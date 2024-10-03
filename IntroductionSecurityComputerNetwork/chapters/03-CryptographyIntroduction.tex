@@ -74,7 +74,7 @@
             \item[Cifrari a blocchi] I \textbf{cifrari a blocchi} cifrano un blocco di dati "lungo" alla volta con una chiave fissa. Questa tipologia è più complessa e richiede uan funzione di cifratura e una di de-cifratura. Solitamente si usano blocchi di 64/128 bit.  
         \end{description}
         \subsubsection{Cifrari a flusso}
-            I cifrari a flusso operano su un flusso di testo in chiaro e producono un flusso di testo cifrato. Lo stesso testo se ripetuto può essere cifrato in modo diverso in base al tempo nel quale è stato cifrato. I circuiti sono molto semplici e progettati per essere molto veloci.
+            I cifrari a flusso operano su un flusso di \textit{testo in chiaro} e producono un flusso di \textit{testo cifrato}. Lo stesso testo se ripetuto può essere cifrato in modo diverso in base al tempo nel quale è stato cifrato. I circuiti sono molto semplici e progettati per essere molto veloci.
             \begin{figure}[H]
                 \centering
                 \includegraphics[width=0.9\textwidth]{03/cifrarioFlusso.png}
@@ -82,3 +82,14 @@
             \end{figure}
             \paragraph{Dove si usano} I cifrari a flusso sono usati in applicazioni in cui la velocità è fondamentale, come ad esempio nelle comunicazioni via radio o nella comunicazione in tempo reale.
         \subsubsection{Cifrari a blocchi}
+            Nei \textbf{cifrari a blocchi} vene trattato una sezione di \textit{testo in chiaro} come una cosa unica per produrre un \textit{testo cifrato} di egual lunghezza. La dimensione tipica di questa sezione è solitamente tra $64$ e $128$ bit. Un messaggio $M$ più lungo di $n$ bit viene diviso in blocchi di $n$ bit e ogni blocco ($M_1, M_2, \dots, M_i$) viene cifrato separatamente con la stessa chiave $k$.
+            \paragraph{Esempi} Alcuni esempi di cifrari a blocchi sono:
+            \begin{description}
+                \item[DES] \textbf{Data Encryption Standard} è un cifrario a blocchi che opera su blocchi di $64$ bit.
+                \item[AES] \textbf{Advanced Encryption Standard} è un cifrario a blocchi che opera su blocchi di $128$ bit e utilizza chiavi di $128$, $192$ o $256$ bit.
+            \end{description}
+            \paragraph{DES}
+                Il \textbf{Data Encryption Standard} è un cifrario a blocchi che opera su blocchi di $64$ bit che venne progettato da \texttt{IBM} negli anni '70. Il cifrario è basato su una rete di sostituzione e trasposizione, e utilizza una chiave di $56$ bit. Il DES è stato il cifrario più usato fino al 2000 (anche da ANS\footnote{American National Standard X3.92} e in tre F.I.P.S.\footnote{Federal Information Processing Standards}), fino al 2005 quando è stato definitivamente dichiarato insicuro.
+            \paragraph{Feistel (1973)}
+                Il cifrario DES è basato su una struttura di \textbf{Feistel}, la quale prevede che il testo in chiaro venga diviso in due parti uguali, la prima passa attraverso una funzione di cifratura insieme ad una chiave, il risultato viene messo in \textbf{XOR} con la seconda parte del testo in chiaro, il risultato viene poi scambiato con la prima parte e il processo viene ripetuto per $16$ volte con $16$ chiavi diverse (o una chiave divisa in $16$ parti). La decodifica avviene tramite lo stesso processo ma con le chiavi e le parti invertite.
+                \subparagraph{Vantaggi e svantaggi} Primo vantaggio di questo algoritmo è lo stesso meccanismo di cifratura e de-cifratura oltre alla semplicità, questo rende le componenti hardware molto più semplici e meno costose in quanto non necessitano di componenti diverse per cifrare e de-cifrare. 
