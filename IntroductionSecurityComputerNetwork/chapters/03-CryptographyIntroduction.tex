@@ -1,0 +1,84 @@
+\chapter{Cryptography Introduction}
+\section{Cryptosystem}
+    \paragraph{Definizione} Un \textbf{cryptosystem} è una tupla di 5 elementi (E,D,M,K,C):
+    \begin{description}
+        \item[E] è un \textit{algoritmo di cifratura}
+        \item[D] è un \textit{algoritmo di de-cifratura}
+        \item[M] è un insieme di \textit{messaggi in chiaro}
+        \item[K] è un insieme di \textit{chiavi}
+        \item[C] è un insieme di \textit{messaggi cifrati}
+    \end{description}
+    In modo astratto i punti \textbf{E} e \textbf{D} possono essere espresse come funzioni:
+    $$
+        \begin{aligned}
+            E: M \times K \rightarrow C \\
+            D: C \times K \rightarrow M
+        \end{aligned}
+        \qquad D(E(m,k),k) = m
+    $$
+    Nella criptografia base ogni chiave $ k \in K $ può essere usata per cifrare e de-cifrare i messaggi, nella criptografia simmetrica la chiave è la stessa per entrambi i processi, mentre nella criptografia asimmetrica le chiavi sono diverse.
+    \paragraph{Quali componenti sono pubbliche?} Solitamente non abbiamo necessità di mantenere segrete le funzioni \texttt{E} e \texttt{D} o il messaggio cifrato \texttt{C}, quello che davvero deve essere segreto è la chiave \texttt{K}. Il motivo per il quale le funzioni non devono essere segrete è che il sistema deve essere pubblico e quindi tramite processi di \textit{reverse engineering} è possibile ricavare le funzioni (es: il sistema di cifratura di un DVD è stato ricavato tramite \textit{reverse engineering} dopo solo due giorni).
+    \subsection{Why Cryptography?}
+        \paragraph{Sicurezza} La crittografia è usata nei \hyperref[subsec:securityMechanism]{\textbf{meccanismi di sicurezza}} per garantire \hyperref[subPar:confidentiality]{\textbf{confidenzialità}} nascondendo il contenuto dei messaggi, \hyperref[subPar:integrity]{\textbf{integrità}} provvedendo al controllo di integrità tramite funzioni di \textbf{hash} e \textbf{la verifica dell'origine} dei dati tramite firme digitali verificabili da una fonte autorevole.
+    \subsection{Cryptography on rented servers}
+        \paragraph{Problema} Se si usa un server di terze parti per conservare dati, ad esempio su un database, è possibile che il proprietario del server possa accedere ai dati in chiaro. Per evitare ciò si può cifrare i dati prima di inviarli al server, in modo che il proprietario non possa leggerli, ciò comporta però un aumento del carico computazionale lato client in quanto tutti i dati prima di essere letti devono essere de-cifrati, per questo esistono meccanismi di ricerca su dati cifrati che permettono di effettuare ricerche su dati cifrati senza de-cifrarli, una volta trovati i dati desiderati si de-cifrano solo quelli.
+    \subsection{Come definiamo "Computazionalmente sicuro" nelle comunicazioni}
+        \paragraph{Definzizione} Definiamo un sistema di comunicazione \textbf{Computazionalmente sicuro} quando la decifrazione di un messaggio cifrato senza conoscere la chiave è molto difficile, o addirittura impossibile, e richiede molto tempo e risorse computazionali.
+        \paragraph{$E(k,P)=C$} Calcolare $C$ da $P$ deve essere difficile senza $k$, inoltre calcolare $C$ da $P$ sapendo $k$ deve essere facile.
+        \paragraph{$D(k,C)=P$} Calcolare $P$ da $C$ deve essere facile sapendo $k$, ma deve essere difficile senza $k$.
+        \paragraph{Trapdoor - funzione a senso unico} Una \textbf{trapdoor} è una funzione a senso unico che richiede una ulteriore informazione. Ed una \textbf{funzione a senso unico} è descritta come una funzione che è facile da calcolare in una direzione, ma molto più difficile nell'altra.  
+    \subsection{Hash v/s Encryption}
+        \paragraph{Quando l'una e quando l'altra} Usiamo funzioni di hash quando non abbiamo bisogno di accedere all'informazione originale, ma solo di verificare l'integrità dei dati. Ricordiamo che le funzioni di \textbf{hash} per definizione sono \textbf{one-way} e \textbf{deterministiche}, quindi non possiamo de-cifrarle e non necessitiamo di una chiave per cifrare i dati. \newline
+        D'altro canto usiamo la cifratura quando i dati che vogliamo proteggere devono poter essere letti e ne vogliamo preservare la \textbf{confidenzialità}, bisogna prima concordare una \textbf{chiave} in maniera sicura, poi calcolare il \textbf{messaggio cifrato} con suddetta chiave e infine inviare il messaggio cifrato, il destinatario potrà de-cifrare il messaggio con la chiave concordata. In questo modo proteggiamo la \textbf{confidenzialità} e la \textbf{riservatezza} dei dati ma non la loro \textbf{integrità}.
+    \subsection{La Criptografia non è la soluzione a tutti i problemi}
+        \paragraph{Perchè?} La crittografia non è la soluzione a tutti i problemi di sicurezza, in quanto comunque è sensibile a delle chiavi conservate su supporti digitali, i quali devono proteggere questa informazione. Inoltre da sola la crittografia non è mai usata come soluzione a problemi di sicurezza, ma sempre in combinazione con altri meccanismi di sicurezza.
+\section{Types of cryptography - Tipologie di criptografia}
+    \subsection{Cifrari di sostituzione}
+        \paragraph{In breve} I \textbf{cifrari di sostituzione} sono cifrari che sostituiscono un simbolo del \textit{dizionario} con un altro simbolo. In questo contesto la \textit{chiave} è la \textit{sostituzione} dei simboli.
+        \paragraph{In lungo}
+            I \textbf{cifrari di sostituzione} sono dei \textbf{metodi di criptazione} per i quali ogni simbolo del \textbf{messaggio in chiaro} è rimpiazzato nel \textbf{messaggio cifrato} rispetto ad un prefissato sistema. I "simboli" possono essere lettere, coppie di lettere, triple di lettere, o anche una combinazione di questi, e anche altro. Il ricevente decifra il testo svolgendo le sostituzioni inverse.
+        \subsubsection{Cifrario di cesare}
+            Il \textbf{cifrario di Cesare} è un cifrario di sostituzione in cui il \textbf{dizionario} del testo in chiaro è spostato di un numero fisso di posizioni nell'alfabeto. Per decifrare il testo cifrato si sposta indietro dello stesso numero di posizioni.\newline
+            Questo tipo di sistema viene anche chiamato: \textbf{rotazione di $k$ posizioni}, in quanto il dizionario viene ruotato di $k$ posizioni.
+            \paragraph{Problemi e proprietà} Il cifrario descritto è il più semplice tra tutti come decodifica in quanto esistono solo $25$ chiavi e con un semplice attacco di \textbf{brute force}. Inoltre se non si vuole usare un attacco di \textbf{brute force} si può comunque cercare di trovare lettere comuni del messaggio cifrato e provare a ricondurle a lettere comuni dell'alfabeto.
+            \begin{figure}[H]
+                \centering
+                \includegraphics[width=0.9\textwidth]{03/cifrarioCesare.png}
+                \caption{Esempio di cifrario di Cesare spostato di 3 posizioni}
+            \end{figure}
+        \subsubsection{Cifrario di Vigenère}
+            Il \textbf{cifrario di Vigenère} è un cifrario che prevede l'uso di una "parola chiave", se necessario ripetuta per la lunghezza del messaggio, per poi calcolare la "somma" dei valori di ogni lettera del messaggio con la corrispondente lettera della parola chiave (prendendo poi il resto della divisione per 26). Quindi assegnando ad ogni lettera un numero da 0 a 25, si somma il numero della lettera del messaggio con il numero della lettera della parola chiave, si prende il resto della divisione per 26 e si assegna alla lettera corrispondente il numero ottenuto.
+            \begin{figure}[H]
+                \centering
+                \includegraphics[width=0.9\textwidth]{03/cifrario2.png}
+                \caption{Esempio di cifrario di Vigenère chiave "lemon"}
+            \end{figure}
+            Per decifrare il messaggio cifrato si sottrae il numero della lettera della parola chiave al numero della lettera del messaggio e si prende il resto della divisione per 26.
+            \paragraph{Vantaggi} Questo cifrario è molto più sicuro rispetto a quello di cesare in quanto come mostrato nell'esempio la lettera "A" viene codificata in quattro lettere diverse e la lettera "T" che è presente tre volte viene cifrata in due lettere corrispondenti. In quanto la parola chiave ha lunghezza "l" allora dimensione della chiave è $l^{26}$. Inoltre se la chiave è della stessa lunghezza del messaggio allora il cifrario di Vigenère è equivalente a un cifrario di sostituzione casuale il che rende impossibile la decifrazione, però ciò comporta ad una ulteriore difficoltà per il mittente e il destinatario nel concordare una chiave.
+    \subsection{Cifrari di trasposizione}
+        \paragraph{In breve} I \textbf{cifrari di trasposizione} sono cifrari che permutano i simboli del messaggio in chiaro. In questo contesto la \textit{chiave} è la \textit{permutazione} dei simboli.
+        \paragraph{In lungo} I \textbf{cifrari di trasposizione} sono dei \textbf{metodi di criptazione} per i quali i simboli del \textbf{messaggio in chiaro} sono permutati in un certo modo per ottenere il \textbf{messaggio cifrato}. Il ricevente decifra il testo svolgendo le permutazioni inverse.
+        \subsubsection{Cifrario di trasposizione per colonne}
+            Il \textbf{cifrario di trasposizione per colonne} è un cifrario che permuta i simboli del messaggio in chiaro per colonne, in modo che il messaggio cifrato sia una matrice di colonne.
+            \begin{figure}[H]
+                \centering
+                \includegraphics[width=0.5\textwidth]{03/cifrario3.png}
+                \caption{Esempio di cifrario di trasposizione per colonne}
+            \end{figure}
+            Per decifrare il messaggio cifrato si riordinano le colonne in base alla chiave.
+    \subsection{Criptografia Simmetrica}
+        Come detto in precedenza la \textbf{criptografia simmetrica} prevede la stessa \textbf{chiave} per cifrare e de-cifrare i messaggi. La gestione di chi possiede le chiavi determina chi può accedere ai dati.
+        \paragraph{Tipi} Esistono nella \textit{criptografia moderna} due tipi ci crittografia simmetrica:
+        \begin{description}
+            \item[Cifrari a flusso] I \textbf{cifrari a flusso} cifrano una "breve" porzione di un blocco di dati alla volta con una chiave che varia nel tempo. Questa tipologia si base su un \textbf{generatore di chiavi}, la cifratura è relativamente semplice (es. \texttt{XOR}) e molto spesso viene usato un bit per blocco.
+            \item[Cifrari a blocchi] I \textbf{cifrari a blocchi} cifrano un blocco di dati "lungo" alla volta con una chiave fissa. Questa tipologia è più complessa e richiede uan funzione di cifratura e una di de-cifratura. Solitamente si usano blocchi di 64/128 bit.  
+        \end{description}
+        \subsubsection{Cifrari a flusso}
+            I cifrari a flusso operano su un flusso di testo in chiaro e producono un flusso di testo cifrato. Lo stesso testo se ripetuto può essere cifrato in modo diverso in base al tempo nel quale è stato cifrato. I circuiti sono molto semplici e progettati per essere molto veloci.
+            \begin{figure}[H]
+                \centering
+                \includegraphics[width=0.9\textwidth]{03/cifrarioFlusso.png}
+                \caption{Esempio di circuito di cifratura a flusso}
+            \end{figure}
+            \paragraph{Dove si usano} I cifrari a flusso sono usati in applicazioni in cui la velocità è fondamentale, come ad esempio nelle comunicazioni via radio o nella comunicazione in tempo reale.
+        \subsubsection{Cifrari a blocchi}

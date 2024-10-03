@@ -1,0 +1,352 @@
+\chapter{Il Livello Applicazione}
+\thispagestyle{chapterInit}
+\section{principi delle applicazioni di rete}
+    \subsection{Architetture di rete}
+        Esistono varie architetture per le applicazioni di rete, tra le quali:
+        \begin{itemize}
+            \item Client-Server
+            \item Peer-to-Peer
+            \item Architetture ibride
+            \item Cloud Computing 
+        \end{itemize}
+        \subsubsection{Client - Server}
+        \label{subsubsec:clientServer}
+            In questa architettura esistono due ruoli principali:
+            \paragraph{Server} Il server è un host \textbf{sempre attivo} con un \textbf{indirizzo permanente} e molto spesso difficile da scalare
+            \paragraph{Client} Il client \textbf{comunica col server}, inoltre a differenza del server può \textbf{disconnettersi temporaneamente} e inoltre può avere un \textbf{indirizzo IP dinamico}. Generalmente i client \textbf{non comunicano tra di loro}.
+        \subsubsection{Architettura P2P pura}
+            In questa architettura \textbf{non c'è} sempre un server attivo, vengono eseguire \textbf{coppie arbitrarie} di host che comunicano tra di loro. Infine i \textbf{peer} non devono necessariamente essere sempre attivi e possono avere un \textbf{indirizzo IP dinamico}.
+
+        \subsubsection{Architetture ibride}
+            In queste architetture si ha una combinazione tra client-server e P2P, ad esempio un server con peer che comunicano tra di loro. Un esempio di architettura ibrida è Skype, oppure un applicativo di messaggistica istantanea dove le chat sono P2P ma l'individuazione degli utenti è fatta tramite un server centrale.
+        \subsubsection{Cloud Computing}
+            In questa architettura si ha un insieme di tecnologie che permettono \textbf{di memorizzare archiviare e/o elaborare dati} tramite l'utilizzo di risorse distribuite. La creazione di copie di sicurezza dette \textbf{backup} è automatica e l'operabilità si trasferisce online. I dati sono memorizzati in \textbf{server farm} generalmente localizzate nei paesi di origine del service provider.
+    \subsection{Struttura delle applicazioni di rete}
+        \subsubsection{Processi del sistema operativo}
+            \paragraph{Processo:} Programma in esecuzione su un host.
+            
+            All'interno di uno stesso host due processi comunicano utilizzando \textbf{schemi interprocesso} (definiti dal S.O.)
+
+            Processi su host diversi comunicano tramite \textbf{messaggi} scambiati tramite la rete.
+            \paragraph{Processo client} processo che inizia la comunicazione
+            \paragraph{Processo server} processo che attende di essere contattato
+        \subsubsection{Socket}
+            \paragraph{Socket} Un processo che invia/riceve messaggi a/da il suo \textbf{socket}.
+            
+            Un socket è analogo ad una porta 
+
+    \subsection{Indirizzamento}
+        \paragraph{IP} Per identificare un host in modo univoco si usa un \textbf{indirizzo IP} che è formato da 32 bit. 
+
+        \paragraph{Numeri di porta} L'indirizzo IP però non è sufficiente ad identificare un processo all'interno dell'host per questo definiamo dei \textbf{numeri di porta}.
+
+    \subsection{Protocolli a livello applicazione}
+        \subsubsection{Definizioni}
+            I protocolli a livello applicazione definiscono:
+                \begin{itemize}
+                    \item Tipi di messaggi scambiati
+                    \item Sintassi dei messaggi
+                    \item Semantica dei campi dei messaggi
+                    \item Regole per determinare quando e come i processi inviano e ricevono messaggi
+                \end{itemize}
+            \paragraph{Protocolli dominio pubblico}Alcuni protocolli sono di pubblico dominio definiti nelle \textbf{RFC} (Request for Comments) della \textbf{IETF} (Internet Engineering Task Force). Questi consentono interoperabilità tra diversi host, esempi di protocolli a pubblico dominio sono: \textbf{HTTP}, \textbf{SMTP}\dots
+            \paragraph{Protocolli proprietari} Altri protocolli sono proprietari, ad esempio Skype.
+    \subsection{Servizi di trasporto}
+        \subsubsection{Come segliere il protocollo di trasporto}
+            \begin{description}
+                \item[Perdita di dati] Applicazioni che richiedono trasmissione affidabile dei dati (es. file transfer) richiedono un protocollo di trasporto affidabile
+                \item[Temporizzazione] Applicazioni che richiedono bassa latenza (es. VoIP) richiedono un protocollo di trasporto con bassa temporizzazione
+                \item[Throughput] Applicazioni che richiedono alto throughput richiedono un protocollo di trasporto con alto throughput
+                \item[Sicurezza] Applicazioni che richiedono sicurezza (es. trasferimento di file) richiedono un protocollo di trasporto sicuro
+            \end{description}
+            \begin{table}[H]
+                \centering
+                \begin{adjustbox}{max width=\textwidth}
+                    \begin{tabular}{c p{7em} p{13em} c}
+                        \textbf{Applicazione} & \textbf{Tolleranza alla perdita di dati} & \textbf{Throughput} & \textbf{Sensibilità al tempo} \\
+                        \hline\\
+                        Trasferimento file & No & Variabile & No \\
+                        \hline\\
+                        Posta elettronica & No & Variabile & No \\
+                        \hline \\
+                        Documenti Web & No & Variabile & No \\
+                        \hline \\
+                        Audio/video in tempo reale & Sì & Audio: da 5kbit/s a 1Mbit/s Video: da 10kbit/s a 5Mbit/s & Sì, centinaia di ms \\
+                        \hline \\
+                        Audio/video memorizzati & Si & come sopra & Sì, pochi secondi \\
+                        \hline \\
+                        Giochi interattivi & Sì & Fino a pochi kbit/s & Sì, centinaia di ms \\
+                        \hline \\
+                        Messaggistica istantanea & No & Variabile & Sì e no \\
+                        \hline
+                    \end{tabular}
+                \end{adjustbox}
+            \end{table}
+        \subsubsection{TCP / UDP}
+            \paragraph{TCP} \textbf{Transmission Control Protocol} è un protocollo di trasporto \textbf{affidabile} e \textbf{orientato alla connessione}. TCP ha un \textbf{controllo di flusso} e \textbf{controllo di congestione}, \textbf{non offre} temporizzazione e garanzie su un'ampiezza di banda minima, sicurezza.
+            \paragraph{UDP} \textbf{User Datagram Protocol} è un protocollo di trasporto \textbf{inaffidabile} fra i processi d'invio e di ricezione. UDP \textbf{non offre} controllo di flusso, controllo di congestione, temporizzazione, garanzie su un'ampiezza di banda minima, sicurezza.
+            
+            \begin{table}[H]
+                \centering
+                \begin{adjustbox}{max width=\textwidth}
+                    \begin{tabular}{c c c}
+                        \textbf{Applicazione} & \textbf{Protocollo a livello applicazione} & \textbf{Protocollo di trasporto} \\
+                        \hline \\
+                        Posta elettronica & SMTP [RFC 2821] & TCP \\
+                        \hline \\
+                        Accesso a terminali remoti & Telnet [RFC 854] & TCP \\
+                        \hline \\
+                        Web & HTTP [RFC 2616] & TCP \\
+                        \hline \\
+                        Trasferimento file & FTP [RFC 959] & TCP \\
+                        \hline \\
+                        Multimedia in streaming & HTTP [RFC 2616], RTP [RFC 3550] & TCP, UDP \\
+                        \hline \\
+                        Telefonia Internet & SIP [RFC 3261], RTP [RFC 3550], Proprietario & Tipicamente UDP \\  
+                        \hline
+                    \end{tabular}
+                \end{adjustbox}
+            \end{table}
+\section{Web e HTTP}
+    \subsection{Terminologia}
+        \begin{description}
+            \item[Pagina Web] Una \textbf{pagina web} è costituita da \textbf{oggetti}
+            \item[Oggetto] Un \textbf{oggetto} può essere una \textbf{pagina HTML}, un'\textbf{immagine}, un'\textbf{applet}, un'\textbf{audio}, un'\textbf{video}, \dots
+            \item[un file HTML] è un \textbf{file base} per formare una \textbf{pagina web}. Suddetto file è scritto tramite l'\textbf{HyperText Markup Language} che include diversi oggetti referenziati
+            \item[URL] Ogni oggetto è referenziato tramite un \textbf{URL} (Uniform Resource Locator)    
+        \end{description}
+        \paragraph{Esempio di URL}
+            \begin{center}
+                \texttt{http://www.sito.com/folder/file.html}
+            \end{center}
+            \begin{description}
+                \item[http] Protocollo di trasferimento
+                \item[www.sito.com] Nome del server
+                \item[folder] Cartella in cui si trova il file
+                \item[file.html] Nome del file
+            \end{description}
+    \subsection{Introduzione a HTTP}
+        \paragraph{Overview} L'\textbf{HTTP} (HyperText Transfer Protocol) è un protocollo di livello applicazione del web. Sfrutta il modello \textbf{\hyperref[subsubsec:clientServer]{client-server}} dove il \textbf{client} invia una \textbf{richiesta} al \textbf{server} che risponde con una \textbf{risposta} contenente il \textbf{contenuto richiesto} e il client visualizza il contenuto.
+        
+        \paragraph{Usa TCP} Il client inizializza una connessione \textbf{TCP} con il server sulla porta 80, il server accetta la connessione \textbf{TCP} del client e si scambiano messaggi HTTP tra il browser e il web-server. Quando il trasferimento è completato la connessione \textbf{TCP} viene chiusa.
+        
+        Si noti come il protocollo HTTP sia \textbf{stateless}, ovvero non mantiene informazioni sullo stato del client.
+
+        \subsubsection{Connessioni HTTP}
+            \paragraph{Connessioni non persistenti} Almeno un oggetto viene trasmesso su una connessione \texttt{TCP}.
+                \begin{enumerate}
+                    \item Il client \texttt{HTTP} inizializza una connessione \texttt{TCP} con un server \texttt{HTTP} sulla porta 80
+                    \item Il server \texttt{HTTP} sul host in attesa di una connessione \texttt{TCP} alla porta 80
+                    \item Il client \texttt{HTTP} trasmette un \textit{messaggio di richiesta} con l'\textit{URL} nella socket della connessione \texttt{TCP}. Il messaggio indica che oggetto si vuole
+                    \item Il server \texttt{HTTP} trasmette un \textit{messaggio di risposta} con l'oggetto richiesto nella socket della connessione \texttt{TCP}
+                    \item Il server chiude la connessione \texttt{TCP}
+                    \item Il client riceve l'oggetto e visualizza l'oggetto richiesto e all'arrivo del messaggio di risposta chiude la connessione \texttt{TCP}
+                \end{enumerate}
+                \begin{itemize}
+                    \item Il metodo di connessione non persistente richiede 2 round-trip time (\texttt{RTT}) per ottenere un oggetto.
+                    \item Overhead di connessione \texttt{TCP} per ogni oggetto richiesto
+                    \item I browser moderni spesso in caso di connessioni non persistenti aprono richieste parallele per ottenere più oggetti contemporaneamente
+                \end{itemize}
+            \paragraph{Connessioni persistenti} Più oggetti vengono trasmessi su una connessione TCP
+        \subsubsection{Tipi dei metodi}
+            \begin{description}
+                \item[GET] Il client richiede un oggetto al server 
+                \item[POST] Il client invia dati al server
+                \item[HEAD] Il client richiede solo l'intestazione dell'oggetto
+                \item[PUT] Il client invia un oggetto al server (da HTTP/1.1)
+                \item[DELETE] Il client cancella un oggetto dal server (da HTTP/1.1)
+            \end{description}
+        \subsubsection{Messaggio di risposta HTTP}
+            \texttt{HTTP/1.1 200 OK $\Rightarrow$ Versione del protocollo, codice di stato, frase di stato\\
+                Connection close $\Rightarrow$ Connessione chiusa\\
+                Date: Thu, 06 Aug 1998 12:00:15 GMT $\Rightarrow$ Data e ora\\
+                Server: Apache/1.3.0 (Unix) $\Rightarrow$ Server web\\
+                Last-Modified: Mon, 22 Jun 1998 ... $\Rightarrow$ Data ultima modifica\\
+                Content-Length: 6821 $\Rightarrow$ Lunghezza del contenuto\\
+                Content-Type: text/html $\Rightarrow$ Tipo di contenuto\\
+                dati dati dati dati dati  ... $\Rightarrow$ Dati
+            }
+        \subsubsection{Codici di stato}
+        \begin{description}
+            \item[200] OK $\Rightarrow$ La richiesta è stata completata con successo l'oggetto richiesto è stato trasmesso
+            \item[301] Moved Permanently $\Rightarrow$  Il documento richiesto è stato spostato in un'altra locazione
+            \item[400] Bad Request $\Rightarrow$ La richiesta non può essere soddisfatta di errori client
+            \item[404] Not Found $\Rightarrow$ Il documento richiesto non è stato trovato sul server
+            \item[505] HTTP Version Not Supported $\Rightarrow$ La versione HTTP usata non è supportata dal server
+        \end{description}
+    \subsection{Cookies}
+        I \textbf{cookies} sono composti da quattro componenti:
+        \begin{enumerate}
+            \item Una riga di intestazione nel messaggio di \textit{risposta HTTP} % TODO: inserire riferimento
+            \item Una riga di intestazione nel messaggio di \textit{richiesta HTTP} % TODO: inserire riferimento
+            \item Un file mantenuto sul \textit{client}
+            \item Un database mantenuto sul \textit{server}
+        \end{enumerate}
+        \subsubsection{Come vengono usati cookies}
+            \paragraph{Cosa contengono}
+                \begin{itemize}
+                    \item Autorizzazione
+                    \item Carta per acquisti
+                    \item Raccomandazioni
+                    \item Stato della sessioni dell'utente
+                \end{itemize}
+            \paragraph{Lo Stato}
+                \begin{itemize}
+                    \item Mantengono lo stato del mittente e del ricevente per più richieste
+                    \item I messaggi HTTP trasportano lo stato
+                \end{itemize}
+            \paragraph{Privacy}
+                \begin{itemize}
+                    \item I cookies possono essere usati per tracciare la navigazione dell'utente
+                    \item L'utente può fornire al sito nome e l'indirizzo
+                \end{itemize}
+    \subsection{Cache web}
+        \paragraph{Obbiettivo:} soddisfare le richieste degli utenti senza coinvolgere il server d'origine
+        \paragraph{Cache} è una copia di un oggetto mantenuta da un'entità più vicina all'utente
+        \paragraph{Il Procedimento} Il client invia una richiesta al server proxy, il server proxy invia la richiesta al server d'origine se l'oggetto non è in cache, altrimenti il server proxy invia l'oggetto al client.
+        \paragraph{Vantaggi} Riduzione del tempo di risposta, riduzione del traffico di rete, riduzione del carico sui server d'origine
+        \paragraph{Perchè viene usata} Viene usata per ridurre il tempo di risposta e il traffico di rete, in certe situazioni delle istituzioni si possono dotare di un cache interna per ridurre il traffico di rete verso l'esterno e per ridurre il tempo di risposta.
+        \paragraph{\texttt{GET} condizionale} Il client può chiedere al server proxy di inviare l'oggetto solo se è stato modificato, in caso contrario il server proxy invia un messaggio di risposta con codice 304 (Not Modified) e l'oggetto non viene inviato. Il controllo viene eseguito tramite un \textbf{header} \texttt{If-Modified-Since} che contiene la data dell'ultima modifica dell'oggetto.
+    \subsection{HTTP/1.0 e HTTP/1.1}
+        \subsubsection{HTTP/1.0}
+            \begin{itemize}
+                \item Connessioni non persistenti
+                \item Ogni oggetto richiede una connessione TCP separata
+                \item Non supporta proxy
+                \item Non supporta cache
+            \end{itemize}
+        \subsubsection{HTTP/1.1}
+            \begin{itemize}
+                \item Connessioni persistenti
+                \item Pipelining
+                \item Host Virtuale
+                \item Cache
+                \item Cookies
+                \item Connessioni persistenti
+                \item Pipelining
+                \item Host Virtuale
+                \item Cache
+                \item Cookies
+            \end{itemize}
+    \subsection{HTTP/2.0}
+        \textbf{HTTP/2} rappresenta una evoluzione di \textbf{HTTP/1.1}, il protocollo è focalizzato sulle prestazioni, specificatamente sulla latenza percepita. Obbiettivo di \texttt{HTTP/2} è di avere una unica connessione per browser.
+        \subsubsection{Framing binario}
+            Nuovo livello di framing binario per incapsulare i messaggi \texttt{HTTP}, in questo modo la semantica \texttt{HTTP} rimane invariata ma la codifica in transito è differente. Tutte le comunicazioni \texttt{HTTP/2} sono suddivise in messaggi più piccoli, ognuno dei quali codificano un formato binario, inoltre sia il client che il server possono inviare messaggi in qualsiasi momento.ù
+        \subsubsection{Stream, messaggi e frame}
+            Tutte le comunicazioni vengono eseguite all'interno di una connessione TCP bidirezionale, ogni \textbf{stream} ha un identificativo univoco con priorità. Ogni messaggio è un messaggio \texttt{HTTP} logico (richiesta/risposta). Il frame è la più piccola unità di comunicazione di un certo tipo specifico di dati.
+        \subsubsection{Multiplexing di richieste e risposte}
+        \subsubsection{Server Push}
+    \subsection{Transport Layer Security (TLS)}
+    \subsection{HTTPS}
+\section{FTP - File Transfer Protocol}
+    \paragraph{FTP} Il \textbf{File Transfer Protocol} è un protocollo di trasferimento di file che permette di trasferire file tra un host e un server. FTP è un protocollo \textbf{stateful} che mantiene lo stato del client e del server durante la sessione. Lo standard FTP è definito nella \textbf{RFC 959} e usa una porta standard di \textbf{21}.
+    \subsection{Connessione di controllo}
+        \paragraph{Connessione di controllo} La connessione di controllo è usata per inviare comandi tra il client e il server. I comandi sono inviati in \textbf{ASCII} e i comandi sono \textbf{case-insensitive}. La connessione di controllo è \textbf{stateful} e mantiene lo stato del client e del server durante la sessione. La connessione di controllo usa la porta \textbf{21}, mentre la connessione dati usa la porta \textbf{20}, questo è un esempio di protocollo con \textbf{controllo fuori banda}.
+    \subsection{Comandi FTP}
+
+\section{Posta Elettronica}
+    \paragraph{Introduzione}
+        Per la gestione della posta elettronica esistono 3 componenti principali:
+        \begin{itemize}
+            \item Agente utente
+            \item Server di posta
+            \item Simple Mail Transfer Protocol (SMTP)
+        \end{itemize}
+        \subparagraph{Agente utente} è detto anche "mail reader" e permette di comporre, modificare e leggere i messaggi di posta elettronica. I messaggi in uscita o in arrivo vengono memorizzati sul server di posta che è sempre attivo.
+        \subparagraph{Server di posta} Contiene la \textbf{Casella di posta} che contiene i messaggi in arrivo, ha una \textbf{coda di messaggi} in uscita ed usa il \textbf{protocollo SMTP} tra server di posta per inviare messaggi di posta elettronica, in quanto il protocollo \textbf{SMTP} richiede che il server ricevente sia sempre in ascolto.
+    \subsection{SMTP}
+        Il protocollo \textbf{SMTP} (Simple Mail Transfer Protocol) è un protocollo di livello applicazione che permette di inviare messaggi di posta elettronica tra server di posta. Il protocollo \textbf{SMTP} usa la porta \textbf{25} ed è un protocollo \textbf{stateless}.
+        \paragraph{Fasi del trasferimento} Il trasferimento di un messaggio di posta elettronica avviene in tre fasi:
+            \begin{description}
+                \item[Handshaking] Il client apre una connessione \textbf{TCP} con il server di posta, il server risponde con un messaggio di benvenuto
+                \item[trasferimento] Il client invia il messaggio, il server accetta il messaggio e lo deposita nella casella di posta del destinatario
+                \item[Chiusura] Il client chiude la connessione
+            \end{description}
+        \paragraph{Iterazione comando/risposa} I comando usano \textbf{ASCII} a 7 bit e sono \textbf{case-insensitive}, le risposte sono codificate con un codice a tre cifre.
+        \paragraph{Note finali} 
+            \begin{itemize}
+                \item Il protocollo usa connessioni \textbf{persistenti}
+                \item Il protocollo richiede che il messaggio (intestazione e corpo) sia nel formato \textbf{ASCII} a 7 bit
+                \item Il protocollo prevede che \texttt{<CR><LF>.<CR><LF>} sia usato per terminare il messaggio
+            \end{itemize}
+        \paragraph{Formato dei messaggi di posta elettronica}
+            \begin{description}
+                \item[Intestazione]contiene i mittenti, i destinatari, il soggetto, la data e l'ora
+                \item[riga vuota] separa l'intestazione dal corpo
+                \item[Corpo] contiene il testo del messaggio
+            \end{description}
+    \subsection{POP3}
+        Il protocollo \textbf{POP3} (Post Office Protocol 3) è un protocollo di livello applicazione che permette di scaricare i messaggi di posta elettronica dal server di posta. Il protocollo \textbf{POP3} usa la porta \textbf{110} ed è un protocollo \textbf{stateful}.
+        \paragraph{Fasi del trasferimento} Il trasferimento di un messaggio di posta elettronica avviene in tre fasi:
+            \begin{description}
+                \item[autorizzazione] Il client apre una connessione \textbf{TCP} con il server di posta, il client si autentica con il server
+                \item[trasferimento] Il client scarica i messaggi di posta elettronica
+                \item[Chiusura] Il client chiude la connessione
+            \end{description}
+        \paragraph{Comandi POP3}
+            \begin{description}
+                \item[USER] Autenticazione
+                \item[PASS] Password
+                \item[LIST] Lista dei messaggi
+                \item[RETR] Recupera un messaggio
+                \item[DELE] Cancella un messaggio
+                \item[QUIT] Chiude la connessione
+            \end{description}
+    \subsection{IMAP}
+        Il protocollo \textbf{IMAP} (Internet Message Access Protocol) è un protocollo di livello applicazione che permette di scaricare i messaggi di posta elettronica dal server di posta. Il protocollo \textbf{IMAP} usa la porta \textbf{143} ed è un protocollo \textbf{stateful}.
+        \paragraph{Fasi del trasferimento} Il trasferimento di un messaggio di posta elettronica avviene in tre fasi:
+            \begin{description}
+                \item[autorizzazione] Il client apre una connessione \textbf{TCP} con il server di posta, il client si autentica con il server
+                \item[trasferimento] Il client scarica i messaggi di posta elettronica
+                \item[Chiusura] Il client chiude la connessione
+            \end{description}
+        \paragraph{Comandi IMAP}
+            \begin{description}
+                \item[LOGIN] Autenticazione
+                \item[SELECT] Seleziona una casella di posta
+                \item[FETCH] Recupera un messaggio
+                \item[STORE] Modifica lo stato di un messaggio
+                \item[LOGOUT] Chiude la connessione
+            \end{description}
+\section{DNS}
+    \paragraph{Introduzione}
+        \paragraph{Domain Name Sysyem} Il \textbf{DNS} consiste in un \textit{database distribuito} implementando una gerarchia di \textit{server DNS}. Il \textit{DNS} è un protocollo a livello applicazione che consente agli host e ai router di comunicare per \textit{risolvere} i nomi degli host in indirizzi IP.
+    \subsection{Servizi DNS}
+        \begin{itemize}
+            \item Traduzione degli hostname in indirizzi IP
+            \item Host aliasing - Un host può avere più nomi
+            \item Mail server aliasing - Un host può avere più server di posta
+            \item Payload distribution - Distribuzione del carico tra i server
+        \end{itemize}
+        \paragraph{Perchè non centralizzare DNS}
+        \begin{itemize}
+            \item Singolo punto di fallimento
+            \item Traffico di rete
+            \item Database centralizzato distante
+            \item Manutenzione
+        \end{itemize}
+    \subsection{Struttura del DNS}
+        In generale i server \texttt{DNS} sono organizzati in una struttura gerarchica a \textbf{albero} dove il nodo radice è il server \texttt{DNS} radice (13 al mondo) esistono dei server di \texttt{DNS} di nomi di primo livello (com) (TLD) e infine i server di \texttt{DNS} autoritativi usati per un dominio di secondo livello (google.com)
+        \paragraph{Server \texttt{DNS} locali} Ogni ISP ha un server \texttt{DNS} locale che si occupa di tradurre i nomi degli host in indirizzi IP
+    \subsection{Resource Record \texttt{RR}}
+        \paragraph{Resource Record} Un \texttt{RR} è una tupla che contiene i seguenti campi:
+        \begin{itemize}
+            \item \texttt{Name} - Il nome del dominio
+            \item \texttt{Value} - Il valore del campo
+            \item \texttt{Type} - Il tipo di record
+            \item \texttt{TTL} - Il tempo di vita del record
+        \end{itemize}
+        \paragraph{Tipi di \texttt{RR}}
+        \begin{itemize}
+            \item \texttt{A} - Indirizzo IP - \textbf{name}: \texttt{hostname} \textbf{value}: \texttt{IP}
+            \item \texttt{NS} - Server di nomi - \textbf{name}: \texttt{dominio} \textbf{value}: \texttt{hostname}
+            \item \texttt{CNAME} - Nome canonico - \textbf{name}: \texttt{alias} \textbf{value}: \texttt{hostname}
+            \item \texttt{MX} - Mail server - \textbf{name}: \texttt{dominio} \textbf{value}: \texttt{hostname}
+        \end{itemize}
+    \subsection{Inserire un record}
+        \paragraph{Esempio} Abbiamo avviato la nuova società
+        \begin{itemize}
+            \item Registriamo il nome "foo.com" presso un \texttt{registrar}
+            \item Otteniamo un indirizzo IP per il nostro server web (host)
+            \item Diamo al nostro registrar l'indirizzo IP del nostro server web e il nome del nostro server web. Esempio records: \texttt{(foo.com, dns1.foo.com, NS), (dns1.foo.com, 211.211.211.211, A)}
+        \end{itemize}

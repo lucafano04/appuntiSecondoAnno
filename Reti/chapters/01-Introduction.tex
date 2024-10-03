@@ -1,0 +1,45 @@
+\setlength{\parskip}{0pt}
+\titlespacing*{\subparagraph}{1em}{0em}{0em} 
+
+\chapter{Introduzione}
+\thispagestyle{chapterInit}
+    \section{Cos'è internet?}
+        \paragraph{Internet}
+            \subparagraph{Host} Una rete di milioni di dispositivi collegati detti "Host"
+            \subparagraph{Applicazioni di rete} un insieme di applicazioni di rete
+            \subparagraph{Collegamenti} una rete di collegamenti fisici (rame, fibra ottica, onde elettromagnetiche, ecc...).
+                Frequenza di trasmissione è uguale a ampiezza di banda
+            \subparagraph{Router} Instrada i pacchetti verso la destinazione finale
+            \subparagraph{ISP} Internet Service Provider
+        \paragraph{Protocollo} Un protocollo definisce il formato e l’ordine dei messaggi scambiati fra due o più entità in comunicazione 
+        \paragraph{Standard} 
+            \subparagraph{RFC} Request for Comments
+            \subparagraph{IETF} Internet Engineering Task Force
+    \section{Ai confini della rete}
+        \paragraph{Sistemi Terminali (Host)}
+        \begin{enumerate}
+            \item Fanno girare i programmi applicativi (Web, email, ecc...)
+            \item Sono situati ai margini della rete
+        \end{enumerate}
+        \paragraph{Architettura client-server} Host client richiede e riceve i servizi da un programma server in esecuzione su un host server
+        \paragraph{Peer-to-peer} Nessun server fisso, i peer sono client e server allo stesso tempo (es. BitTorrent, Skype)
+        \subsection{Reti d’accesso e mezzi fisici}
+        \subsection{Accesso residenziale: punto-punto}
+            \paragraph{Modem dial-up} Fino a 56 kbp/s (mai raggiunti) su linea telefonica, non si può telefonare e navigare contemporaneamente
+            \paragraph{DSL - Digital Subscriber Line} Installazione da parte di un ISP, fino a 1-5 Mbps in upstream e 10-50 Mbps in downstream, linea dedicata
+        \subsection{FTTH - Fiber To The Home}
+            \paragraph{Fibra ottica} Fino a 2.5 Gbps in upstream e 2.5 Gbps in downstream
+        \subsection{Accesso aziendale: reti locali (LAN)}
+            \paragraph{LAN} Una Local Area Network, o LAN, collega i sistemi terminali di aziende e università all’edge router
+            \paragraph{Ethernet} 
+                \subparagraph{Velocità} 10 Mbps, 100 Mbps, 1 Gbps, 10 Gbps 
+                \subparagraph{Moderna Configurazione}: sistemi terminali collegati a switch, switch collegato a router 
+        \subsection{Acceso wireless}
+            \paragraph{Wireless LANs} 
+                \subparagraph{Wi-Fi} 2.4 GHz, 5 GHz, 802.11b/g/n/ac
+                \subparagraph{Cellular networks} 3G, 4G, 5G
+    \section{Al nucleo della rete}
+        La rete solitamente è composta da una maglia di router interconnessi, questi lavorano per trovare la migliore strada per arrivare alla destinazione più velocemente possibile
+        \paragraph{Commutazione di circuito} Esistono delle risorse punto-punto riservate alla comunicazione
+            \subparagraph{Time Division Multiplexing} Il tempo è diviso in slot, ogni slot è assegnato ad una connessione diversa
+            \subparagraph{Frequency Division Multiplexing} La banda è divisa in frequenze, ogni frequenza è assegnata ad una connessione diversa.

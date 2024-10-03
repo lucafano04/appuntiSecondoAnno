@@ -1,0 +1,109 @@
+\chapter{Algebra relazionale}
+\thispagestyle{chapterInit}
+\section{Introduzione}
+    \paragraph{Linguaggio di interrogazione} Un \textbf{linguaggio di interrogazione} (\textit{query language}) per il modello relazionale specializzato per manipolare (tipicamente estrarre) dati di una base di dati relazionali. I linguaggi possono essere suddivisi in:
+        \begin{description}
+            \item[Procedurali] Il programmatore descrive passo passo come ottenere il risultato.
+            \item[Dichiarativi] Il programmatore descrive il risultato che vuole ottenere, senza specificare come ottenerlo.
+        \end{description}
+    L'Algebra relazionale è un linguaggio dichiarativo.
+    \subsection{Perché algebra relazionale}
+        \begin{itemize}
+            \item \textbf{Fondamenta teoriche per le operazioni sui dati}
+            \item \textbf{Ottimizzazione delle query}
+            \item \textbf{Portabilità tra DBMS}
+            \item \textbf{Comprensione degli algoritmi di esecuzione delle query}
+        \end{itemize}
+    \subsection{Concetti generali}
+        \paragraph{Input Output} Nella AR input e output sono \textit{relazioni} (nel senso del modello relazionale).
+        \paragraph{Risultato} il risultato di un'operazione è una \textit{nuova relazione}, che viene generata a partire da una o più relazione di \textit{input}.
+        \paragraph{Algebra Chiusa} Effetto diretto della definizione di input e output come relazioni è che l'algebra relazionale è \textit{chiusa}, ovvero il risultato di un'operazione è sempre una relazione.
+\section{Operazioni dell'AR}
+    \paragraph{Operazioni unarie}
+        \begin{itemize}
+            \item \textbf{SELECT} (simbolo $\sigma$)
+            \item \textbf{PROJECT} (simbolo $\pi$)
+            \item \textbf{RENAME} (simbolo $\rho$)
+        \end{itemize}
+    \paragraph{Operazioni insiemistiche di AR}
+        \begin{itemize}
+            \item \textbf{UNIONE} (simbolo $\cup$)
+            \item \textbf{INTERSEZIONE} (simbolo $\cap$)
+            \item \textbf{DIFFERENZA} (simbolo $\circ$)
+            \item \textbf{PRODOTTO CARTESIANO} (simbolo $\times$)
+        \end{itemize}
+    \paragraph{Operazioni binarie}
+        \begin{itemize}
+            \item \textbf{JOIN} (simbolo $\Join$)
+            \item \textbf{DIVISIONE} (simbolo $\div$)
+        \end{itemize}
+    \paragraph{Altre Operazioni}
+        \begin{itemize}
+            \item \textbf{OUTER JOINS; OUTER UNION}
+            \item \textbf{AGGREGAZIONE}
+        \end{itemize}
+    \subsection{Operazione Unarie}
+        \subsubsection{Selezione}
+        \subsubsection{Proiezione}
+            \paragraph{Proprietà} La forma generale dell'operazione \textit{project} è:
+                $$
+                    \pi_{A_1, A_2, \dots, A_n} (R)
+                $$
+                \begin{itemize}
+                    \item $\pi$ è l'operatore di proiezione
+                    \item $A_1, A_2, \dots, A_n$ è la lista degli attributi di $R$ che si vogliono mantenere
+                \end{itemize}
+            \paragraph{Duplicati} L'operazione di proiezione rimuove le tuple duplicate in quanto il risultato è un insieme di tuple.
+            \paragraph{Risultato} Il numero di tuple in $ \pi_{A_1, A_2, \dots, A_n} (R) $ è minore o uguale al numero di tuple in $R$. Inoltre se $ A_1, A_2, \dots, A_n $ include una \textit{chiave} di $ R $, allora il numero di tuple restituite da \texttt{PROJECT} sarà sempre \textit{uguale} al numero di tuple in $ R $.
+            \paragraph{non commutativo} L'operazione di proiezione non è commutativa, ovvero:
+                $$
+                    \pi_{A_1, A_2, \dots, A_n} ( \pi_{B_1, B_2, \dots, B_m} (R) ) \neq \pi_{B_1, B_2, \dots, B_m} ( \pi_{A_1, A_2, \dots, A_n} (R) )
+                $$
+                sono uguali $ \Leftrightarrow $ $ A_1, A_2, \dots, A_n $ e $ B_1, B_2, \dots, B_m $ sono uguali.
+        \subsubsection{Rename}
+            L'operatori di ridenominazione ha la seguente forma: $ \rho(R(A_1,\dots,A_n), E)$
+            dove:
+            \begin{itemize}
+                \item $ E $ è una qualunque espressione algebrica
+                \item $ R $ è una nuova relazione che ha le stesse tuple di $ E $ ma con alcuni attributi rinominati
+                \item $ A_1,\dots,A_n $ è la lista di ridenominazione e contiene espressioni nella forma \textit{vecchioNome} $\rightarrow$ \textit{nuovoNome}
+            \end{itemize}
+            Se il nome degli attributi non viene modificato si può omettere la lista di ridenominazione.
+    \subsection{Operazioni Insiemistiche}
+        \subsubsection{Unione}($ R\cup S $): è la relazione che include tutte le tuple che sono in $ R $ o in $ S $ o in entrambe.
+            \subparagraph{Criteri}
+            \begin{enumerate}
+                \item $ R $ e $ S $ devono avere lo stesso numero di attributi (se diverso non rispetta il significato di unione)
+                \item Gli attributi di $ R $ e $ S $ devono avere lo stesso dominio o dominio compatibile
+                \item Se i nomi degli attributi sono diversi, bisognerà rinominare in output il nome degli attributi
+            \end{enumerate}
+        \subsubsection{Intersezione}($ R\cap S $): è la relazione che include tutte le tuple che sono in $ R $ e in $ S $.
+        \subsubsection{Differenza}
+        \subsubsection{Prodotto Cartesiano} ($ R \times S $): è la relazione che ha come schema l'unione degli attributi di $ R $ e $ S $ e una tupla $ <r,s> $ (la concatenazione di $ r $ e $ s $) per ogni coppia di tuple $ r \in R $ e $ s \in S $. Il grado della relazione risultante è la somma dei gradi delle relazioni di input, mentre la cardinalità è il prodotto delle cardinalità delle relazioni di input. 
+        $$
+            R(A_1, A_2, \dots, A_n) \times S(B_1, B_2, \dots, B_m) = Q(A_1, A_2, \dots, A_n, B_1, B_2, \dots, B_m)
+        $$
+        Notiamo come il grado di $ Q $ sia $ n + m $ e la cardinalità sia $ |R| \times |S| $.
+    \subsection{Operazioni Binarie}    
+        \subsubsection{Join}
+            L'operazione di \texttt{JOIN} di due relazioni $ R $ e $ S $ ($ R \Join_c S $) è definita come \texttt{prodotto cartesiano} seguito da una \texttt{selezione}:
+            $$
+                R \Join_c S = \sigma_{\theta} (R \times S)
+            $$
+            Il risultato è l'insieme delle combinazioni di tuple di $ R $ e $ S $ che soddisfano il predicato $ c $. 
+            \paragraph{\texttt{JOIN} commutativo e associativo} L'operazione di \texttt{JOIN} è commutativa e associativa nei casi di \texttt{EQUI JOIN} (join con condizione di uguaglianza).
+            \paragraph{Cardinalità} La cardinalità del risultato di un \texttt{JOIN} è al massimo il prodotto delle cardinalità delle relazioni di input (caso nel quale tutte le tuple soddisfano il predicato), e al minimo 0 (caso in cui nessuna tupla soddisfa il predicato).
+            \paragraph{Equi Join} Un \texttt{EQUI JOIN} è un \texttt{JOIN} in cui il predicato è una condizione di uguaglianza tra attributi delle relazioni di input.
+            \paragraph{Natural Join} Un \texttt{NATURAL JOIN} è un \texttt{JOIN} in cui il predicato è l'uguaglianza di \textbf{tutti} gli attributi con lo stesso nome. In caso di attributi con nome diverso ma vogliamo comunque fare un \texttt{NATURAL JOIN} dobbiamo prima eseguire un \texttt{RENAME} (almeno su una delle due relazioni). 
+            \paragraph{Outer Join} Un \texttt{OUTER JOIN} è un \texttt{JOIN} nel quale vengono mantenute le tuple che \textbf{non} soddisfano il predicato. Si distinguono tre tipi di \texttt{OUTER JOIN}:
+                \subparagraph{Left Outer Join} ($ R \leftouterjoin_c S $): mantiene tutte le tuple di $ R $ sia che soddisfino il predicato che no. Se una tupla di $ R $ non soddisfa il predicato, i valori degli attributi di $ S $ saranno \texttt{NULL}.
+                \subparagraph{Right Outer Join} ($ R \rightouterjoin_c S $): mantiene tutte le tuple di $ S $ sia che soddisfino il predicato che no. Se una tupla di $ S $ non soddisfa il predicato, i valori degli attributi di $ R $ saranno \texttt{NULL}.
+                \subparagraph{Full Outer Join} ($ R \fullouterjoin_c S $): mantiene tutte le tuple di $ R $ e $ S $ sia che soddisfino il predicato che no. Se una tupla di $ R $ o $ S $ non soddisfa il predicato, i valori degli attributi dell'altra relazione saranno \texttt{NULL}.
+        \subsubsection{Divisione}
+            La \texttt{DIVISIONE} è una operazione che non è primitiva nell'algebra relazionale e raramente implementata dai \texttt{DBMS}. Risponde alla domanda: "Quali sono i valori di $ A $ per i quali valgono tutti i valori di $ B $?". È definita come:
+            $$
+                R \div S = \{ <x>|\exists <x,y>\in R, \forall <y> \in S \}
+            $$
+            dove $ R $ e $ S $ sono relazioni e $ x $ e $ y $ sono gli attributi di $ R $ e $ S $ rispettivamente.
+\section{Query Tree}
+    

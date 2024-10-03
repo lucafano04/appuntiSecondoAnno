@@ -1,0 +1,150 @@
+\chapter{Il Modello Relazionale}
+\label{cap:il-modello-relazionale}
+\thispagestyle{chapterInit}
+
+\section{Concetti Generali}
+    \paragraph{La Storia} Il modello fu proposto da Edgar F. Codd nel 1970 nel suo articolo: "A Relational Model of Data for Large Shared Data Banks".
+    \paragraph{Il Modello} Il modello relazionale è un modello di dati che si basa sul concetto matematico di relazione.
+\section{Relazione} 
+    \paragraph{Definizione}
+        \textit{Informalmente}, una \textbf{relazione} può essere vista come una \textbf{tabella} con un insieme di valori su ogni riga. 
+        
+        Ci sono due livelli che definiscono una relazione:
+        \begin{itemize}
+            \item Lo \textbf{schema} della relazione (livello \textit{intensionale})
+            \item \textbf{Istanze} della relazione (livello \textit{estensionale})  
+        \end{itemize}
+    \subsection{Definizione intensionale} Lo schema di una   relazione definisce:
+            \begin{itemize}
+                \item Il nome della relazione
+                \item il nome di ogni attributo
+                \item il dominio di ogni attributo
+            \end{itemize}
+            Si nota come l'ordine degli attributi non sia rilevante. Uno dei modi "standard" di rappresentare una relazione è il seguente: \texttt{Students(\textit{sid}: string, \textit{name}: string, \textit{login}: string, \textit{age}: integer, \textit{gpa}: real)}.
+            \paragraph{Grado} Il \textbf{grado} di una relazione è il numero di attributi che la compongono (nel caso dell'esempio, il grado è 5).
+    \subsection{Definizione estensionale} Un'istanza di uno schema di relazione è un \underline{insieme} di \textbf{tuple} (o \textbf{record}), ognuna delle quali ha lo stesso numero di campi dello schema della relazione. Questo comporta:
+        \begin{itemize}
+            \item Essendo un insieme \textbf{non} possono esserci duplicati
+            \item L'ordine delle tuple non è rilevante
+        \end{itemize}
+        \paragraph{Cardinalità} La \textbf{cardinalità} di una relazione è il numero di tuple che contiene.
+    \subsection{Stato di una relazione}
+        Lo \textbf{stato di una relazione} è un sottoinsieme del prodotto cartesiano dei domini dei suoi attributi:
+        
+        Data una relazione: $ R(A_1, A_2, \dots, A_n) $, lo stato di $ R $ è definito come: 
+        $$
+            r(R)\subset \operatorname{dom}(A_1)\times \operatorname{dom}(A_2)\times \dots \times \operatorname{dom}(A_n)
+        $$
+        ovvero:
+        $$
+            \begin{aligned}
+                r(R)&= \{t_1, t_2, \dots, t_n\}\qquad & \text{dove ogni } t_i \text{ è una tupla}\\
+                t_i&= \left< v_1, v_2, \dots, v_n \right> \qquad & \text{dove } v_i \text{ è un elemento dell'attributo } \operatorname{dom}(A_j)
+            \end{aligned}
+        $$
+    \subsection{Chiave di una relazione}
+        Ogni riga di una relazione ha un campo (o un insieme di campi) il cui valore (o i cui valori) identifica univocamente quella la riga in quella tabella. Questo campo (o insieme di campi) è detto \textbf{chiave} della relazione.
+
+        Talvolta si usano valori convenzionali per identificare una riga in una tabella. Si parla di \textit{chiave artificiale} (\textit{artificial key}) o \textit{chiavi surrogate} (\textit{surrogate key}).
+\section{Vincoli}
+    \paragraph{Definzione} I vincoli determinano quali stati di una relazione in una base di dati relazionale sono ammissibili e quali non lo sono.
+    
+    Esistono tre tipi di vincoli:
+    \begin{enumerate}
+        \item \textbf{Vincoli Impliciti:} dipendono dal \textit{data model} stesso.
+        \item \textbf{Vincoli basati sullo schema } ( o \textbf{espliciti}): sono definiti nello schema usando gli strumenti forniti dal modello \textbf{ER}.
+        \item \textbf{Vincoli applicativi o semantici:} si trattano di vincoli che vanno al di là del modello e devono essere imposti a livello di programma
+    \end{enumerate}
+    Un vincolo è definito come una \textbf{condizione} che DEVE valere affinché lo \textbf{stato} di una relazione sia \textbf{valido}. 
+
+    I principali tipi di vincoli espliciti che possono essere espressi nel modello relazionale sono:
+    \begin{itemize}
+        \item Vincolo di \textbf{dominio}
+        \item Vincolo di \textbf{chiave}
+        \item Vincolo di \textbf{integrità} delle \textbf{entità}
+        \item Vincolo di \textbf{integrità referenziale}
+    \end{itemize}
+    \subsection{Definizioni}
+        \paragraph{Superchiave} di una relazione $ R $: è un insieme di attributi $ S_K $ di $ R $ tale che:
+            \begin{itemize}
+                \item Non esistano due tuple di $ \operatorname{r}(R) $ in cui gli attributi di $ S_K $ abbiano lo stesso valore
+                \item Questa condizione deve essere rispettata in \textit{ogni stato valido} di $ R $
+            \end{itemize}
+        \paragraph{Chiave} di una relazione $ R $: è una superchiave minimale, ovvero una superchiave tale che la rimozione di qualsiasi attributo produrrebbe un insieme di attributi che non è più una superchiave di $ R $.
+        
+            Ogni chiave minimale è detta anche \textbf{chiave candidata}
+    
+        \textbf{Una chiave è sempre una superchiave ma non viceversa}
+    \subsection{Vincolo di chiave}
+        Se una relazione ha più di una \textbf{chiave candidata} allora ne viene scelta una come \textbf{chiave primaria} (in generale quella più piccola per numero di attributi)
+
+        I valori della chiave primaria sono usati per \textit{identificare} in modo \textit{univoco} le tuple di una relazione.
+
+    \subsection{Vincolo di integrità delle entità}
+        Nessuno degli attributi che compongono la chiave primaria $ P_K $ di una relazione $ R $ può avere valore \texttt{NULL} in una tupla di $ \operatorname{r}(R) $.
+    \subsection{Vincoli di integrità referenziale}
+        Il vincolo di integrità referenziale coinvolge più relazioni:
+        \begin{itemize}
+            \item una \textbf{relazione referenziante} $ R_1 $ che contiene un riferimento alla chiave primaria di un'altra relazione
+            \item una \textbf{relazione referenziata} $ R_2 $ che contiene la chiave primaria referenziata
+        \end{itemize}
+        Inoltre una tupla $ t_1 $ in $ R_1 $ si dice che \textbf{referenzia} una tupla $ t_2 $ in $ R_2 $ se $t_1[FK] = t_2[PK] $.
+        
+        I valori degli attributi della chiave esterna $ FK $ della \textbf{relazione referenziale} $ R_1 $ possono essere:
+            \begin{enumerate}
+                \item Uno dei valori del corrispondente attributo della chiave primaria $ PK $ in $ R_2 $
+                \item Assumere il valore \texttt{NULL}
+            \end{enumerate}
+        Se \texttt{NULL} la $ FK $ in $ R_1 $ non deve far parte degli attributi della chiave primaria di $ R_2 $.
+
+        \paragraph{Osservazione 1} La $ FK $ può fare riferimento alla stessa relazione di appartenenza della $ PK $.
+        \paragraph{Osservazione 2} Gli attributi alla $ FK $ non necessariamente devono avere lo stesso nome degli attributi della $ PK $.ù
+    \subsection{Altri vincoli}
+        \subsubsection{Vincoli di integrità semantica}
+            I vincoli di integrità semantica sono vincoli che vanno al di là del modello relazionale e devono essere imposti a livello di programma.
+\section{Stato e Operazione di una base di dati}
+    \subsection{Stato di una base di dati}
+        \subsubsection{Base di dati relazionale}
+            Ogni \textit{relazione} è tipicamente popolata da un insieme di tuple. Uno \textbf{stato di una base di dati relazionale} con schema $ S $ è un sottoinsieme di stati delle relazioni $ \{ r_1, r_2, \dots, r_n \} $ tali che ogni $ r_i $ è uno stato di $ R_i $ e che $ r_i $ soddisfa i vincoli di integrità relazionale in $ IC $.
+
+            Uno \textbf{stato} che \textbf{non} soddisfa i vincoli di integrità è detto \textbf{stato non valido}.ù
+        \subsubsection{Base di dati popolata}
+            Lo \textit{stato della base di dati} è l'unione di tutti i singoli stati delle relazioni che compongono la base di dati, ogni volta che questa è modificata si passa ad un nuovo stato.
+    \subsection{Operazioni di base}
+        Le operazioni di base che possono essere eseguite su una base di dati relazionale sono:
+        \begin{description}
+            \item[INSERT] Inserisce una nuova tupla in una relazione 
+            \item[DELETE] Rimuove una tupla da una relazione
+            \item[MODIFY] Modifica il valore di uno o più attributi di una tupla
+        \end{description}
+        \textbf{Importante:} queste operazioni non devono portare alla violazione di alcun vincolo di integrità, per garantire questa condizione può essere necessario \textbf{propagare automaticamente} gli aggiornamenti
+        \subsubsection{Operazioni con vincoli di integrità}
+            \begin{description}
+                \item[RESTRICT] o anche (\texttt{NO ACTION, REJECT}) impedisce l'operazione se viola un vincolo di integrità
+                \item[CASCADE, SET NULL, SET DEFAULT] Modificano automaticamente i valori delle chiavi esterne in modo da mantenere l'integrità referenziale
+                \item[routine] Esegue una procedura specifica per gestire l'errore
+            \end{description}
+            \paragraph{Violazioni per l'operazioni \texttt{INSERT}}
+                \begin{itemize}
+                    \item Violazione del vincolo di dominio - il valore inserito non è nel dominio dell'attributo
+                    \item Violazione del vincolo di chiave - il valore inserito è duplicato rispetto alla chiave
+                    \item Violazione del vincolo di integrità referenziale - il valore inserito non è presente nella chiave referenziata
+                    \item Violazione del vincolo di integrità delle entità - il valore della chiave primaria è \texttt{NULL}
+                \end{itemize}
+            \paragraph{Violazioni per l'operazioni \texttt{DELETE}}
+                \begin{itemize}
+                    \item Violazione del vincolo di integrità referenziale - esistono tuple in altre relazioni che fanno riferimento alla tupla che si vuole eliminare
+                \end{itemize}
+            \paragraph{Violazioni per l'operazioni \texttt{UPDATE}}
+                \begin{itemize}
+                    \item \texttt{UPDATE} della chiave primaria $\Rightarrow $ possibile violazione del vincolo di integrità referenziale
+                    \item \texttt{UPDATE} di una chiave esterna $\Rightarrow $ possibile violazione del vincolo di integrità referenziale
+                    \item \texttt{UPDATE} di un attributo che fa parte di una chiave $\Rightarrow $ possibile violazione del vincolo di dominio o vincoli \texttt{UNIQUE} e \texttt{NOT NULL}
+                \end{itemize}
+            \paragraph{Come preservare l'integrità referenziale}
+                \begin{itemize}
+                    \item \texttt{CASCADE} - cancella tutte le tuple che referenziavano la chiave primaria della tupla cancellata o modificata
+                    \item \texttt{SET NULL} - Imposta a \texttt{NULL} i valori delle chiavi esterne che referenziano la chiave primaria della tupla cancellata o modificata - NON può essere fatto se la chiave esterna è parte della chiave primaria
+                    \item \texttt{SET DEFAULT} - assegnare un valore di default alle chiavi esterne che referenziano la chiave primaria della tupla cancellata o modificata - NON può essere fatto se la chiave esterna è parte della chiave primaria
+                    \item \texttt{RESTRICT} - Impedisce l'operazione se viola un vincolo di integrità
+                \end{itemize}

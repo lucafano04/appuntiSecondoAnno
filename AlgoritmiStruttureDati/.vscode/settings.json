@@ -1,0 +1,19 @@
+{
+    "cSpell.language": "en,it-IT,it",
+    "cSpell.enableFiletypes": [
+        "tex"
+    ],
+    "cSpell.words": [
+        "amsfonts",
+        "amsmath",
+        "amssymb",
+        "amsthm",
+        "basecase",
+        "documentclass",
+        "hyperref",
+        "inductivecase",
+        "inputenc",
+        "usepackage"
+    ],
+    "editor.wordWrap": "on"
+}

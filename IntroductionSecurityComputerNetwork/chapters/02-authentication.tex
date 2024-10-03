@@ -1,0 +1,154 @@
+\chapter{Authentication I: Passwords \& co}
+\thispagestyle{chapterInit}
+\section{User Authentication \& Digital Identity - Autenticazione e Identità Digitale}
+    \subsection{Introduzione e Definizioni}
+        \begin{description}
+            \item[Identità] è un insieme di attributi relazionati ad una entità
+            \item[Attributo] è una caratteristica o proprietà di una entità ch e può essere usata per descriverne lo stato, apparenza o ogni altro aspetto.  
+            \item[Identità digitale] è ua identità i quali attributi sono conservati e trasmessi in forma digitale 
+        \end{description}
+        Ma perché la identità digitale è importante? In pratica questa può essere una soluzione per diversi aspetti che i governi mondiali vorrebbero risolvere.
+    \subsection{Digital Identity Lifecycle - Ciclo di Vita dell'Identità Digitale}
+        \begin{description}
+            \item[Creazione] L'identità viene creata, in genere da un ente di certificazione che assicura l'identità dell'utente e fornisce/chiede una forma di accesso per riconoscere in futuro l'utente. Viene creato un ID univoco per l'utente
+            \item[Autenticazione] L'identità viene autenticata tramite il metodo concordato in fase di creazione
+            \item[Autorizzazione/ Accesso] L'utente ha accesso a risorse e servizi in base ai permessi assegnati, i dati necessari dell'utente vengono trasmessi dall'ente di certificazione al servizio.
+            \item[Cancellazione o Disattivazione] L'identità viene cancellata o disattivata quando non è più necessaria e i dati devono essere cancellati dopo un certo periodo di tempo per garantire la privacy dell'utente.
+        \end{description}
+        \subsubsection{Enrollment / On-Boarding - Creazione}
+            La fase di creazione di una utenza porta un \textbf{Applicant} a diventare un \textbf{Subscriber} tramite una serie di passaggi:
+            \begin{description}
+                \item[Resolution] Vengono raccolti gli \textbf{attributi} essenziali dell'utente (nome, indirizzo, data e luogo di nascita, \dots) vengono ora raccolti anche due documenti di identità (patente, passaporto, C.I.,\dots) - ora l'utente viene distinto univocamente su un contesto
+                \item[Validation] Gli \textbf{attributi} raccolti vengono validati sulla base di \textbf{prove} tramite una fonte autorevole- gli attributi vengono ora associati ad una persona fisica 
+                \item[Verification] Le \textbf{prove} vengono verificate, in questo punto si verifica la corrispondenza tra le diverse foto, viene mandato un codice ai contatti per verificare che siano i suoi, etc - l'utente viene ora confermato e la sua identità è certificata 
+            \end{description}
+            \paragraph{Identity Assurance Levels - Livelli di Assicurazione dell'Identità}
+                \begin{description}
+                    \item[IAL1] GLi attributi, se presenti, vengono auto-dichiarati, o considerati come tali
+                    \item[IAL2] Una persona o di remoto o in presenza, verifica gli attributi
+                    \item[IAL3] Gli attributi vengono verificati da una persona autorizzata e i documenti fisici vengono esaminati
+                \end{description}  
+        \subsubsection{Authentication - Autenticazione}
+            \paragraph{Definzione} L'\textbf{autenticazione} è il processo di verifica dell'identità di un utente, processo o dispositivo.
+
+            Il \textbf{richiedente} deve dimostrare al \textbf{verificante} che è chi dice di essere.
+            \paragraph{Base} Quando esegui il login solitamente inserisci un \textbf{username} e una \textbf{password} che vengono confrontati con quelli memorizzati nel sistema.
+
+            L'autenticazione tramite \textbf{password} è molto diffusa e semplice da implementare.
+\section{An Introduction to Passwords - Introduzione alle Password}
+    \subsection{User Authn - Autenticazione Utente}
+        Quando esegui il login inserisci un \textbf{username} per annunciare chi sei e una \textbf{password} per dimostrare chi dici di essere, questo tipo di autenticazione si chiama \textbf{user authn} ovvero il processo di verifica dell'identità di un utente.
+        \subsubsection{Entollment - Creazione}
+            Le \textbf{password} dovrebbero essere conosciute solo dall'utente e dal sistema. Spesso però, soprattutto nelle grandi aziende, le password vengono mandata via mail o scritte dall'utente su una pagina web. In questi casi da chi potrebbe essere intercettata la password?
+        \subsubsection{La teoria rispetto alla realtà}
+            Le password hanno dominato il mondo dell'informatica sin dall'avvento dei computer, ma da allora la richiesta verso queste è che siano più sicure ma allo stesso tempo più "User Friendly", siamo in ricerca di alternative ma per ora delle proposte alternative come \textit{criteri di complessità} ma studi hanno rilevato che spesso non vengono rispettati e/o che non sono efficaci. 
+    \subsection{Password Security - Sicurezza delle Password}
+        All'inizio di internet le password venivano conservate in file appositi in chiaro, ma questo comportava un rischio molto alto, infatti se un attaccante riusciva ad accedere a quel file poteva facilmente accedere a tutte le password.
+
+        \subsubsection{Hashing}
+            Per risolvere questo problema si è pensato di "\textbf{hash-are}" le password, ovvero di applicare una funzione di hash alla password e conservare il risultato. In questo modo se un attaccante accede al file delle password non può risalire alla password originale.
+            \paragraph{Proprietà della funzione di hash}
+                Una funzione di hash ottimale dovrebbe avere le seguenti proprietà:
+                \begin{description}
+                    \item[Deterministica] dato un input la funzione restituisce sempre lo stesso output
+                    \item[Rapida] la funzione deve essere veloce da calcolare
+                    \item[Difficile da invertire] data l'output è difficile risalire all'input
+                    \item[Biettiva] due input diversi devono avere output diversi
+                    \item[Lunghezza fissa] l'output deve avere una lunghezza fissa indipendentemente dalla lunghezza dell'input
+                \end{description}
+                Molto spesso però capita che i bit disponibili per l'hash siano limitati rispetto a tutti i possibili input, per questo motivo si è cercato di creare funzioni di hash che generano due output uguali solo in rarissimi casi, inoltre si aggiunge a questo che per input simili l'output sia molto diverso.
+            \subsubsection{Crack of Passwords}
+                In caso di un "leak" di password che sono state opportunamente codificate con una funzione di hash, un attaccante può tentare di decifrarle ma questo è molto difficile. Questo diventa più semplice se vengono usate password poco sicure e/o comuni. infatti si stimi che per  trovare una password da 8 caratteri composti da lettere minuscole e numeri ci vogliano "solo" 155€ su una istanza di AWS.
+        \subsection{Hash \& Salt}
+            Per rendere più difficile il lavoro degli attaccanti si è pensato di aggiungere un \textbf{salt} alle password, ovvero un valore casuale che viene aggiunto alla password prima di calcolare l'hash. Questo rende più difficile per l'attaccante decifrare la password.
+\section{Multi Factor Authentication - Autenticazione a più fattori}
+    \subsection{Definizione}
+        L'autenticazione a più fattori è un metodo di autenticazione che richiede l'uso di più metodi di autenticazione per verificare l'identità di un utente.
+    \subsection{Fattori di Autenticazione}
+        I fattori di autenticazione sono:
+        \begin{description}
+            \item[Qualcosa che sai] (password, PIN, \dots)
+            \item[Qualcosa che hai] (smartphone, token, \dots)
+            \item[Qualcosa che sei] (impronte digitali, riconoscimento facciale, \dots)
+        \end{description}
+        \subsubsection{Vantaggi/Svantaggi quello che sai}
+            \paragraph{Vantaggi}
+                \begin{itemize}
+                    \item Facile da implementare - non richiede hardware aggiuntivo
+                    \item Facile da usare - Basta ricordare la password
+                    \item Facile da resettare se dimenticato - basta fare il reset della password
+                \end{itemize}
+            \paragraph{Svantaggi}
+                \begin{itemize}
+                    \item Facile da rubare - se un attaccante riesce a scoprire la password può accedere al sistema 
+                    \item Facile da dimenticare - se la password è complessa è facile dimenticarla
+                    \item Facile da indovinare - se la password è semplice ed è stata usata in altri contesti è facile indovinarla
+                \end{itemize}
+        \subsubsection{Vantaggi/Svantaggi quello che hai}
+            \paragraph{Vantaggi}
+                \begin{itemize}
+                    \item Difficile da rubare - se un attaccante non ha il dispositivo non può accedere al sistema
+                    \item Difficile da indovinare - se il dispositivo è protetto da PIN o password è difficile indovinare l'accesso
+                    \item Difficile da clonare - se il dispositivo è protetto da un token è difficile clonarlo inoltre la parte di autenticazione è fatta dal dispositivo stesso e non dal sistema
+                \end{itemize}
+            \paragraph{Svantaggi}
+                \begin{itemize}
+                    \item Facile da perdere - se il dispositivo viene perso l'utente non può accedere al sistema
+                    \item Difficile da resettare - se il dispositivo viene perso l'utente deve contattare l'amministratore per resettare l'accesso
+                    \item Costoso - i dispositivi possono essere costosi 
+                \end{itemize}
+        \subsubsection{Vantaggi/Svantaggi quello che sei}
+            \paragraph{Vantaggi}
+                \begin{itemize}
+                    \item Difficile da rubare - le impronte digitali o il riconoscimento facciale sono unici e difficili da rubare
+                    \item Difficile da indovinare - è difficile indovinare le impronte digitali o il riconoscimento facciale
+                    \item Difficile da clonare - è difficile clonare le impronte digitali o il riconoscimento facciale
+                \end{itemize}
+            \paragraph{Svantaggi}
+                \begin{itemize}
+                    \item Se il fattore viene compromesso non può essere cambiato - se le impronte digitali vengono rubate non possono essere cambiate
+                    \item Costoso - i dispositivi possono essere costosi
+                    \item Non sempre preciso - il riconoscimento facciale può essere ingannato
+                \end{itemize}
+        \subsubsection{PSD2 Compliance}
+            \paragraph{Cos'è PSD2} La \textbf{PSD2} è una direttiva europea che regola i servizi di pagamento e che richiede l'autenticazione a più fattori per i pagamenti online. Questo per ridurre il rischio di frodi.
+            \paragraph{How to comply MFA in PSD2} Una idea sarebbe quella di includere nella challenge anche i dati della particolare transazione come:
+                \begin{itemize}
+                    \item L'identificativo del destinatario della transazione
+                    \item L'importo della transazione
+                    \item L'instante nella quale la transazione è stata inizializzata
+                    \item \dots
+                \end{itemize}
+            Purtroppo però ciò non è abbastanza in quanto i dati sopra indicati possono essere ricavati dal contesto il che rende la challenge prevedibile.
+    \subsection{FIDO: Phishing Resistant Authentication}
+        \subsubsection{Cos'è FIDO}
+            \textbf{FIDO (Fast Identity Online)} è un insieme di standard aperti per l'autenticazione a più fattori che mira a ridurre il rischio di phishing. Il suo scopo è quello di assicurare una \textbf{autenticazione forte} e di \textbf{ridurre l'uso di password}.
+        \subsubsection{Come funziona}
+            \begin{enumerate}
+                \item Viene chiesto all'utente di scegliere un ente FIDO
+                \item L'utenti sblocca il dispositivo FIDO usando un'impronta digitale, un pulsante su un dispositivo di secondo fattore, un PIN o un qualsiasi altro metodo di autenticazione supportato
+                \item Il dispositivo crea una chiave pubblica e una chiave privata univoca per il dispositivo, il servizio online e l'utente
+                \item La chiave pubblica è inviata al servizio online ed associata all'account dell'utente
+                \item Il servizio online chiede all'utente di autenticarsi con il dispositivo precedentemente registrato
+                \item L'utente sblocca il dispositivo FIDO usando lo stesso metodo di autenticazione usato in precedenza
+                \item Il dispositivo FIDO usa l'account dell'utente identificato per inviare la corretta chiave al servizio online
+                \item Infine il dispositivo invia la challenge ricevuta dal servizio online firmata con la chiave privata e il servizio online verifica la firma con la chiave pubblica, l'utente è autenticato.
+            \end{enumerate}
+\section{Outsourcing Authentication}
+    \subsection{Definizione}
+        L'outsourcing dell'autenticazione è il processo di affidare l'autenticazione degli utenti ad un servizio esterno, spesso chiamato \textbf{Identity Provider}. Questo servizio si occupa di verificare l'identità dell'utente e di inviare un token di autenticazione al servizio che richiede l'autenticazione. Esempio in italia per l'accesso ai servizi pubblici si usa SPID.
+    \subsection{Che problema risolve}
+        L'outsourcing dell'autenticazione risolve diversi problemi:
+        \begin{description}
+            \item[Sicurezza] L'Identity Provider è specializzato in autenticazione e può offrire un livello di sicurezza più alto
+            \item[User Experience] L'Identity Provider può offrire un'esperienza utente migliore in quanto l'utente non deve ricordare le password per ogni servizio ma solo quella dell'Identity Provider - SSO
+            \item[Compliance] L'Identity Provider può aiutare a rispettare le normative sulla privacy e la sicurezza
+        \end{description}
+    \subsection{La soluzione}
+        L'outsourcing dell'autenticazione è delegato ad una terza parte, l'\textbf{Identity Provider}, che si occupa di verificare l'identità dell'utente e di inviare le informazioni di autenticazione al servizio che richiede l'autenticazione. A questo punto il servizio invia all'utente un token di autenticazione che può essere usato per accedere al servizio senza dover inserire nuovamente le credenziali del SSO.
+    \subsection{Potenziali Problemi}
+        L'outsourcing dell'autenticazione può comportare alcuni problemi:
+        \begin{description}
+            \item[Single Point of Failure] Se l'Identity Provider è compromesso tutti i servizi che usano l'Identity Provider per l'autenticazione sono compromessi
+            \item[Privacy] L'Identity Provider può raccogliere informazioni sull'utente e sulle sue abitudini di navigazione
+        \end{description}
