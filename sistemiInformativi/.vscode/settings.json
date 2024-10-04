@@ -1,6 +1,9 @@
 {
     "cSpell.words": [
+        "ciclare",
+        "esternalizzazione",
         "informazionali",
+        "Interrompibilità",
         "pdfcreator",
         "pdfkeywords",
         "pdflatex",
@@ -9,5 +12,8 @@
         "pdftitle",
         "Reingegnerizzazione"
     ],
-    "editor.wordWrap": "on"
+    "editor.wordWrap": "on",
+    "conventionalCommits.scopes": [
+        "SI"
+    ]
 }
