@@ -31,8 +31,7 @@
             \paragraph{Processo client} processo che inizia la comunicazione
             \paragraph{Processo server} processo che attende di essere contattato
         \subsubsection{Socket}
-            \paragraph{Socket} Un processo che invia/riceve messaggi a/da il suo \textbf{socket}.
-            
+            \paragraph{Socket} Un processo che invia/riceve messaggi a/da il suo \textbf{socket}.\newline
             Un socket è analogo ad una porta 
 
     \subsection{Indirizzamento}
@@ -234,15 +233,40 @@
             Nuovo livello di framing binario per incapsulare i messaggi \texttt{HTTP}, in questo modo la semantica \texttt{HTTP} rimane invariata ma la codifica in transito è differente. Tutte le comunicazioni \texttt{HTTP/2} sono suddivise in messaggi più piccoli, ognuno dei quali codificano un formato binario, inoltre sia il client che il server possono inviare messaggi in qualsiasi momento.ù
         \subsubsection{Stream, messaggi e frame}
             Tutte le comunicazioni vengono eseguite all'interno di una connessione TCP bidirezionale, ogni \textbf{stream} ha un identificativo univoco con priorità. Ogni messaggio è un messaggio \texttt{HTTP} logico (richiesta/risposta). Il frame è la più piccola unità di comunicazione di un certo tipo specifico di dati.
-        \subsubsection{Multiplexing di richieste e risposte}
-        \subsubsection{Server Push}
+            \paragraph{Multiplexing di richieste e risposte}
+                In \textbf{HTTP/1.x} se il client esegue più richieste in parallelo per migliorare le prestazioni deve usate \texttt{TCP} multiple (\texttt{HTTP/1.1 o HTTP/1.2}) oppure aprire una nuova connessione (\texttt{HTTP/1.0}). Grazie al \textbf{framing binario} di \texttt{HTTP/2} è possibile rimuovere queste limitazioni consentendo il \textbf{multiplexing} di richieste e risposte.
+                \subparagraph{Priorità degli stream }L'ordine nel quale i frame vengono inviati dal client o dal server influenza le prestazioni, per questo motivo \texttt{HTTP/2} supporta di associare a ciascun \texttt{stream} una priorità e delle dipendenze. Infatti ogni stream può avere un peso tra $ 1 $ ovvero il peso minimo e $ 256 $ ovvero il peso massimo, inoltre uno stream può avere un elenco di dipendenza su altri stream. Grazie a questa funzionalità il client costruisce un "\textbf{albero di priorità}" in modo da ottimizzare il caricamento della pagina.
+            \paragraph{Server Push} Il server può inviare più risposte per una singola richiesta (se ad esempio è necessaria una dipendenza per il caricamento della pagina) in modo da ridurre il tempo di caricamento della pagina senza dover attendere la richiesta del client.
     \subsection{Transport Layer Security (TLS)}
+        Il \texttt{TLS} ovvero \textbf{Transport Layer Security} è un protocollo crittografico che permette una comunicazione sicura da sorgente a destinatario fornendo: \textbf{Autenticazione}, \textbf{Integrità dei dati} e \textbf{Confidenzialità}. \footnote{Più sulla sicurezza di computer e reti in: "Appunti di Introduction to Computer and Network Security" di Luca Facchini}\newline
+        Il funzionamento del \texttt{TLS} può essere riassunto in tre fasi:
+        \begin{enumerate}
+            \item Negoziazione fra client e server per stabilire l'algoritmo di crittografia da usare
+            \item Scambio delle chiavi per la crittografia e autenticazione della comunicazione
+            \item Cifratura simmetrica dei dati e autenticazione dei dati
+        \end{enumerate}
     \subsection{HTTPS}
+        \texttt{HTTPS} è un protocollo di comunicazione sicura che estende \texttt{HTTP} aggiungendo una crittografia tramite \texttt{TLS}. Il protocollo \texttt{HTTPS} usa la porta $ 443 $ e permette tutti i vantaggi di \texttt{TLS} come l'autenticazione, l'integrità dei dati e la confidenzialità. Questo però non significa che tutto il traffico dei livelli inferiori sia crittografato, infatti solo il traffico (header e dati) del livello applicazione è crittografato.
 \section{FTP - File Transfer Protocol}
     \paragraph{FTP} Il \textbf{File Transfer Protocol} è un protocollo di trasferimento di file che permette di trasferire file tra un host e un server. FTP è un protocollo \textbf{stateful} che mantiene lo stato del client e del server durante la sessione. Lo standard FTP è definito nella \textbf{RFC 959} e usa una porta standard di \textbf{21}.
     \subsection{Connessione di controllo}
         \paragraph{Connessione di controllo} La connessione di controllo è usata per inviare comandi tra il client e il server. I comandi sono inviati in \textbf{ASCII} e i comandi sono \textbf{case-insensitive}. La connessione di controllo è \textbf{stateful} e mantiene lo stato del client e del server durante la sessione. La connessione di controllo usa la porta \textbf{21}, mentre la connessione dati usa la porta \textbf{20}, questo è un esempio di protocollo con \textbf{controllo fuori banda}.
-    \subsection{Comandi FTP}
+    \subsection{Comandi \& Risposte FTP}
+        \paragraph{Comandi FTP}
+            \begin{description}
+                \item[USER \textit{username}] Autenticazione con l'username
+                \item[PASS \textit{password}] Autenticazione con la password
+                \item[LIST] Mostra i file nella directory corrente
+                \item[RETR \textit{filename}] Recupera un file dalla directory corrente
+                \item[STOR \textit{filename}] Memorizza un file nella directory corrente
+            \end{description}
+        \paragraph{Risposte FTP}
+            \begin{description}
+                \item[331] Username OK, password richiesta
+                \item[125] Connessione dati aperta, inizio trasferimento
+                \item[425] Connessione dati non aperta
+                \item[452] Errore di memorizzazione
+            \end{description}
 
 \section{Posta Elettronica}
     \paragraph{Introduzione}
