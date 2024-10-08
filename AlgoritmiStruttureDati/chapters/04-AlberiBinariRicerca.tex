@@ -1,0 +1,248 @@
+\chapter{Alberi Binari di Ricerca}
+\thispagestyle{chapterInit}
+\section{Alberi Binari di Ricerca}
+    \paragraph{Dizionario} \begin{definition}
+        Un \textbf{dizionario} è una struttura dati che implementa le seguenti funzionalità: 
+        \begin{itemize}
+            \item \texttt{Item lookup(Item k)}: restituisce l'elemento con chiave $k$ se presente nel dizionario.
+            \item \texttt{insert(Item k, Item v)}: inserisce l'elemento $i$ con chiave $k$ e valore $v$ nel dizionario.
+            \item \texttt{remove(Item k)}: elimina l'elemento con chiave $k$ dal dizionario.
+        \end{itemize}
+    \end{definition}
+    \subparagraph{Possibili Implementazioni} di seguito sono riportate le possibili implementazioni di un dizionario:
+        \begin{table}[H]
+            \centering
+            \begin{tabular}{|c|c|c|c|}
+                \hline
+                \textbf{Struttura} & \textbf{\texttt{lookup}} & \textbf{\texttt{insert}} & \textbf{\texttt{remove}} \\
+                \hline
+                Vettore Ordinato & $O(\log n)$ & $O(n)$ & $O(n)$ \\
+                \hline
+                Vettore non Ordinato & $O(n)$ & $O(1)$* & $O(1)$* \\
+                \hline
+                Lista non Ordinata & $O(n)$ & $O(1)$ & $O(1)$* \\
+                \hline
+            \end{tabular}
+        \end{table}
+        * Assumendo che l'elemento sia già stato trovato, altrimenti $O(n)$.
+    \paragraph{Idea ispiratrice} Portare l'idea di ricerca binaria negli alberi.
+    \paragraph{Memorizzaione}\begin{itemize}
+        \item Le \textbf{associazioni chiave-valore} vengono memorizzate in un albero binario
+        \item Ogni nodo $ u $ contiene una coppia: $ (u.key, u.value) $
+        \item Le chiavi devono appartenete ad un insieme \textbf{totalmente ordinato}
+    \end{itemize}
+    \paragraph{Proprietà}
+    \begin{enumerate}
+        \item Le chiavi contenute nei nodi del sotto-albero sinistro di un nodo $ u $ sono minori di $ u.key $
+        \item Le chiavi contenute nei nodi del sotto-albero destro di un nodo $ u $ sono maggiori di $ u.key $
+    \end{enumerate}
+    \paragraph{Specifica}
+        \subparagraph{\texttt{Getters}}
+            \begin{itemize}
+                \item \texttt{Item key()}: restituisce la chiave dell'elemento memorizzato nel nodo
+                \item \texttt{Item value()}: restituisce il valore dell'elemento memorizzato nel nodo
+                \item \texttt{Node left()}: restituisce il figlio sinistro del nodo
+                \item \texttt{Node right()}: restituisce il figlio destro del nodo
+                \item \texttt{Node parent()}: restituisce il genitore del nodo
+            \end{itemize}
+        \subparagraph{\texttt{Dizionario}}
+            \begin{itemize}
+                \item \texttt{Item lookup(Item k)}: restituisce l'elemento con chiave $ k $ se presente nel dizionario
+                \item \texttt{insert(Item k, Item v)}: inserisce l'elemento $ i $ con chiave $ k $ e valore $ v $ nel dizionario
+                \item \texttt{remove(Item k)}: elimina l'elemento con chiave $ k $ dal dizionario
+            \end{itemize}
+        \subparagraph{Ordinamento}
+            \begin{itemize}
+                \item \texttt{Tree successorNode(Node u)}: restituisce il nodo con chiave successiva a $ u.key $
+                \item \texttt{Tree predecessorNode(Node u)}: restituisce il nodo con chiave precedente a $ u.key $
+                \item \texttt{Tree min()}: restituisce il nodo con chiave minima
+                \item \texttt{Tree max()}: restituisce il nodo con chiave massima
+            \end{itemize}
+        \subparagraph{Funzioni interne}
+            \begin{itemize}
+                \item \texttt{Node lookupNode(Tree T, Item k)}: restituisce il nodo con chiave $ k $ se presente nell'albero $ T $
+                \item \texttt{Node insertNode(Tree T, Item k, Item v)}: inserisce l'elemento $ i $ con chiave $ k $ e valore $ v $ nell'albero $ T $
+                \item \texttt{Node removeNode(Tree T, Item k)}: elimina l'elemento con chiave $ k $ dall'albero $ T $
+            \end{itemize}
+    \subsection{Ricerca - \texttt{lookupNode()}}
+        La funzione \texttt{Item lookup(Tree T, Item k)} restituisce il presente nell'albero $ T $ con chiave $ k $ se presente, altrimenti restituisce \texttt{nil}.
+        Implementazione con dizionario:
+        \begin{algorithm}[H]
+            \caption{lookupNode(\Item k)}
+            \begin{algorithmic}
+                \State \Tree $ t \gets \operatorname{lookupNode}(tree, k)$
+                \If{$ t \neq \Nil $}
+                    \State \Return $ t.\operatorname{value}() $
+                \Else
+                    \State \Return \Nil
+                \EndIf
+            \end{algorithmic}
+        \end{algorithm}
+        Versione Iterativa:
+        \begin{algorithm}[H]
+            \caption{lookupNode(\Item k)}
+            \begin{algorithmic}
+                \State \Tree $ t \gets \operatorname{root}()$
+                \While{$ t \neq \Nil \textbf{and} u.key \neq k $}
+                    \If{$ k < t.\operatorname{key}() $}
+                        \State $ t \gets t.\operatorname{left}() $
+                    \Else
+                        \State $ t \gets t.\operatorname{right}() $
+                    \EndIf
+                \EndWhile
+                \State \Return $ t $
+            \end{algorithmic}
+        \end{algorithm}
+        Versione Ricorsiva:
+        \begin{algorithm}[H]
+            \caption{lookupNode(\Item k)}
+            \begin{algorithmic}
+                \Function{lookupNode}{\Tree $ t $, \Item $ k $}
+                    \If{$ t = \Nil \textbf{or} t.\operatorname{key}() = k $}
+                        \State \Return $ t $
+                    \EndIf
+                    \If{$ k < t.\operatorname{key}() $}
+                        \State \Return \Call{lookupNode}{$ t.\operatorname{left}(), k $}
+                    \Else
+                        \State \Return \Call{lookupNode}{$ t.\operatorname{right}(), k $}
+                    \EndIf
+                \EndFunction
+            \end{algorithmic}
+        \end{algorithm}
+    \subsection{Minimo \& Massimo}
+        \begin{algorithm}[H]
+            \caption{\Tree min(\Tree $ t $)}
+            \begin{algorithmic}
+                \State $\Tree u \gets t$
+                \While{$ u.\operatorname{left}() \neq \Nil $}
+                    \State $ u \gets u.\operatorname{left}() $
+                \EndWhile
+                \State \Return $ u $
+            \end{algorithmic}
+        \end{algorithm}
+        \begin{algorithm}[H]
+            \caption{\Tree max(\Tree $ t $)}
+            \begin{algorithmic}
+                \State $\Tree u \gets t$
+                \While{$ u.\operatorname{right}() \neq \Nil $}
+                    \State $ u \gets u.\operatorname{right}() $
+                \EndWhile
+                \State \Return $ u $
+            \end{algorithmic}
+        \end{algorithm}
+        Queste due funzioni sono implementabili in nel modo mostrato solo in quanto assumiamo che l'albero sia un albero binario di ricerca ben formato, se ciò non fosse vero, sarebbe necessario scorrere l'intero albero. (Non in questo capitolo)
+    \subsection{Successore e Predecessore}
+        \subsubsection{Successore}
+            \begin{definition}
+                Il \textbf{successore} di un nodo $ u $ è il più piccolo nodo maggiore di $ u $.
+            \end{definition}
+            Per rispondere a questo problema, possiamo distinguere diversi casi:
+            \begin{enumerate}
+                \item Se $ u $ ha un figlio destro allora il successore sarà il minimo del sotto-albero destro
+                \item Se $ u $ non ha un figlio destro, allora bisognerà risalire l'albero fino a trovare il nodo radice di un sotto-albero che contiene $ u$ a sinistra
+            \end{enumerate}
+            \begin{algorithm}[H]
+                \caption{\Tree successorNode(\Tree $ u $)}
+                \begin{algorithmic}
+                    \If{$ u = \Nil $}
+                        \State \Return $t$ \Comment{Se $ u = \Nil $, non ha successore}
+                    \EndIf
+                    \If{$ u.\operatorname{right}() \neq \Nil $} \Comment{Caso 1 - Se $ u $ ha un figlio destro}
+                        \State \Return \Call{min}{$ u.\operatorname{right}() $}
+                    \algstore{successorNode}
+                \end{algorithmic}
+            \end{algorithm}
+            \begin{algorithm}[H]
+                \begin{algorithmic}
+                    \algrestore{successorNode}
+                    \Else \Comment{Caso 2 - Se $ u $ non ha un figlio destro}
+                        \State $\Tree p \gets u.\operatorname{parent}()$
+                        \While{$ p \neq \Nil \textbf{and} u == p.\operatorname{right}() $}
+                            \State $ u \gets p $
+                            \State $ p \gets p.\operatorname{parent}() $
+                        \EndWhile
+                        \State \Return $ p $
+                    \EndIf
+                \end{algorithmic}
+            \end{algorithm}
+        \subsubsection{Predecessore}
+            \begin{definition}
+                Il \textbf{predecessore} di un nodo $ u $ è il più grande nodo minore di $ u $.
+            \end{definition}
+            Per rispondere a questo problema, possiamo distinguere diversi casi:
+            \begin{enumerate}
+                \item Se $ u $ ha un figlio sinistro allora il predecessore sarà il massimo del sotto-albero sinistro
+                \item Se $ u $ non ha un figlio sinistro, allora bisognerà risalire l'albero fino a trovare il nodo radice di un sotto-albero che contiene $ u$ a destra
+            \end{enumerate}
+            \begin{algorithm}[H]
+                \caption{\Tree predecessorNode(\Tree $ u $)}
+                \begin{algorithmic}
+                    \If{$ u = \Nil $}
+                        \State \Return $t$ \Comment{Se $ u = \Nil $, non ha predecessore}
+                    \EndIf
+                    \If{$ u.\operatorname{left}() \neq \Nil $} \Comment{Caso 1 - Se $ u $ ha un figlio sinistro}
+                        \State \Return \Call{max}{$ u.\operatorname{left}() $}
+                    \Else \Comment{Caso 2 - Se $ u $ non ha un figlio sinistro}
+                        \State $\Tree p \gets u.\operatorname{parent}()$
+                        \While{$ p \neq \Nil \textbf{and} u == p.\operatorname{left}() $}
+                            \State $ u \gets p $
+                            \State $ p \gets p.\operatorname{parent}() $
+                        \EndWhile
+                        \State \Return $ p $
+                    \EndIf
+                \end{algorithmic}
+            \end{algorithm}
+    \subsection{Inserimento - \texttt{insertNode()}}
+        La funzione \texttt{insertNode(\Tree $ t $, \Item $ k $, \Item $ v $)} inserisce un'associazione chiave-valore $ (k, v) $ nell'albero $ t $, se la chiave $ k $ è già presente, il valore viene aggiornato, se $ t = \Nil $, viene restituito un nuovo nodo con chiave $ k $ e valore $ v $, altrimenti si restituisce l'albero $ t $ inalterato.
+        \paragraph{Implementazione dizionario} Questa è l'implementazione del dizionario con la funzione \texttt{insertNode()}:
+        \begin{algorithm}[H]
+            \caption{insertNode(\Item $ k $, \Item $ v $)}
+            \begin{algorithmic}
+                \State tree $\gets \operatorname{insertNode}(\text{tree}, k, v)$
+            \end{algorithmic}
+        \end{algorithm}
+        \subsubsection{Implementazione}
+            \begin{algorithm}[H]
+                \caption{\Tree insertNode(\Tree $ T $, \Item $ k $, \Item $ v $)}
+                \begin{algorithmic}
+                    \State \Tree $ p \gets \Nil $
+                    \State \Tree $ u \gets T $
+                    \While{$ u \neq \Nil \textbf{and} u.\operatorname{key}() \neq k $}
+                        \State $ p \gets u $
+                        \State $ u \gets \operatorname{iff}(k<u.\operatorname{key}(), u.\operatorname{left}(), u.\operatorname{right}()) $
+                    \EndWhile
+                    \If{$ u \neq \Nil \textbf{and} u.\operatorname{key}() == k $}
+                        \State $ u.value \gets v $
+                    \algstore{insertNode}
+                \end{algorithmic}
+            \end{algorithm}
+            \begin{algorithm}[H]
+                \begin{algorithmic}
+                    \algrestore{insertNode}
+                    \Else
+                        \State \Tree $ new \gets \New \Item(k, v)$
+                        \Call {link}{$ p, new, k$}
+                        \If{$ p == \Nil $}
+                            \State $ T \gets new $
+                        \EndIf
+                    \EndIf
+                    \State \Return $ T $
+                \end{algorithmic}
+            \end{algorithm}
+            Definizione della funzione \texttt{link()}:
+            \begin{algorithm}[H]
+                \caption{link(\Tree $ p $, \Tree $ u $, \Item $ k $)}
+                \begin{algorithmic}
+                    \If{$ u \neq \Nil $}
+                        \State $ u.\operatorname{parent} \gets p $
+                    \EndIf
+                    \If{$ p \neq \Nil $}
+                        \If{$ k < p.\operatorname{key}() $}
+                            \State $ p.\operatorname{left} \gets u $
+                        \Else
+                            \State $ p.\operatorname{right} \gets u $
+                        \EndIf
+                    \EndIf
+                \end{algorithmic}
+            \end{algorithm}
+\section{Alberi Binari di Ricerca Bilanciati}

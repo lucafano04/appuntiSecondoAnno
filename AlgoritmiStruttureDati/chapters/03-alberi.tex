@@ -1,0 +1,227 @@
+\chapter{Alberi}
+\thispagestyle{chapterInit}
+\section{Introduzione}
+    \paragraph{Albero Radicato (\textit{Rooted Tree})}
+        \begin{definition}
+            Un albero intero consiste in un insieme di nodi orientati che connettono coppie di nodi, con le seguenti proprietà:
+            \begin{enumerate}
+                \item Un nodo dell'albero è designato come nodo \textbf{radice}
+                \item Ogni nodo $ n $, a parte la radice, ha esattamente un arco entrante
+                \item Esiste un cammino unico dalla radice ad ogni nodo
+                \item L'albero è connesso
+            \end{enumerate}
+        \end{definition}
+    \paragraph{Albero Radicato Ricorsivo}
+        \begin{definition}
+            Un albero è dato da:
+            \begin{enumerate}
+                \item Un insieme vuoto, oppure
+                \item Un nodo \textbf{radice} e zero o più \textbf{sotto-alberi}, ognuno dei quali è un albero.
+                    \subitem La radice è connessa ai sotto-alberi tramite archi orientati.
+            \end{enumerate}
+        \end{definition}
+    \paragraph{Profondità nodi (\textit{Depth})}
+        \begin{definition}
+            Si definisce \textbf{profondità} di un nodo $ n $ la lunghezza del cammino semplice dalla radice al nodo $ n $ (misurato in numero di archi).
+        \end{definition}
+    \paragraph{Livello (\textit{Level})}
+        \begin{definition}
+            Si definisce come \textbf{livello} di un albero l'insieme di tutti i nodi alla stessa profondità.
+        \end{definition}
+    \paragraph{Altezza dell'albero (\textit{Height})}
+        \begin{definition}
+            Si definisce come \textbf{altezza} di un albero la profondità massima dei nodi dell'albero.
+        \end{definition}
+\section{Alberi Binari}
+    \begin{definition}
+        Un \textbf{albero binario} è un albero radicato nel quale ogni nodo ha al massimo due figli, identificati come figlio \textbf{sinistro} e figlio \textbf{destro}.
+    \end{definition}
+    \subsubsection{Specifica delle \texttt{API}}
+
+        \begin{algorithm}[H]
+            \caption{Tree}
+            \% Costituisce unb nuovo nodo, contenente $v$, senza figli o genitori. \newline
+            $\operatorname{Tree}(\operatorname{Item} v) $ \newline
+            \% Legge il valore memorizzato nel nodo \newline
+            $\operatorname{Item} \operatorname{read}()$ \newline
+            \% Modifica il valore memorizzato nel nodo \newline
+            $\operatorname{write}(\operatorname{Item} v)$ \newline
+            \% Restituisce il padre, oppure \textbf{nil} se questo nodo è radice \newline
+            $\operatorname{Tree} \operatorname{parent}() $ \newline
+            \% Restituisce il figlio sinistro (destro) di questo nodo; restituisce \textbf{nil} se assente
+            $\operatorname{Tree} \operatorname{left}()$ \newline
+            $\operatorname{Tree} \operatorname{right}()$ \newline
+            \% Inserisce il sotto-albero radicato in t come figlio sinistro (destro) di questo nodo\newline
+            $\operatorname{insertLeft}(\operatorname{Tree} t)$ \newline
+            $\operatorname{insertRight}(\operatorname{Tree} t) $\newline
+            \% Distrugge (ricorsivamente) il figlio sinistro (destro) di questo nodo \newline
+            $\operatorname{deleteLeft}()$ \newline
+            $\operatorname{deleteRight}()$
+        \end{algorithm}
+    \subsection{Implementazione}
+        \paragraph{Campi memorizzati nei nodi:}\begin{description}
+            \item[\textit{parent}] Puntatore al nodo padre
+            \item[\textit{left}] Puntatore al figlio sinistro
+            \item[\textit{right}] Puntatore al figlio destro
+        \end{description}
+        \paragraph{Operazioni di base:} Implementazione operazioni \texttt{API}:
+        \begin{algorithm}[H]
+            \caption{Tree}
+            \begin{algorithmic}
+                \Function{Tree}{\Item $v$}
+                    \State \Tree $t \gets$ \New \Tree
+                    \State $t.\textit{value} \gets v$
+                    \State $t.\textit{left} \gets t.\textit{right} \gets$ 
+                    \State $t.\textit{parent} \gets \textbf{nil}$
+                    \State \Return $t$
+                \EndFunction
+                \Function{insertLeft}{\Tree $t$}
+                    \If{$left == \textbf{nil}$}
+                        \State $left \gets t$
+                        \State $t.\textit{parent} \gets \textit{this}$
+                    \EndIf
+                \EndFunction
+                \Function{insertRight}{\Tree $t$}
+                    \If{$right == \textbf{nil}$}
+                        \State $right \gets t$
+                        \State $t.\textit{parent} \gets \textit{this}$
+                    \EndIf
+                \EndFunction
+                \Function{deleteLeft}{}
+                    \If{$left \neq \textbf{nil}$}
+                        \State $left.\textit{deleteLeft}()$
+                        \State $left.\textit{deleteRight}()$
+                        \State $left \gets \textbf{nil}$
+                    \EndIf
+                \EndFunction
+                \algstore{bkbreak}
+            \end{algorithmic}
+        \end{algorithm}
+        \begin{algorithm}[H]
+            \begin{algorithmic}
+                \algrestore{bkbreak}
+                \Function{deleteRight}{}
+                    \If{$right \neq \textbf{nil}$}
+                        \State $right.\textit{deleteLeft}()$
+                        \State $right.\textit{deleteRight}()$
+                        \State $right \gets \textbf{nil}$
+                    \EndIf
+                \EndFunction
+            \end{algorithmic}
+        \end{algorithm}
+    \subsection{Visite}
+        \paragraph{Visita di un albero / ricerca} Una \textbf{visita} è una strategia per analizzare (visitare) tutti i nodi di un albero. Le visite possono essere:
+        \begin{description}
+            \item[Visita in profondità (\textit{Depth-First search} \texttt{DFS})] Usata per visitare un albero, si visita ricorsivamente ognuno dei suoi \textbf{sotto-alberi}.
+                \subitem Tre varianti: pre/in/post visita
+                \subitem Richiede uno \textbf{stack}
+            \item[Visita in ampiezza (\textit{Breadth-First search} \texttt{BFS})] Usata per visitare ogni \textbf{livello} dell'albero, partendo dalla radice.
+                \subitem Richiede una \textbf{queue}
+        \end{description}
+        \begin{algorithm}[H]
+            \caption{dfs(\Tree t>)}
+            \begin{algorithmic}
+                \If{$t \neq \textbf{nil}$}
+                    \State \% pre-order visit of $t$
+                    \State \Print $t$
+                    \State $\operatorname{dfs}(t.\textit{left})$
+                    \State \% in-order visit of $t$
+                    \State \Print $t$
+                    \State $\operatorname{dfs}(t.\textit{right})$
+                    \State \% post-order visit of $t$
+                    \State \Print $t$
+                \EndIf
+            \end{algorithmic}
+        \end{algorithm}
+        \subsubsection{Esmempi di applicazione}
+            Contare i nodi in post-visita:
+            \begin{algorithm}[H]
+                \caption{countNodes(\Tree $t$)}
+                \begin{algorithmic}
+                    \If{$t \neq \textbf{nil}$}
+                        \State $c \gets 1$
+                        \State $c \gets c + \operatorname{countNodes}(t.\textit{left})$
+                        \State $c \gets c + \operatorname{countNodes}(t.\textit{right})$
+                        \State \Return $c$
+                    \Else
+                        \State \Return $0$
+                    \EndIf
+                \end{algorithmic}
+            \end{algorithm}
+            Stampare espressioni con In-visita:
+            \begin{algorithm}[H]
+                \caption{\Int printExpression(\Tree $t$)}
+                \begin{algorithmic}
+                    \If{$t.\operatorname{left}() == \Nil \textbf{and} t.\operatorname{right}() == \Nil$}
+                        \State \Print $t.\operatorname{read}()$
+                    \Else
+                        \State \Print "("
+                        \State \Print $\operatorname{printExpression}(t.\operatorname{left}())$
+                        \State \Print $t.\operatorname{read}()$
+                        \State \Print $\operatorname{printExpression}(t.\operatorname{right}())$
+                        \State \Print ")"
+                    \EndIf
+                \end{algorithmic}
+            \end{algorithm}
+\section{Alberi Generici}
+    \begin{definition}
+        Un \textbf{albero generico} è un albero radicato nel quale ogni nodo può avere un numero arbitrario di figli.
+    \end{definition}
+    \subsubsection{Definizione delle \texttt{API}}
+    
+        \begin{algorithm}[H]
+            \caption{Tree}
+            \% Costituisce unb nuovo nodo, contenente $v$, senza figli o genitori. \newline
+            $\operatorname{Tree}(\operatorname{Item} v) $ \newline
+            \% Legge il valore memorizzato nel nodo \newline
+            $\operatorname{Item} \operatorname{read}()$ \newline
+            \% Modifica il valore memorizzato nel nodo \newline
+            $\operatorname{write}(\operatorname{Item} v)$ \newline
+            \% Restituisce il padre, oppure \textbf{nil} se questo nodo è radice \newline
+            $\operatorname{Tree} \operatorname{parent}() $ \newline
+            \% Restituisce il primo figlio, oppure \textbf{nil} se è una foglia \newline
+            $\operatorname{Tree} \operatorname{leftmostChild}()$ \newline
+            \% Restituisce il prossimo fratello, oppure \textbf{nil} se è l'ultimo figlio \newline
+            $\operatorname{Tree} \operatorname{rightSibling}()$ \newline
+            \% Inserisce il sotto-albero radicato in t come primo figlio di questo nodo\newline
+            $\operatorname{insertChild}(\operatorname{Tree} t)$ \newline
+            \% Inserisce il sotto-albero radicato in t come prossimo fratello di questo nodo\newline
+            $\operatorname{insertSibling}(\operatorname{Tree} t)$ \newline
+            \% Distrugge (ricorsivamente) l'albero radicato identificato dal primo figlio di questo nodo \newline
+            $\operatorname{deleteChild}()$ \newline
+            \% Distrugge (ricorsivamente) l'albero radicato identificato dal prossimo fratello di questo nodo \newline
+            $\operatorname{deleteSibling}()$
+        \end{algorithm}
+    \subsection{Visite}
+        \subsubsection{\textit{Breadh-First Search}}
+            \begin{algorithm}[H]
+                \caption{bfs(\Tree $t$)}
+                \begin{algorithmic}
+                    \State \Queue $Q$ = $\operatorname{Queue}()$
+                    \State $Q.\operatorname{enqueue}(t)$
+                    \While{\textbf{not} $Q.\operatorname{isEmpty}()$}
+                        \State \Tree $u \gets Q.\operatorname{dequeue}()$
+                        \State \Print $u$
+                        \State $ u \gets u.\operatorname{leftmostChild}()$
+                    \algstore{bfsbreak}
+                \end{algorithmic}
+            \end{algorithm}
+            \begin{algorithm}[H]
+                \begin{algorithmic}
+                    \algrestore{bfsbreak}
+                        \While{$u \neq \textbf{nil}$}
+                            \State $Q.\operatorname{enqueue}(u)$
+                            \State $u \gets u.\operatorname{rightSibling}()$
+                        \EndWhile
+                    \EndWhile
+                \end{algorithmic}
+            \end{algorithm}
+        \subsubsection{Memorizzazione}
+            Esistono diversi modi per memorizzare un albero, più o meno indicati a seconda del numero massimo e medi dei figli presenti:
+            \begin{enumerate}
+                \item Realizzazione con vettore di figli
+                \item Realizzazione con primo figlio e prossimo fratello
+                \item Realizzazione con vettore dei padri
+            \end{enumerate}
+
+
