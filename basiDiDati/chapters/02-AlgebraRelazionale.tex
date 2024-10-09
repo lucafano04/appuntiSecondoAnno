@@ -44,6 +44,25 @@
         \end{itemize}
     \subsection{Operazione Unarie}
         \subsubsection{Selezione}
+            \paragraph{Proprietà}
+                La forma generale dell'operazione \textit{select} è:
+                $$
+                    \sigma_{\theta} (R)
+                $$
+                \begin{itemize}
+                    \item $\sigma$ è l'operatore di selezione
+                    \item $\theta$ è il predicato di selezione o condizione
+                    \item $R$ è la relazione di input
+                \end{itemize}
+            \paragraph{Commutativo} L'operazione di selezione è commutativa, ovvero:
+                $$
+                    \sigma_{\theta_1} ( \sigma_{\theta_2} (R) ) = \sigma_{\theta_2} ( \sigma_{\theta_1} (R) )
+                $$
+                Questa però può essere semplificata in:
+                $$
+                    \sigma_{\theta_1 \land \theta_2} (R)
+                $$
+            
         \subsubsection{Proiezione}
             \paragraph{Proprietà} La forma generale dell'operazione \textit{project} è:
                 $$
@@ -70,15 +89,16 @@
             \end{itemize}
             Se il nome degli attributi non viene modificato si può omettere la lista di ridenominazione.
     \subsection{Operazioni Insiemistiche}
-        \subsubsection{Unione}($ R\cup S $): è la relazione che include tutte le tuple che sono in $ R $ o in $ S $ o in entrambe.
-            \subparagraph{Criteri}
+        \paragraph{Criteri} Per tutte le operazioni insiemistiche valgono i seguenti criteri:
             \begin{enumerate}
-                \item $ R $ e $ S $ devono avere lo stesso numero di attributi (se diverso non rispetta il significato di unione)
+                \item $ R $ e $ S $ devono avere lo stesso numero di attributi (se diverso non rispetta il significato di insieme)
                 \item Gli attributi di $ R $ e $ S $ devono avere lo stesso dominio o dominio compatibile
                 \item Se i nomi degli attributi sono diversi, bisognerà rinominare in output il nome degli attributi
             \end{enumerate}
+        In sostanza le operazioni insiemistiche sono definite solo per relazioni "compatibili".
+        \subsubsection{Unione}($ R\cup S $): è la relazione che include tutte le tuple che sono in $ R $ o in $ S $ o in entrambe.
         \subsubsection{Intersezione}($ R\cap S $): è la relazione che include tutte le tuple che sono in $ R $ e in $ S $.
-        \subsubsection{Differenza}
+        \subsubsection{Differenza} ($ R-S $): è la relazione che include tutte le tuple che sono in $ R $ ma non in $ S $. Questo 
         \subsubsection{Prodotto Cartesiano} ($ R \times S $): è la relazione che ha come schema l'unione degli attributi di $ R $ e $ S $ e una tupla $ <r,s> $ (la concatenazione di $ r $ e $ s $) per ogni coppia di tuple $ r \in R $ e $ s \in S $. Il grado della relazione risultante è la somma dei gradi delle relazioni di input, mentre la cardinalità è il prodotto delle cardinalità delle relazioni di input. 
         $$
             R(A_1, A_2, \dots, A_n) \times S(B_1, B_2, \dots, B_m) = Q(A_1, A_2, \dots, A_n, B_1, B_2, \dots, B_m)
@@ -106,4 +126,20 @@
             $$
             dove $ R $ e $ S $ sono relazioni e $ x $ e $ y $ sono gli attributi di $ R $ e $ S $ rispettivamente.
 \section{Query Tree}
-    
+    \paragraph{Definizione} La \textbf{\textit{query tree}} è una struttura dati usata per rappresentare i passi di esecuzione di una query. 
+    \paragraph{Proprietà} Le \textit{query tree} sono standard quando si parla di stimare: il lavoro necessario per eseguire una query, la generazione dei risultati intermedi e se è possibile ottimizzare la query. In una query tree:
+        \begin{itemize}
+            \item Ogni nodo rappresenta un'operazione (selezione, proiezione, join, ecc\dots)
+            \item Le foglie rappresentano le relazioni di partenza
+        \end{itemize}
+    \paragraph{Cosa fare con il \textit{query tree}?} Una volta che una query è stata scritta è utile costruirsi il suo \textit{query tree} per verificare se esiste una altro piano di esecuzione che: 
+        \begin{itemize}
+            \item produca lo stesso risultato
+            \item abbia un costo inferiore (in termini di tempo e risorse)
+        \end{itemize}
+        \subparagraph{Esempi di ottimizzazioni comuni}
+        \begin{description}
+            \item[Anticipazione delle selezioni] Eseguire le selezioni il prima possibile in modo da ridurre il numero di tuple da processare, questo applicando eventuali filtri prima di eseguire altre operazioni.
+            \item[Anticipazione delle proiezioni] Eseguire le proiezioni il prima possibile in modo da ridurre il numero di attributi da processare.
+            \item[Riordino dei join] Cambiare l'ordine dei join in modo da ridurre il numero di tuple intermedie tra un join e l'altro, o per ridurre il numero di tuple da processare successivamente.
+        \end{description}
