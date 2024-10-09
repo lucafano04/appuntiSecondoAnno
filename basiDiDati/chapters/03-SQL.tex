@@ -1,2 +1,44 @@
-\chapter{SQL - Structured Query Language}
+\chapter{\texttt{SQL} - \textit{Structured Query Language}}
 \thispagestyle{chapterInit}
+\section{Definizioni}
+    \texttt{\textbf{SQL}} o \textbf{\textit{Structured Query Language}} è un linguaggio per la gestione di basi di dati relazionali. Questo è usato per la creazione, modifica e interrogazione dei dati. Oggi questo è standardizzato ma ne esistono diversi "dialetti" a seconda del \texttt{DBMS} utilizzato.
+    \paragraph{\texttt{DDL} - \textit{Data Definition Language}} 
+        Per \texttt{DDL} o \textbf{\textit{Data Definition Language}} è il sottoinsieme di comandi (o più precisamente \textit{query}) che permettono di definire la struttura di un database
+    \paragraph{\texttt{DML} - \textit{Data Manipulation Language}}
+        Per \texttt{DML} o \textbf{\textit{Data Manipulation Language}} intendiamo il sottoinsieme \textit{query} che permettono di:\begin{itemize}
+            \item Inserire dati
+            \item Aggiornare dati
+            \item Cancellare dati
+            \item Ottenere dati
+        \end{itemize}
+\section{Struttura Generale delle \textit{query} \texttt{SQL}}
+    \subsection{Comando \texttt{SELECT} - interrogazione dei dati}
+        Il comando \texttt{SELECT} è il comando principale per l'interrogazione dei dati. La sua struttura generale è la seguente:
+        \begin{lstlisting}
+SELECT [DISTINCT] <lista di attributi>
+FROM <lista di relazioni>
+WHERE <condizione>
+        \end{lstlisting}
+        \begin{description}
+            \item[\<lista di relazioni\>] è la lista dei nomi delle relazioni da cui si vogliono estrarre i dati. Queste possono anche definire solo una porzione di una tabella (tramite variabili di range)
+            \item[\<lista di attributi\>] è la lista degli attributi che si vogliono estrarre. Questi possono essere anche espressioni aritmetiche o funzioni
+            \item[\<condizione\>] è un insieme di condizioni con predicati di confronto: ($<,>,=,\leq, \geq,\neq $). Questi predicati possono essere combinati con gli operatori logici \texttt{AND, OR, NOT}
+            \item[\texttt{DISTINCT}] è un modificatore opzionale che permette di eliminare i duplicati, di default \underline{NON} vengono eliminati
+        \end{description}
+        \subsubsection{Esecuzione di una \textit{query} \texttt{SELECT}}
+            Questo genere di \textit{query} viene eseguito seguendo i seguenti passaggi:
+            \begin{enumerate}
+                \item Si calcola il prodotto cartesiano delle relazioni coinvolte in \<lista di relazioni\>
+                \item Si prendono ora solo le tuple che soddisfano la o le condizioni specificate in \<condizione\> (se presenti)
+                \item Si proiettano ora solo gli attributi specificati in \<lista di attributi\> rimuovendo gli attributi non specificati
+                \item Se presente il modificatore \texttt{DISTINCT} si eliminano i duplicati
+            \end{enumerate}
+        \subsubsection{Operatori di Confronto} 
+            Gli operatori di confronto usabili nella clausola \texttt{WHERE} del comando \texttt{SELECT} possono essere differenti per i diversi tipi di dati e \texttt{DBMS}. I principali operatori sono:
+                \begin{enumerate}
+                    \item Operatori aritmetici ($=, \neq, <, \leq, >, \geq$)
+                    \item \texttt{BETWEEN} - per verificare se un valore è compreso in un intervallo (chiuso)
+                    \item \texttt[IN] - per verificare se un valore è contenuto in una lista di valori
+                    \item \texttt{LIKE} - per verificare se un valore è simile ad una stringa contenente caratteri jolly (\texttt{\%} e \texttt{\_})
+                    \item \texttt{IS [NOT] NULL} - per verificare se un valore è \texttt{NULL} o meno. In quanto \texttt{NULL} è uno stato particolare che può assumere un attributo scrivere \texttt{WHERE attributo = NULL} non ha senso ed è sbagliato, si deve usare \texttt{IS NULL}
+                \end{enumerate}
