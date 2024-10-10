@@ -42,6 +42,7 @@
     \fancyfoot{}
     \fancyfoot[LE,RO]{\thepage}
     \fancyfoot[LO,RE]{"Appunti di Introduction to Computer and Network Security" di Luca Facchini}
+    \renewcommand{\footrulewidth}{0.4pt}
 }
 \fancypagestyle{stdPageS}{
     \fancyhead{}
@@ -49,7 +50,10 @@
     \fancyfoot{}
     \fancyfoot[LE,RO]{\thepage}
     \fancyfoot[LO,RE]{"Appunti di Introduction to Computer and Network Security" di Luca Facchini}
+    \renewcommand{\footrulewidth}{0.4pt}
 }
+
+\addtocontents{toc}{\protect\thispagestyle{stdPageS}}
 
 \title{Appunti di Introduction to Computer and Network Security}
 \author{Luca Facchini (mat. 245965)}
@@ -87,17 +91,10 @@
         
         \vfill  % Pushes the content to the center vertically
     \end{titlepage}
-    \pagestyle{fancy}
-    \fancyhead{}
-    \fancyhead[RO,LE]{\leftmark}
-    \fancyfoot{}
-    \fancyfoot[LE,RO]{\thepage}
-    \fancyfoot[LO,RE]{"Appunti di Introduction to Computer and Network Security" di Luca Facchini}
-    
+    \pagestyle{stdPageS}
     \begingroup
         \setcounter{tocdepth}{1}
         \tableofcontents
-        \thispagestyle{stdPageS}
     \endgroup
     \include{chapters/01-basicNotions}
     \include{chapters/02-authentication}

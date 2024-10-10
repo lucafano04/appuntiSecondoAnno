@@ -1,5 +1,6 @@
 {
     "cSpell.words": [
+        "Adleman",
         "Cryptosystem",
         "Feistel",
         "pdfcreator",
@@ -8,6 +9,10 @@
         "pdfproducer",
         "pdfsubject",
         "pdftitle",
+        "Rijndael",
+        "Rivest",
+        "Shamir",
+        "smartcard",
         "SPID",
         "tupla",
         "Vigenère"
