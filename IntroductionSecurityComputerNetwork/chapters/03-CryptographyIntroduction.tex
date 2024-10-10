@@ -114,4 +114,30 @@
                 \subparagraph{Pubblicazione della chiave privata} Un altro modo per attaccare un sistema crittografico basato su \texttt{RSA} è quello che per un qualunque motivo la chiave privata venga pubblicata, in questo caso l'attaccante può de-cifrare tutti i messaggi cifrati con la chiave pubblica, e se la chiave pubblica è usata per firmare i messaggi allora l'attaccante può falsificare i messaggi. In questa situazione la coppia di chiavi deve essere revocata e sostituita con una nuova coppia.
 
             \subsubsection{\texttt{DH} - \textit{Diffie-Hellman}}
-            
+                La cifratura \texttt{DH}è un algoritmo crittografico che permette a due parti di scambiarsi una chiave senza che questa venga trasmessa in alcun modo tramite un canale (sicuro o meno). L'algoritmo si basa sulla complessità dell'inversione di esponenti modulari. L'algoritmo è stato inventato da \texttt{Whitfield Diffie} e \texttt{Martin Hellman} nel 1976.
+                \paragraph{Fondamenti matematici} L'algoritmo si basa su un campo finito $ F = GF(p) $ che sono tutti i numeri interi modulo $ p $ con $ p $ primo. Inoltre sfrutta le proprietà degli esponenti, in quanto $ g^x(\mod p) $ è una funzione irreversibile ma semplice da calcolare. Infine viene usato il \textbf{Problema del logaritmo discreto} o \textit{\texttt{DLP}} che descrive come dati $ p,g,X $ trovare $ x $ tale che $ g^x \mod p = X $, il che è computazionalmente difficile se $ p $ è primo e $ g $ è un generatore per $ 0 < X < p $ esiste un $ x $ tale che $ g^x \mod p = X $.
+                \paragraph{Funzionamento nel dettaglio} Consideriamo \texttt{A} e \texttt{B} i nostri interlocutori allora il procedimento è il seguente:
+                \begin{enumerate}
+                    \item \texttt{A} sceglie un numero primo $ p $ e un generatore $ g $ per $ GF(p) $ e un numero segreto $ a $.
+                    \item \texttt{A} sceglie un numero $ a $ grande (chiave privata) e calcola $ A = g^a \mod p $ (chiave pubblica).
+                    \item Ora \texttt{A} invia $ p $ numero primo scelto, $ g $ generatore scelto e $ A $ chiave pubblica di \texttt{A} a \texttt{B}.
+                    \item \texttt{B} ricevuto $ p $, $ g $ e $ A $ sceglie un numero segreto $ b $ molto grande (chiave privata) e calcola $ B = g^b \mod p $ (chiave pubblica).
+                    \item \texttt{B} invia a \texttt{A} $ B $ chiave pubblica di \texttt{B}.
+                    \item Entrambi ora si calcolano la chiave risultante, \texttt{A} calcolerà $ K_a = B^a \mod p $ e \texttt{B} calcolerà $ K_b = A^b \mod p $. Si può dimostrare che $ K_a = K_b $.\footnote{$ K = A^b\mod p = (g^a \mod p)^b \mod p = g^{ab} \mod p = (g^b \mod p)^a \mod p = B^a \mod p $}
+                \end{enumerate}
+                \paragraph{Sicurezza del protocollo} La sicurezza di \texttt{DH} dipende dalla difficoltà del \texttt{DLP}\footnote{\textit{Discrete Logarithm Problem}} e dall'abilità di un attaccante di risolvere il \texttt{DLP}, altrimenti non è possibile ricavarsi le chiavi private da quelle pubbliche.
+                    \subparagraph{\textit{men-in-the-middle}} D'altra parte il protocollo \texttt{DH} non garantisce l'autenticità del messaggio, dunque quando dell'esempio precedente \texttt{B} riceve la chiave pubblica, il numero primo e il generatore, non sà se effettivamente lo ha ricevuto da \texttt{A} allora una terza parte si può mettere nel mezzo e inviare diverse informazioni a \texttt{A} e \texttt{B} e quindi la comunicazione tra \texttt{A} e \texttt{B} intercettata da \texttt{C} usa due chiavi diverse tra \texttt{A}-\texttt{C} e tra \texttt{C}-\texttt{B} il tutto mantenendo sicure le corrispondenti chiavi private. Per risolvere questo problema si può usare la crittografia asimmetrica per autenticare le chiavi pubbliche.
+\section{Riassumendo}
+\begin{itemize}
+    \item Bisogna evitare di crearsi il proprio algoritmo di crittografia, in quanto è molto difficile creare un algoritmo sicuro e quelli fatti in casa sono molto più vulnerabili.
+    \item \textit{DES} non deve essere più usato in quanto è stato dichiarato insicuro.
+    \item Consigliati blocchi di chiavi da $ 80/90 $ bit per la crittografia simmetrica usando \texttt{AES}.
+    \item La sicurezza di \texttt{DES} e \texttt{AES} non è provata, è solo resistente ad attacchi conosciuti.
+    \item Non dimenticarti di gestire bene le chiavi:
+        \subitem come condividerla? vedi dopo
+        \subitem come proteggerla? Usa un sistema di controllo degli accessi
+        \subitem Con $ n $ partecipanti servono $ n^2 $ chiavi
+    \item \texttt{PKC}$\neq$\texttt{RSA} in quanto alcune proprietà di \texttt{RSA} non usano nessun aspetto di \texttt{PKC}.
+    \item La sicurezza effettiva dipende dallo stato dell'arte nel risolvere problemi matematici. (avanzamento tecnologico, disponibilità di risorse, ecc\dots)
+    \item \texttt{DH} usato solo per scambio di chiavi ma persistono problemi di autenticità. (Attenzione agli attacchi \texttt{MITM})
+\end{itemize}

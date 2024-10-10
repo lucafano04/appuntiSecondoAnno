@@ -2,7 +2,9 @@
     "cSpell.words": [
         "Adleman",
         "Cryptosystem",
+        "Diffie",
         "Feistel",
+        "MITM",
         "pdfcreator",
         "pdfkeywords",
         "pdflatex",
@@ -17,5 +19,8 @@
         "tupla",
         "Vigenère"
     ],
-    "editor.wordWrap": "on"
+    "editor.wordWrap": "on",
+    "conventionalCommits.scopes": [
+        "I2CNS"
+    ]
 }
