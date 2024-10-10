@@ -16,5 +16,6 @@
     ],
     "conventionalCommits.scopes": [
         "Reti"
-    ]
+    ],
+    "editor.wordWrap": "on"
 }
