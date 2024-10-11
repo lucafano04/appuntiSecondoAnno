@@ -42,3 +42,28 @@ WHERE <condizione>
                     \item \texttt{LIKE} - per verificare se un valore è simile ad una stringa contenente caratteri jolly (\texttt{\%} e \texttt{\_})
                     \item \texttt{IS [NOT] NULL} - per verificare se un valore è \texttt{NULL} o meno. In quanto \texttt{NULL} è uno stato particolare che può assumere un attributo scrivere \texttt{WHERE attributo = NULL} non ha senso ed è sbagliato, si deve usare \texttt{IS NULL}
                 \end{enumerate}
+        \subsubsection{Operatori di aggregazione}
+            \texttt{SQL} supporta 5 operatori di aggregazione:
+            \begin{description}
+                \item[\texttt{count(*)}] - conta il numero di tuple risultanti dalla \textit{query}
+                \item[\texttt{count([DISTINCT] A)}] - conta il numero di tuple risultanti dalla \textit{query} che hanno un valore non \texttt{NULL} per l'attributo \texttt{A}, se \texttt{DISTINCT} è presente vengono conteggiate solo le tuple con valori distinti
+                \item[\texttt{sum([DISTINCT] A)}] - somma i valori dell'attributo \texttt{A} per le tuple risultanti dalla \textit{query}, se \texttt{DISTINCT} è presente vengono sommati solo i valori distinti
+                \item[\texttt{avg([DISTINCT] A)}] - calcola la media dei valori dell'attributo \texttt{A} per le tuple risultanti dalla \textit{query}, se \texttt{DISTINCT} è presente vengono considerati solo i valori distinti
+                \item[\texttt{max(A)}] - restituisce il valore massimo dell'attributo \texttt{A} per le tuple risultanti dalla \textit{query}
+                \item[\texttt{min(A)}] - restituisce il valore minimo dell'attributo \texttt{A} per le tuple risultanti dalla \textit{query}
+            \end{description}
+        \subsubsection{Operatori \texttt{GROUP BY} \& \texttt{HAVING}}
+            Gli operatori \texttt{GROUP BY} e \texttt{HAVING} permettono di eseguire operazioni di aggregazione solo su sottoinsiemi di tuple.
+            In particolare \texttt{GROUP BY} permette di raggruppare le tuple in base ai valori di uno o più attributi, mentre \texttt{HAVING} permette di filtrare i risultati in base a condizioni di aggregazione.
+            \begin{lstlisting}
+SELECT <lista di attributi>, <funzione di aggregazione>
+FROM <lista di relazioni>
+WHERE <condizione>
+GROUP BY <lista di attributi di raggruppamento>
+HAVING <condizione di aggregazione>
+            \end{lstlisting}
+            \begin{description}
+                \item[\<lista di attributi di raggruppamento\>] è la lista degli attributi su cui si vuole raggruppare le tuple
+                \item[\<condizione di aggregazione\>] è la condizione che deve essere soddisfatta dal risultato della funzione di aggregazione per essere incluso nel risultato
+                \item[\<funzione di aggregazione\>] è una o più funzioni di aggregazione da applicare ai gruppi di tuple
+            \end{description}
