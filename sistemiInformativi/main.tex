@@ -54,10 +54,12 @@
 \fancypagestyle{stdPage}{
     \fancyhead{}
     \fancyhead[RO,LE]{\leftmark}
+    \fancyhead[LO,RE]{\rightmark}
     \setlength{\headheight}{15pt}
     \fancyfoot{}
     \fancyfoot[LE,RO]{\thepage}
     \fancyfoot[LO,RE]{"Appunti di Sistemi Informativi" di Luca Facchini}
+    \renewcommand{\footrulewidth}{0.4pt}
 }
 
 
@@ -90,23 +92,17 @@
         \vfill  % Pushes the content to the center vertically
     \end{titlepage}
 
-    \pagestyle{fancy}
-    \fancyhead{}
-    \fancyhead[RO,LE]{\leftmark}
-    \setlength{\headheight}{15pt}
-    \fancyfoot{}
-    \fancyfoot[LE,RO]{\thepage}
-    \fancyfoot[LO,RE]{"Appunti di Sistemi Informativi" di Luca Facchini}
+    \pagestyle{stdPage}
     
+    \addtocontents{toc}{\protect\thispagestyle{stdPage}}
     \begingroup
         \tableofcontents
         \thispagestyle{stdPage}
     \endgroup
     
     \include{chapters/01-laSocietàDellaConoscenza}
-    
     \include{chapters/02-concettiGenerali}
-
     \include{chapters/03-strutturaAziendaSistemaInformativo}
     \include{chapters/04-scelteOrganizzative}
+    \include{chapters/05-iSistemiOperazionali}
 \end{document}

@@ -1,0 +1,57 @@
+\chapter{I sistemi operazionali}
+\thispagestyle{chapterInit}
+
+\section{Finalità dei sistemi operazionali}
+    Le principali finalità dei \textbf{sistemi operazionali} riguardano:
+    \begin{description}
+        \item[Registrazione delle transazioni] Il processo di acquisizione e memorizzazione delle informazioni relative alle transazioni aziendali.
+        \item[Pianificazione e controllo] La possibilità di pianificare le operazioni aziendali e controllarne l'effettiva esecuzione.
+        \item[Acquisizione ed organizzazione della conoscenza] La possibilità di acquisire e organizzare la conoscenza aziendale.
+        \item[Elaborazione delle situazioni aziendali] La possibilità di elaborare le informazioni aziendali per ottenere una visione complessiva della situazione aziendale.
+    \end{description}
+    Per raggiungere questa finalità il sistema operazionale si compone di due sottosistemi principali:
+    \begin{description}
+        \item[Base di dati operazionale] Contiene le informazioni operative in forma organizzata.
+        \item[Funzioni operative] Sono le funzioni che permettono di acquisire, memorizzare, elaborare e trasmettere le informazioni.
+    \end{description}
+    \subsection{Transazioni}
+        \subsubsection{Cos'è una transazione}
+            \paragraph{Definzione} Per definizione una \textbf{transazione} è una operazione detta \textbf{atomica} (ovvero indivisibile) che si manifesta in un certo e conosciuto momento ed è una informazione che l'azienda è interessata a registrare.
+            \paragraph{Esempi} Alcuni esempi di transazioni sono: gli ordini tra cliente e fornitori, prelievi da magazzino, spedizioni, pagamenti, ecc\dots
+        \subsubsection{Registrazione delle transazioni}
+            Le transazioni da dover registrare, possono essere sostanzialmente di due tipi:
+            \begin{description}
+                \item[Semplici] Si deve registrare nel sistema solo un singolo dato.
+                \item[Complesse] Si devono registrare più operazioni elementari connesse in senso logico e spesso corelate a documenti fisici, quali ad esempio una spedizione che è correlata ad una \textit{bolla di spedizione}.
+            \end{description}
+            Inoltre una transazione può generarle delle altre e quindi si parla di \textbf{transazioni a cascata}.
+            \paragraph{Volume dei dati} Ogni transazione produce un volume di dati dipendentemente dalla natura dell'attività e dell'organizzazione aziendale.
+    \subsection{Pianificazione e controllo delle operazioni}
+        Alcuni processi aziendali sono dipendenti da altri, si rende quindi necessario usare i dati dei processi "a monte" per pianificare e controllare i processi "a valle". Tramite l'uso di \texttt{SI} è possibile adottare modelli più complessi di pianificazione e monitorare continuativamente l'andamento dello stato dei processi aziendali. 
+        \paragraph{Perché pianificare e controllare} Pianificare e controllare i processi aziendali ha diversi vantaggi per l'azienda, sia per il passato che per il presente fino ad avere anche una utilità per i processi futuri. Questi vantaggi sono raggiunti tramite: La possibilità di elaborare piani e strategie di produzione, registrare e monitorare l'avanzamento delle operazioni ed infine la possibilità di misurare se e quanto i piani sono stati rispettati rispetto agli obiettivi prefissati.
+            \subparagraph{Come pianificare e controllare} Il \texttt{SI} deve essere dotato di funzioni molto articolate e specifiche per l'azienda alla quale si riferisce, ad esempio quando parliamo di "Elaborazione di piani" il \texttt{SI} di riferimento deve essere in grado di: ottimizzare le risorse disponibili, sincronizzare le operazioni ed essere coerente con lo stato degli indicatori aziendali.
+    \subsection{Elaborazione delle situazioni aziendali}
+        Il \texttt{SI} è un sistema dinamico che serve per modellare la realtà aziendale e per fornire informazioni utili per la gestione aziendale. La conoscenza dello stato corrente, oltre che di quello passato, è fondamentale per la gestione aziendale, questa conoscenza permette di pilotare l'azienda grazie a determinati eventi. Alcuni indicatori di stato sono ad esempio: le giacenze di magazzino, i tempi di consegna, i tempi di produzione, ecc\dots\newline
+        Gli indicatori dunque non rappresentano una situazione statica, ma una situazione dinamica che cambia nel tempo. Questi indicatori sono utili per la gestione aziendale e per la pianificazione delle attività future. Tutti gli indicatori di stato sono calcolati a partire dai dati inseriti, modificati e cancellati dalle transazioni aziendali e sono utili per la gestione aziendale.
+\section{Informazione Operativa}
+    L'informazione operativa è costituita principalmente da archivi nei quali sono presenti relazioni che coinvolgono diverse entità, questi archivi solitamente li classifichiamo in:
+    \begin{description}
+        \item[Movimenti] Contengono le informazioni relative alle transazioni semplici, relative ad un singolo oggetto.
+        \item[Documenti] Contengono le informazioni su transazioni complesse che riguardano una lisa di oggetti (classica tabella) dove in testa troviamo anche una serie di informazioni comune a tutte le righe.
+        \item[Informazioni di stato] Ovvero un insieme di indicatori di stato che permettono di avere una visione complessiva della situazione aziendale. Questi possono essere \textit{de-materializzati} e quindi calcolati al momento della richiesta o \textit{materializzati} e quindi calcolati e memorizzati in un archivio.
+        \item[Informazioni Anagrafiche] Contengono le informazioni relative alle entità che partecipano alle transazioni, questi non si limitano a contenere solo dati di anagrafica di persone fisiche, ma anche di oggetti, di entità giuridiche, ecc\dots
+    \end{description}
+    \subsection{Qualità dei dati}
+        Per qualità dei dati si fà riferimento allo standard \texttt{ISO 8402-1995} citando: "Il possesso della totalità delle caratteristiche che portano al soddisfacimento delle esigenze espresse o implicite, dell'utente".
+        \paragraph{La qualità dei dai}
+            Per stabilire un indice di qualità dei dati si possono utilizzare diversi parametri quali:
+            \begin{itemize}
+                \item Tanto più elevata quanto più il sistema fornisce rappresentazioni degli eventi vicine alla percezione diretta della realtà
+                \item La dipendenza dalla struttura del \texttt{SI} è minore quanto più i dati sono indipendenti dalla struttura del sistema
+                \item La qualità è diminuita da sottosistemi non integrati e da dati ridondanti
+            \end{itemize}
+            In sostanza un dato per essere di qualità non deve essere ridondante, deve essere coerente con la realtà e deve essere indipendente dalla struttura del sistema.
+        \paragraph{Impatto della qualità dei dati}
+            Se all'interno del proprio \texttt{SI} si ha una bassa qualità dei dati, allora si avrà un forte impatto economico/organizzativo tra cui: la difficoltà nell'introduzione di innovazioni tecnologiche (adozione di una nuova tecnologia) e di processo (modificare un processo produttivo), la difficoltà nell'avvio di processi del tipo \textit{data warehousing}, inoltre dal lato umano avere una bassa qualità dei dati può portare a una scarsa soddisfazione degli utenti finali del \texttt{SI} (ovvero quelle persone che utilizzano il \texttt{SI} per svolgere il proprio lavoro).
+\section{Potenzialità informativa}
+\section{Composizione dei sistemi informativi operazionali}
