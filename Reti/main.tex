@@ -52,6 +52,20 @@
     \fancyfoot[LE,RO]{\thepage}
     \fancyfoot[LO,RE]{"Appunti di Reti" di Luca Facchini}
 }
+\fancypagestyle{stdPage}{
+    \fancyhead{}
+    \fancyhead[RE,LO]{\rightmark}
+    \fancyhead[RO,LE]{\leftmark}
+    \fancyfoot{}
+    \renewcommand{\footrulewidth}{0.4pt}
+    \fancyfoot[LE,RO]{\thepage}
+    \fancyfoot[LO,RE]{"Appunti di Reti" di Luca Facchini}
+}
+
+\fancypagestyle{tocStyle}{
+    \pagestyle{stdPage}
+    \fancyhead[RE,LO]{}
+}
 
 \graphicspath{{./images/}}
 
@@ -83,17 +97,15 @@
         
         \vfill  % Pushes the content to the center vertically
     \end{titlepage}
-    \tableofcontents
-
-    \pagestyle{fancy}
-    \fancyhead{}
-    \fancyhead[RO,LE]{\leftmark}
-    \fancyhead[RE,LO]{\rightmark}
-    \fancyfoot{}
-    \renewcommand{\footrulewidth}{0.4pt}
-    \fancyfoot[LE,RO]{\thepage}
-    \fancyfoot[LO,RE]{"Appunti di Reti" di Luca Facchini}
+    \begingroup
+        \pagestyle{tocStyle}
+        \addtocontents{toc}{\protect\thispagestyle{tocStyle}}
+        \addtocontents{toc}{\protect\pagestyle{tocStyle}}
+        \tableofcontents
+    \endgroup
+    \pagestyle{stdPage}
     
     \include{chapters/01-Introduction}
     \include{chapters/02-livelloApplicazione}
+    \include{chapters/03-livelloTrasporto}
 \end{document}
