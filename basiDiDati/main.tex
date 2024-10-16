@@ -43,9 +43,16 @@
     pdfcreator={pdflatex},
 }
 
-\fancypagestyle{chapterInit}{%
-    \fancyhf{}
+\fancypagestyle{chapterInit}{
+    \pagestyle{stdPage}
+    \fancyhead{}
     \renewcommand{\headrulewidth}{0pt}
+}
+
+\fancypagestyle{stdPage}{
+    \renewcommand{\footrulewidth}{0.4pt}
+    \fancyhead{}
+    \fancyhead[RO,LE]{\leftmark}
     \fancyfoot{}
     \fancyfoot[LE,RO]{\thepage}
     \fancyfoot[LO,RE]{"Appunti di Basi di Dati" di Luca Facchini}
@@ -89,12 +96,8 @@
     \end{titlepage}
     \tableofcontents
 
-    \pagestyle{fancy}
-    \fancyhead{}
-    \fancyhead[RO,LE]{\leftmark}
-    \fancyfoot{}
-    \fancyfoot[LE,RO]{\thepage}
-    \fancyfoot[LO,RE]{"Appunti di Basi di Dati" di Luca Facchini}
+    \pagestyle{stdPage}
+    
 
     \include{chapters/01-IlModelloRelazionale}
     \include{chapters/02-AlgebraRelazionale}

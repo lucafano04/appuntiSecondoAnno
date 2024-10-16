@@ -67,3 +67,19 @@ HAVING <condizione di aggregazione>
                 \item[\<condizione di aggregazione\>] è la condizione che deve essere soddisfatta dal risultato della funzione di aggregazione per essere incluso nel risultato
                 \item[\<funzione di aggregazione\>] è una o più funzioni di aggregazione da applicare ai gruppi di tuple
             \end{description}
+        \subsubsection{Operatori insiemistici}
+            Gli operatori insiemistici permettono di combinare i risultati di più \textit{query} in un unico risultato. Gli operatori insiemistici sono:
+            \begin{description}
+                \item[\texttt{UNION}] - restituisce l'unione dei risultati di due \textit{query} (eliminando i duplicati)\footnote{In quanto l'operatore \texttt{UNION} elimina i duplicati se si sta cercando di unire due query allora non è necessario usare il modificatore \texttt{DISTINCT} in quanto ordinamento e rimozione dei duplicati sono già garantiti dall'operatore}
+                \item[\texttt{UNION ALL}] - restituisce l'unione dei risultati di due \textit{query} (senza eliminare i duplicati e ordinare i risultati)
+                \item[\texttt{INTERSECT}] - restituisce l'intersezione dei risultati di due \textit{query}
+                \item[\texttt{EXCEPT}] - restituisce la differenza tra i risultati di due \textit{query}
+            \end{description}
+        \subsubsection{Operatore \texttt{JOIN}}
+            L'operatore \texttt{JOIN} permette di combinare i risultati di due \textit{query} in un unico risultato. Gli operatori \texttt{JOIN} sono:
+            \begin{description}
+                \item[\texttt{INNER JOIN}] - restituisce le tuple che hanno un valore comune in entrambe le relazioni
+                \item[\texttt{LEFT JOIN}] - restituisce tutte le tuple della relazione di sinistra e le tuple della relazione di destra che hanno un valore comune
+                \item[\texttt{RIGHT JOIN}] - restituisce tutte le tuple della relazione di destra e le tuple della relazione di sinistra che hanno un valore comune
+                \item[\texttt{FULL JOIN}] - restituisce tutte le tuple delle relazioni coinvolte
+            \end{description}
