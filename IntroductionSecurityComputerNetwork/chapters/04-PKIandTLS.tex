@@ -1,0 +1,72 @@
+\chapter[\texttt{PKI} \& \texttt{TLS}]{Cryptography at work: \texttt{PKI} \& \texttt{TLS}}
+\thispagestyle{chapterInit}
+\section{Digital Certificates}
+    \subsection{Introduzione}
+        Il certificato digitale è un documento elettronico che contiene la chiave pubblica di un'entità, come un'organizzazione, un sito web o un individuo ben identificato tramite procedure di verifica dell'identità, spesso legislate da normative nazionali o internazionali. Il certificato è rilasciato da un'autorità di certificazione (CA) riconosciuta a livello internazionale, che garantisce l'identità del titolare del certificato. Il certificato è firmato digitalmente dalla CA, che ne garantisce l'integrità e l'autenticità. Il certificato può essere usato per autenticare l'identità del titolare, per garantire la riservatezza delle comunicazioni e per garantire l'integrità dei dati scambiati.
+        Il certificato usa il paradigma della crittografia a chiave pubblica, in cui una chiave è usata per cifrare i dati e l'altra per decifrarli, infatti è composto da un certificato pubblico e da una chiave privata.
+    \subsection{Struttura del certificato \texttt{X.509}}
+        All'interno del certificato sono presenti le seguenti informazioni:
+        \begin{description}
+            \item[Version] o versione del certificato, che indica il formato del certificato.
+            \item[Serial Number] o numero seriale del certificato, rispetto ad altri certificati rilasciati dalla stessa \texttt{CA}.
+            \item[Signature Algorithm ID] o algoritmo di firma digitale usato per firmare il certificato.
+            \item[Issuer] o autorità di certificazione, che ha rilasciato il certificato (\texttt{CA}).
+            \item[Validity Period] o periodo di validità del certificato.
+            \item[Subject] o titolare del certificato che lo ha richiesto, la quale identità è garantita dalla \texttt{CA}.
+            \item[Subject Public Key] o chiave pubblica del titolare del certificato (\texttt{PK}).
+                \subitem Algoritmo di cifratura asimmetrica usato per cifrare i dati.
+                \subitem Valore della chiave pubblica.
+            \item[Issuer Unique Identifier] o identificativo univoco della \texttt{CA}.
+            \item[Subject Unique Identifier] o identificativo univoco del titolare del certificato.
+            \item[Extensions] o estensioni del certificato, che possono contenere informazioni aggiuntive, quali nomi alternativi, restrizioni d'uso, ecc.
+            \item[Signature] o firma digitale del certificato rilasciata dalla \texttt{CA} che garantisce l'integrità e l'autenticità del certificato e che questo non sia stato alterato o contraffatto.
+        \end{description}
+    \subsection{Certificati: domande e risposte}
+        \begin{itemize}
+            \item Come sono rilasciati i certificati?
+            \item Chi può rilasciare i certificati?
+            \item Perché dovrei fidarmi di un ente certificatore?
+            \item Come posso controllare se un certificato è valido?
+            \item Come posso revocare un certificato?
+            \item Chi può revocare un certificato?
+        \end{itemize}
+        La risposta a queste domande è data dalla \texttt{PKI} (\texttt{Public Key Infrastructure}), che è un insieme di tecnologie, standard e procedure che permettono di gestire in modo sicuro le chiavi pubbliche e i certificati digitali.
+\section{\textit{Public Key Infrastructure} - \texttt{PKI}}
+    Una \texttt{PKI} è un insieme di tecnologie, standard e procedure che permettono di gestire in modo sicuro le chiavi pubbliche e i certificati digitali. Questa infrastruttura garantisce anche la corrispondenza tra le chiavi pubbliche e i titolari delle chiavi, garantendo l'integrità e l'autenticità delle chiavi pubbliche e dei certificati digitali.
+    \subsection{Ottenere un certificato}
+        Per ottenere un certificato, il titolare deve come prima cosa registrarsi presso una \texttt{CA} autorevole, la quale verifica tramite processi che possono essere automatici o manuali l'identità del richiedente. Una volta verificata l'identità del richiedente questo invia una chiave privata e pubblica da certificare alla \texttt{CA} la quale \texttt{CA} rilascia il certificato, contenete le informazioni del titolare e la chiave pubblica del titolare, questo certificato è firmato digitalmente tramite chiave privata dalla \texttt{CA} e inviato al titolare che ora può distribuirlo.
+        \subsubsection{\texttt{ACME} - \texttt{Automated Certificate Management Environment}}
+            \texttt{ACME} è un protocollo di gestione automatica dei certificati, che permette di automatizzare il processo di richiesta, rinnovo e revoca dei certificati digitali. Il protocollo è stato sviluppato per semplificare la gestione dei certificati digitali, riducendo i costi e i tempi di gestione dei certificati. Il protocollo è basato su un modello di autorizzazione a due fattori, in cui il richiedente deve dimostrare di avere il controllo del dominio per cui richiede il certificato e di essere autorizzato a richiedere il certificato.
+            \paragraph{Let's encrypt} è un'autorità di certificazione che rilascia certificati digitali gratuitamente, tramite il protocollo \texttt{ACME}. Il servizio è stato lanciato nel 2016 con l'obiettivo di rendere l'uso dei certificati digitali più diffuso e sicuro, riducendo i costi e i tempi di gestione dei certificati. Il servizio è automatizzato e permette di ottenere un certificato digitale in pochi minuti, senza dover passare per procedure manuali di verifica dell'identità verificando l'identità del richiedente tramite il controllo del dominio per cui richiede il certificato.
+            \paragraph{Funzionamento}\begin{enumerate}
+                \item Il richiedente genere una coppia di chiavi pubblica e privata.
+                \item Il richiedente dimostra di essere in possesso del dominio per cui richiede il certificato.
+                \item Il richiedente richiede il certificato alla \texttt{CA} tramite il protocollo \texttt{ACME}.
+                \item La \texttt{CA} verifica il controllo del dominio e rilascia il certificato.
+                \item Il richiedente installa il certificato sul proprio server e può revocare o rinnovare il certificato in qualsiasi momento.
+            \end{enumerate}
+            \paragraph{Verifica del controllo del dominio}\begin{itemize}
+                \item \texttt{HTTP-01}: il richiedente deve creare un file con un contenuto specifico e caricarlo sul proprio server web.
+                \item \texttt{DNS-01}: il richiedente deve creare un record \texttt{TXT} con un contenuto specifico nel proprio server DNS.
+                \item \texttt{TLS-ALPN-01}: il richiedente deve configurare un certificato particolare con una connessione \texttt{TLS} specifica.
+            \end{itemize}
+    \subsection{Requisiti su \texttt{PKI}}
+        In quanto il sistema di \texttt{PKI} è distribuito a livello globale, è necessario che le \texttt{CA} e gli utenti rispettino alcuni requisiti comuni, tra cui: una politica di assegnazione nomi univoca, ogni parte della \texttt{PKI} deve provare ad alla \texttt{TTP} (\textit{Trusted Third Party}) che hanno una identità. Inoltre le \texttt{TTPs} devono controllare che quella identità sia valida e che il richiedente abbia ricevuto quella identità da una fonte affidabile. Infine le \texttt{TTPs} devono garantire che le chiavi pubbliche siano valide e che siano state rilasciate da una fonte affidabile.
+        \paragraph{Requisiti dei software} Tutti i software che operano con la \texttt{PKI} devono rispettare alcuni requisiti, tra cui: devono supportare i protocolli standard della \texttt{PKI}, devono supportare i formati standard dei certificati digitali, devono supportare i meccanismi standard di verifica dei certificati digitali, devono supportare i meccanismi standard di revoca dei certificati digitali, devono supportare i meccanismi standard di gestione dei certificati digitali e devono essere aggiornati regolarmente per garantire la sicurezza dei certificati digitali.
+        \subsubsection{\texttt{CRL} - \textit{Certificate Revocation List}}
+            La \texttt{CRL} è una lista di certificati revocati, che contiene le informazioni sui certificati che sono stati revocati dalla \texttt{CA}. Questa lista viene aggiornata regolarmente dalla \texttt{CA} e distribuita in tutto il modo a orari regolari alle \texttt{RA} (\textit{Registration Authority}) e agli utenti. La \texttt{CRL} contiene le seguenti informazioni sui certificati revocati: il numero seriale del certificato, la data di revoca, il motivo della revoca e la \texttt{CA} che ha revocato il certificato. Una possibile criticità di questo sistema è che la \texttt{CRL} può essere ritardata nella sua distribuzione e quindi un certificato revocato può essere utilizzato per un certo periodo di tempo, non conosciuto per motivi di sicurezza.
+    \subsection{Validazione di un certificato}
+        La \textbf{validazione di un certificato} è il processo per il quale si verifica che un certificato sia valido, autentico e integro prima di stabilire una connessione \texttt{SSL/TLS} con un server web. Inoltre ci si assicura che il certificato non sia scaduto e che non sia stato revocato dalla \texttt{CA}. Il processo di validazione di un certificato è composto da diversi passaggi: \begin{enumerate}
+            \item Il \textit{client} segue la catena di fiducia fino ad arrivare alla \texttt{CA} radice (\texttt{Root CA}).
+            \item Ogni certificato nella catena di fiducia è verificato tramite la firma digitale della \texttt{CA} che lo ha rilasciato per garantire l'autenticità e l'integrità del certificato.
+            \item Il \textit{client} verifica che il certificato sia valido per il periodo di validità specificato nei certificati.
+            \item Viene controllato che il certificato non sia stato revocato dalla \texttt{CA} tramite la \texttt{CRL}.
+            \item Infine il \textit{client} verifica che il \texttt{CN} (\textit{Common Name}) o il \texttt{SAN} (\textit{Subject Alternative Name}) del certificato corrisponda al nome del server web a cui si sta connettendo.
+        \end{enumerate}
+    \subsection{Catena di fiducia}
+        La catena di fiducia è una struttura gerarchica che permette di garantire l'autenticità e l'integrità delle chiavi pubbliche e dei certificati digitali. La catena di fiducia è composta da una serie di entità che si fidano l'una dell'altra e che garantiscono l'autenticità e l'integrità delle chiavi pubbliche e dei certificati digitali. La catena di fiducia è basata su un modello gerarchico, in cui le entità sono organizzate in una struttura ad albero, in cui ogni entità è collegata a un'altra entità di livello superiore, fino ad arrivare a un'autorità di certificazione radice (\texttt{Root CA}).
+\section{\texttt{SSL} \& \texttt{TLS} introduction}
+    Come possiamo sfruttare la crittografia a chiave pubblica e l'infrastruttura \texttt{PKI} per garantire la riservatezza, l'integrità e l'autenticità delle comunicazioni su Internet? La risposta è data dal protocollo \texttt{SSL} (\textit{Secure Socket Layer}) e dal suo successore \texttt{TLS} (\textit{Transport Layer Security}), che permettono di garantire la sicurezza delle comunicazioni su Internet.
+    \paragraph{\texttt{SSL}} (\textit{Secure Socket Layer}) è un protocollo di sicurezza che permette di garantire la riservatezza, l'integrità e l'autenticità delle comunicazioni su Internet. Il protocollo è basato su un modello di crittografia a chiave pubblica, in cui una chiave è usata per cifrare i dati e l'altra per decifrarli. Il protocollo è stato sviluppato da Netscape nel 1994 e ha avuto un grande successo, diventando uno standard de facto per la sicurezza delle comunicazioni su Internet.
+    \paragraph{\texttt{TLS}} (\textit{Transport Layer Security}) è il successore di \texttt{SSL}, che è stato sviluppato per superare i problemi di sicurezza di \texttt{SSL} e per garantire una maggiore sicurezza delle comunicazioni su Internet. Il protocollo è basato su un modello di crittografia a chiave pubblica, in cui una chiave è usata per cifrare i dati e l'altra per decifrarli. Il protocollo è stato sviluppato dal gruppo di lavoro \texttt{IETF} (\textit{Internet Engineering Task Force}). Esistono varie versioni del protocollo, tra cui \texttt{TLS 1.0} (\texttt{RFC 2246} 1999), \texttt{TLS 1.1} (\texttt{RFC 4346} 2006), \texttt{TLS 1.2} (\texttt{RFC 5246} 2008), \texttt{TLS 1.3} (\texttt{RFC 8446} 2018), la versione \texttt{TLS 1.3} e \texttt{TLS 1.2} sono le più utilizzate e al momento coesistono nella rete.
+    \paragraph{Obbiettivo di queste tecnologie} L'obiettivo di queste tecnologie è quello di garantire la riservatezza, l'integrità e l'autenticità delle comunicazioni nel web, proteggendo i dati sensibili degli utenti e garantendo la sicurezza delle transazioni online. Questo anche tramite il protocollo \texttt{HTTPS} (\textit{HyperText Transfer Protocol Secure}), che è una versione sicura del protocollo \texttt{HTTP} che utilizza il protocollo \texttt{SSL} o \texttt{TLS} per garantire la sicurezza delle comunicazioni tra il \textit{client} e il \textit{server} web.
