@@ -410,3 +410,27 @@
                 \end{align}
             \end{proof}
             e come conseguenza $T(n)=\Theta(n^\alpha\log n)$
+        \subsubsection{Ricorrenze lineari con partizione bilanciata (Estesa)}
+        \begin{theorem}
+            Sia $ a\geq 1, b>1, f(n) $ asintoticamente positiva e sia:
+            $$
+                T(n)=\begin{cases}
+                    aT(n/b) + f(n) & n>1 \\
+                    \Theta(1) & n\leq 1
+                \end{cases}
+            $$
+            Sia $ \alpha = \log_b a $ si distinguono i seguenti casi:
+            \begin{table}[H]
+                \centering
+                \begin{tabular}{|c|l c l|}
+                    \hline
+                    (1) & $ \exists\epsilon>0:f(n)=O(n^{\alpha - \epsilon})$ & $\Rightarrow$ & $T(n)=\Theta(n^\alpha)$ \\\hline
+                    (2) & $ f(n)=\Theta(n^\alpha)$ & $\Rightarrow$ & $T(n)=\Theta(f(n)\log n)$ \\ \hline
+                    (3) & $ \begin{array}{l}
+                        \exists \epsilon>0:f(n)=\Omega(n^{\alpha + \epsilon}) \land\\
+                        \exists c:0<c<1, \\
+                        \exists m\geq 0:af(n/b)\leq cf(n),\\\forall n\geq m
+                    \end{array} $ & $\Rightarrow$ & $T(n)=\Theta(f(n))$ \\\hline
+                \end{tabular}
+            \end{table}
+        \end{theorem}
