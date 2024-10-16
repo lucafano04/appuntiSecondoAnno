@@ -2,6 +2,7 @@
     "cSpell.language": "en,it,it-IT",
     "cSpell.words": [
         "Datagram",
+        "Gopalpaliwal",
         "IMAP",
         "interprocesso",
         "kbit",
@@ -12,7 +13,9 @@
         "pdfproducer",
         "pdfsubject",
         "pdftitle",
-        "tupla"
+        "RWND",
+        "tupla",
+        "Wikibooks"
     ],
     "conventionalCommits.scopes": [
         "Reti"
