@@ -5,6 +5,7 @@
         "Cryptosystem",
         "Diffie",
         "Feistel",
+        "Heartbleed",
         "MITM",
         "pdfcreator",
         "pdfkeywords",
