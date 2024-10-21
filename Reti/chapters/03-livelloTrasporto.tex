@@ -178,3 +178,150 @@
             Assumiamo di avere due trasmettitori e due ricevitori, un \textit{router} con una coda di dimensione infinita, la capacità del link in uscita è $ R $ e non possono esserci ritrasmissioni, allora il \textit{throughput} massimo per ogni trasmettitore è $ R/2 $, ma se entrambi i trasmettitori inviano dati contemporaneamente allora il ritardo salirà asintoticamente con l'avvicinarsi a $ R/2 $.
         \subsubsection{Scenario 2}
             Assumiamo di avere due trasmettitori e due ricevitori, un \textit{router} con una coda di dimensione finita, la capacità del link in uscita è $ R $ e il mittente ritrasmette i pacchetti in timeout, allora considerando il tasso di arrivo dall'applicazione del mittente $\lambda_{in}$ e il tasso percepito dal destinatario $\lambda_{out}$ e il fatto che il mittente invii dati solo quando il router ha spazio nel buffer allora ci troveremmo nel caso ideale ed abbiamo a disposizione un \textit{throughput} di $ R/2 $ per ogni trasmettitore. Se invece il mittente invia dati senza preoccuparsi dello stato del router invia e re-invia i pacchetti in caso di timeout allora per un input di $\lambda_{in}$ pari a $ R/2 $ il \textit{throughput} in uscita sarà di $ R/4 $ (per via delle ritrasmissioni).
+\section{Controllo di congestione \texttt{TCP}}
+    \paragraph{Alcune cose da dire} Innanzitutto bisogna dire che non esiste un solo algoritmo per il controllo di congestione, esistono infatti molte varianti, ognuna di queste è stata introdotta per rimuovere delle limitazioni della versione precedente. Inoltre l'implementazione di un algoritmo o di un altro dipende spesso dal sistema operativo. Tutte le implementazioni di \texttt{TCP} ragionano in \textit{byte}.
+    \paragraph{Caratteristiche} Il controllo di congestione \textbf{adatta il tasso di trasmissione} sulla base delle condizioni della rete, inoltre lo scopo è quello di evitare di \textbf{saturare} e \textbf{congestionare} la rete. 
+    \paragraph{Approcci possibili} Esistono due approcci possibili per il controllo di congestione: \begin{itemize}
+        \item \textbf{Controllo di congestione \textit{end-to-end}} 
+            \subitem Non coinvolge la rete
+            \subitem Si capisce se c'è congestione osservando perdite di pacchetti o ritardi
+            \subitem Metodo usato da \texttt{TCP}
+        \item \textbf{Controllo di congestione assistito dalla rete}
+            \subitem I router forniscono feedback ai trasmettitori
+            \subitem Un singolo bit per indicare la congestione
+    \end{itemize}
+    \subsection{\texttt{TCP} \textit{congestion control: additive increase multiplicative decrease} (\texttt{AIMD})}
+        \subsubsection{Approccio}
+            Il mittente aumenta il tasso di trasmissione cercando di occupare la banda disponibile e diminuisce il tasso di trasmissione quando rileva una perdita. Questo algoritmo segue due passi fondamentali: \begin{itemize}
+                \item \textbf{Additive Increase} Aumenta il tasso di trasmissione di 1 \texttt{MSS} ogni \texttt{RTT} finché non si rileva una perdita.
+                \item \textbf{Multiplicative Decrease} riduce la finestra (tipicamente di un fattore $ \frac{1}{2} $) quando si rileva una perdita.
+            \end{itemize}
+        \subsubsection{Perché usare \texttt{AIMD}}
+            Per ottenere un \textit{fairness} tra i trasmettitori, infatti se $ k $ sessioni \texttt{TCP} si dividono uno stesso \textit{link} ed è presente un \textit{bottleneck} allora la banda percepita da ogni trasmettitore sarà di $ \frac{R}{k} $.\newline
+            Due sessioni in competizione sullo stesso \textit{link} di banda $ R $ allora poniamo un grafico sul quale l'asse delle ascisse è la banda percepita della sessione 1 e l'asse delle ordinate è la banda percepita della sessione 2. 
+            \begin{figure}[H]
+                \centering
+                \includegraphics[width=0.5\textwidth]{03/congestione1.png}
+                \caption{Grafico di congestione}
+            \end{figure}
+            Dal grafico si vede come nel tempo le connessioni oscillano verso il punto di intersezione, questo è dovuto al fatto che entrambe le connessioni aumentano la loro banda fino a che non si satura il link, a quel punto entrambe rilevano una perdita e riducono la loro banda dello stesso fattore, questo porta ad un \textit{fairness} tra le due connessioni.
+    \subsection{Meccanismi per il controllo di congestione}
+        Il controllo di congestione gestisce l'adattamento della cosiddetta finestra di congestione ($CWND$ = numero di byte che il mittente può inviare). \newline
+        In \texttt{TCP} ci sono diversi algoritmi per il controllo di congestione, tra i più famosi ci sono: \begin{itemize}
+            \item \textbf{In assenza di perdite}
+                \subitem Slow Start
+                \subitem Congestion Avoidance
+            \item Per migliorare l'efficienza di \texttt{TCP} in caso si verifichino perdite
+                \subitem Fast Retransmit
+                \subitem Fast Recovery
+        \end{itemize}
+        \textbf{In ogni caso}: $ |W_T| = \min(\texttt{CWND}, \texttt{RWND}) = \min(\texttt{CWND}, |W_R|) $.
+        \subsubsection{Slow Start}
+            Il \textit{Slow Start} è un algoritmo che prevede che per ogni \texttt{ACK} ricevuto aumento di 1 \texttt{MSS} la finestra di congestione, in questo modo la finestra aumenta esponenzialmente. Questo algoritmo è utilizzato quando la connessione è appena stata aperta e non si conosce la banda disponibile. Il \textit{Slow Start} termina quando la finestra di congestione raggiunge una soglia detta \texttt{SSThresh} (\textit{Slow Start Threshold}) e si passa al \textit{Congestion Avoidance}.
+            \paragraph{Algoritmo della fase \textit{slow start}}
+            \begin{enumerate}
+                \item \textbf{Inizializzazione} \begin{itemize}
+                    \item \texttt{CWND} = 1 \texttt{MSS}
+                    \item \texttt{SSThresh} = \texttt{RWND} (o \texttt{RWND}/2)
+                \end{itemize}
+                \item \textbf{\texttt{ACK} valido ricevuto}:\begin{itemize}
+                    \item \texttt{CWND} = \texttt{CWND} + 1 \texttt{MSS}
+                    \item Sposto $W_{LOW}$ al primo segmento non \texttt{ACK'ato}
+                    \item Se \texttt{CWND} $ \geq $ \texttt{SSThresh} allora passo alla fase di \textit{Congestion Avoidance}
+                    \item Trasmetto nuovi segmenti (compresi tra $W_{LOW}$ e $W_{HIGH}$)
+                \end{itemize}
+                \item \textbf{Se scatta un \textit{timeout}}: \begin{itemize}
+                    \item Abbasso \texttt{SSThresh} a $\max(\texttt{CWND}/2, 2)$
+                    \item Aumento \texttt{RTO} = 2 \texttt{RTO}
+                    \item Reimposto \texttt{CWND} = 1 \texttt{MSS}
+                    \item Ritrasmetto il segmento in timeout 
+                \end{itemize}
+            \end{enumerate}
+            \subsubsection{Congestion Avoidance}
+            Il \textit{Congestion Avoidance} è un algoritmo che prevede che per ogni \texttt{ACK} ricevuto aumento di $ \texttt{MSS}\cdot \frac{\texttt{MSS}}{\texttt{CWND}} $ la finestra di congestione, in questo modo la finestra aumenta linearmente. Quindi per ogni \texttt{RTT} in cui ricevo tutti gli \texttt{ACK} attesi allora aumento di un segmento. Questo algoritmo segue un comportamento lineare e non esponenziale.
+            \paragraph{Algoritmo della fase \textit{congestion avoidance}}
+            \begin{itemize}
+                \item \textbf{Se ricevo un \texttt{ACK} valido}:\begin{itemize}
+                        \item \texttt{CWND} = \texttt{CWND} + $ \frac{\texttt{MSS}}{\texttt{CWND}} $ (in byte!)
+                        \item Sposto $W_{LOW}$ al primo segmento non \texttt{ACK'ato}
+                        \item Trasmetto nuovi segmenti (compresi tra $W_{LOW}$ e $W_{HIGH}$)
+                    \end{itemize}
+                \item \textbf{Se scatta un \textit{timeout}}: \begin{itemize}
+                        \item Passo alla fase di \textit{Slow Start}
+                        \item Abbasso $ \texttt{SSThresh} = \max(\texttt{CWND}/2, 2) $
+                        \item Aumento \texttt{RTO} = 2 \texttt{RTO}
+                        \item Reimposto \texttt{CWND} = 1 \texttt{MSS}
+                        \item Ritrasmetto il segmento in timeout
+                \end{itemize}
+            \end{itemize}
+        \subsubsection{Parametri i quali possono essere modificati}
+            \begin{itemize}
+                \item \textbf{CWND} (\textit{Congestion Window}) Dimensione della finestra di congestione.
+                \item \textbf{SSThresh} (\textit{Slow Start Threshold}) Soglia per il \textit{Slow Start}.
+                \item \textbf{RTOT} (\textit{Retransmission TimeOut}) Tempo di ritrasmissione.
+                \item \textbf{$W_{LOW}\ \&\ W_{HIGH}$} Puntatori alla finestra di trasmissione.
+            \end{itemize}
+        \subsubsection{\textit{Fast Retransmit}}
+            Il \textit{Fast Retransmit} è un algoritmo che prevede che se il mittente riceve tre \texttt{ACK} duplicati allora ritrasmette il segmento richiesto dal \texttt{ACK} duplicato, inoltre il fatto che il mittente riceva tre \texttt{ACK} duplicati indica che c'è una congestione sulla rete si passa dunque alla fase di \textit{Fast Recovery}. Inoltre prendo in considerazione il valore di \texttt{RECOVER}=$W_{UP}$ per determinare quanti segmenti sono stati trasmessi nella rete, in questo modo posso capire quando il processo di \textit{Fast Retransmit} è terminato con successo.
+        \subsubsection{\textit{Fast Recovery}}
+            Quando ricevo il 3° \texttt{ACK} duplicato entro in \textit{Fast Recovery}, in questa fase avvengono diversi passaggi per evitare di saturare la rete: \begin{itemize}
+                \item \textbf{Al 3° \texttt{ACK} duplicato}:\begin{itemize}
+                    \item \texttt{SSThresh} = \texttt{CWND}/2
+                    \item Supponendo di aver perso solo il segmento in questione: \texttt{CWND} = \texttt{SSthresh} + 3 \texttt{MSS}
+                    \item Non sposto $W_{LOW}$
+                \end{itemize}
+                \item \textbf{Se arrivano altri \texttt{ACK} duplicati allora}: \begin{itemize}
+                    \item \texttt{CWND} = \texttt{CWND} +1 \texttt{MSS}
+                    \item Non sposto $W_{LOW}$
+                \end{itemize}
+                \item \textbf{Quando arriva un \texttt{ACK} valido} (che comprende \texttt{RECOVER}): \begin{itemize}
+                    \item \texttt{CWND} = \texttt{SSthresh}
+                    \item Passo alla fase di \textit{Congestion Avoidance}
+                    \item Sposto $W_{LOW}$ al primo segmento non \texttt{ACK'ato}
+                \end{itemize}
+                \item \textbf{Se arriva un \texttt{ACK} che \underline{non} comprende \texttt{RECOVER}}:\begin{itemize}
+                    \item Ritrasmetto il primo segmento non \texttt{ACK'ato}
+                    \item \texttt{CWND} = \texttt{CWND}-(numero di segmenti senza \texttt{ACK})+1
+                    \item Sposto $W_{LOW}$ al primo segmento non \texttt{ACK'ato}
+                \end{itemize}
+            \end{itemize}
+            \begin{figure}[H]
+                \centering
+                \includegraphics[width=0.4\textwidth]{03/macchinaStatiTCP.png}
+                \caption{Macchina a stati di \texttt{TCP}}
+            \end{figure}
+        \subsubsection{Problemi di equità (\textit{fairness}) in \texttt{TCP}}
+            In quanto le applicazione multimediali usano di rado \texttt{TCP} per la trasmissione (ma usano \texttt{UDP}), queste non sono soggette ai controlli di congestione, quindi le connessioni \texttt{TCP} sono penalizzate. Questo avviene in quanto le connessioni \texttt{UDP} trasmettono a velocità costante indipendentemente da fattori esterni.\newline
+            Se invece abbiamo due \textit{host} che usano \texttt{TCP} e uno apre (ad es.) $ 9 $ connessioni mentre l'altro ne apre $ 1 $ allora il primo avrà un \textit{throughput} di $ \frac{R}2 $ mentre il secondo avrà un \textit{throughput} di $ \frac{R} {10} $.
+    \subsection{Altri algoritmi più recenti per il controllo di congestione}
+        Negli algoritmi visti fino ad ora il processo di "rallentamento" della trasmissione avveniva solo in caso di perdita di pacchetti, questo però permette di regolare la banda solo quando è troppo tardi, in quanto deve avvenire una perdita prima che il mittente si renda conto che c'è una congestione. Per ovviare a questo problema sono stati introdotti nuovi algoritmi che permettono di regolare la banda. Questi algoritmi sono: \begin{itemize}
+            \item \texttt{CUBIC}
+            \item \texttt{BBR}
+            \item \texttt{QUIC}
+        \end{itemize}
+        \subsubsection{\texttt{CUBIC}}
+            L'algoritmo \texttt{CUBIC} fa variare la lunghezza della finestra di congestione secondo una funzione cubica nel tempo, questo ne migliora la scalabilità e la stabilità. Questo algoritmo è stato introdotto nel kernel di \texttt{Linux} a partire dalla versione 2.6.19, mentre in \texttt{Windows} è stato introdotto a partire dal 2017.
+            \paragraph{Principi del funzionamento} Per un migliore utilizzo e stabilità della rete \texttt{CUBIC} usa sia sia la parte concava che quella convessa della funzione cubica per regolare la finestra di congestione. 
+            $$
+                \texttt{CWND}_{cubic}(t) = C(t-K)^3 + \texttt{CWND}_{max}
+            $$
+            Dove $ C $ è una costante, $ K = \sqrt[3]{\frac{\texttt{CWND}_{max}(1-\beta)}{C}} $ e $ \texttt{CWND}_{max} $ è la dimensione massima della finestra di congestione. Per lo standard \texttt{RFC 8312} $ C = 0.4 $ e $ \beta = 0.7 $, ma dopo che è stata rilevata una congestione allora $ \beta = 0.5 $. Inoltre questo algoritmo è "\texttt{TCP}\textit{-friendly}" ovvero non penalizza i flussi \texttt{TCP} legacy che condividono la stessa rete.
+        \subsubsection{\texttt{BBR} - \textit{Bottleneck Bandwidth and Round-trip propagation time}}
+            L'algoritmo \texttt{BBR} è un algoritmo di controllo di congestione che cerca di massimizzare il \textit{throughput} e minimizzare il ritardo. Questo algoritmo è stato introdotto da \texttt{Google} nel 2016 e si basa non sul rilevamento di perdite ma su due parametri: \begin{itemize}
+                \item \textbf{Bottleneck Bandwidth} La banda disponibile sul \textit{bottleneck}.
+                \item \textbf{Round-trip propagation time} Il tempo di propagazione del pacchetto.
+            \end{itemize}
+            Il funzionamento a grandi linee prevede la trasmissione di pacchetti ad una velocità che non \textit{dovrebbe} saturare la rete. Questo infatti è progettato per ridurre la finestra di congestione prima che si verifichi una perdita, in questo modo si dovrebbe riuscire a limitare ritrasmissioni inutili. Un vantaggio di \texttt{BBR} è quello che solo il \textit{server} lo deve implementare e non anche il \textit{client}. Il concetto usato è quello di \textit{pacing} ovvero inserisco nuovi pacchetti nella \texttt{CWND} solo quando il nodo più lento della rete è pronto a riceverli.
+            \paragraph{Migliore produttività} Secondo \textit{Google} \texttt{BBR} con un \textit{link} a $10$ Gbps che invia dati lungo un percorso con \texttt{RTT} di $100$ms con tasso di perdita dell'$1\%$ riesce a raggiungere un \textit{throughput} di $3,3$Mbit/s con \texttt{CUBIC} e di $9100$Mbit/s con \texttt{BBR}. Questo è ideale nel caso di connessioni \texttt{HTTP/2} che sfruttano una singola connessione per trasmettere dati.
+            \paragraph{Latenza inferiore} \texttt{BBR} riesce a mantenere una latenza inferiore rispetto a \texttt{CUBIC} in quanto riesce a mantenere la banda costante e non satura la rete. Vari studi (sempre di \textit{Google}) hanno dimostrato che su un collegamento di $10$ Mbps con \texttt{RTT} di $40$ ms ed un \textit{bottleneck} di $1000$ pacchetti la latenza di \texttt{BBR} è di soli $43$ ms contro i $1090$ ms di \texttt{CUBIC}.
+        \subsubsection{\texttt{QUIC} - \textit{Quick UDP Internet Connections}}
+            \texttt{QUIC} è un protocollo di trasporto sviluppato da \texttt{Google} nel 2012 e si prefissa il raggiungimento di due obbiettivi:\begin{itemize}
+                \item Evitare fenomeni di \textit{head-of-line blocking}
+                \item Ridurre la latenza di \texttt{TCP}
+            \end{itemize}
+            \texttt{QUIC} può essere implementato a livello applicazione, oltre che a livello di \textit{kernel}. Lo \textit{use case} di questo dovrebbe essere quello delle connessioni \texttt{HTTP/3}. Il principio di funzionamento di questo è che i pacchetti vengono trasmessi tramite una connessione \texttt{UDP} e non \texttt{TCP}, questo permette di evitare i problemi di \textit{head-of-line blocking} in quanto se un pacchetto viene perso allora non si bloccano tutti i pacchetti successivi. Inoltre \texttt{QUIC} permette di ridurre l'\textit{overhead} di connessione in quando incorpora in se stesso lo scambio delle chiavi (o \textit{handshake}) di \texttt{TLS}.
+    \subsection{Conclusioni}
+        \subsubsection{Meglio dunque \texttt{TCP} o \texttt{UDP}?}
+        La scelta tra \texttt{TCP} e \texttt{UDP} dipende da cosa si vuole fare, se si vuole trasmettere dati in modo affidabile e si vuole evitare di saturare la rete allora si deve usare \texttt{TCP}, se invece si vuole trasmettere dati in modo veloce e non si vuole preoccuparsi di perdite di pacchetti allora si deve usare \texttt{UDP}. Questa scelta però non è così libera come sembra, in quanto se si vuole usare il protocollo \texttt{QUIC} necessitiamo di connessione \texttt{UDP} ma molta della nostra infrastruttura blocca le connessioni di questo tipo in quanto non avviene un controllo di congestione e quindi si rischia di saturare la rete. Google ha provato a mostrare come \texttt{QUIC} sia migliore di \texttt{TCP} cercando di "sbloccare" la rete per questo tipo di connessioni, detto ciò i prodotti della serie \textit{chromium} aprono in contemporanea una connessione \texttt{TCP} e una connessione \texttt{UDP} e scelgono quella che ha il \textit{throughput} migliore. 
+        \subsubsection{Cambio di rete}
+            Con le connessioni \texttt{TCP} le \textit{socket} vengono identificate dalla quadrupla: (IP M.,IP D., Porta M., Porta D.), se si cambia rete allora si cambia anche l'indirizzo IP e quindi la connessione \texttt{TCP} viene persa. Con \texttt{QUIC} invece la connessione viene mantenuta in quanto la \textit{socket} è identificata da un \texttt{ID} e non dall'indirizzo IP.

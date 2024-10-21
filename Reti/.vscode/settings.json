@@ -1,6 +1,8 @@
 {
     "cSpell.language": "en,it,it-IT",
     "cSpell.words": [
+        "AIMD",
+        "CWND",
         "Datagram",
         "Gopalpaliwal",
         "IMAP",
@@ -13,6 +15,8 @@
         "pdfproducer",
         "pdfsubject",
         "pdftitle",
+        "QUIC",
+        "RTOT",
         "RWND",
         "tupla",
         "Wikibooks"
