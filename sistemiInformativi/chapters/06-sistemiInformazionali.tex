@@ -1,0 +1,33 @@
+\chapter{I sistemi Informazionali}
+\thispagestyle{chapterInit}
+\section{In generale}
+    \subsection{Gli Obbiettivi}
+        Gli obbiettivi principali di un sistema informazionale sono diversi, tra i quali troviamo:
+        \begin{enumerate}
+            \item Il sistema informazionale come strumento a supporto delle decisioni
+            \item Interrogazione dei dati
+            \item Base di dati
+            \item Strumenti di analisi dei dati
+        \end{enumerate}
+        \paragraph{Sistema informazionale come supporto alle decisioni} Il sistema informazionale deve essere uno strumento al supporto delle decisioni tramite l'elaborazione di dati, prima dei sistemi informazionali questi venivano forniti tramite \textit{report} i quali però presentano \textit{bias} basati sulla persona che lo prepara (come dati omessi o punti di enfasi), inoltre risultano statici e difficili nella loro creazione. Altri strumenti superati grazie ai sistemi informazionali sono i fogli di calcolo, i quali sono soggetti a errori, è difficile collaborare e sono difficili da mantenere in quanto se si vuole modificare una formula bisogna modificarla in tutti i fogli di calcolo distribuiti.
+        \paragraph{Sistema informazionale come strumento di interrogazione dei dati} Le interrogazioni si suddividono principalmente in: interrogazioni puntuali e interrogazioni complesse. Esempio di interrogazione puntuale è la ricerca della modalità di pagamento di un dato cliente, mentre un esempio di interrogazione complessa è l'analisi dell'aumento del margine operativo per una serie di prodotti rispetto all'anno precedente.
+        \paragraph{Sistema informazionale come strumento di accesso alla base di dati} Il sistema informazionale deve offrire agli utenti finali un modello intuitivo ed efficiente per l'analisi, inoltre deve garantire la possibilità di integrare da fonti diverse i dati ed offrire processi di aggiornamento di questi.
+        \paragraph{Sistema informazionale come strumento di analisi dei dati} In questo caso il sistema informazionale deve offrire strumenti di analisi dei dati, come \textit{reporting} di dati, oppure offre dei sistemi per l'analisi interattiva da una ipotesi iniziale oppure offre sistemi di \textit{Data Mining}
+    \subsection{Terminologia}
+        \paragraph{\textit{Data Warehouse}} Il \textit{Data Warehouse} è quell'insieme di tecniche per definire, costruire e mantenere un \textit{Data Base} che sia orientato all'analisi dei dati. Questo \textit{Data Base} deve essere molto strutturato e i dati organizzati in maniera efficiente per permettere l'analisi dei dati.
+        \paragraph{\textit{Decision Support System} - \texttt{DSS}} Il \texttt{DSS} è una parte del sistema informazionale che integrato nel processo decisionale dell'azienda, permette di visualizzare ed estrarre le informazioni da basi di dati ben organizzate
+        \paragraph{\textit{Data mining}} Il \textit{Data Mining} è una tecnica che permette di estrarre informazioni utili da un grande insieme di dati, questa tecnica è utilizzata per scoprire relazioni tra i dati e per fare previsioni.
+        \paragraph{\textit{Buisness Intelligence}} Ovvero tutte le attività di estrazione di informazioni dai dati di \textit{business} generati dai processi operativi aziendali.
+        \paragraph{\textit{Knowledge Management}} Ovvero l'insieme della conoscenze che ogni individuo possiede i quali dovrebbero essere distribuiti in maniera efficiente all'interno del sistema informazionale. Spesso questa conoscenza è derivata da esperienze passate, da informazioni acquisite e da competenze acquisite, alcune volte questa conoscenza è difficile da trasferire ed è difficile da codificare.
+        \paragraph{\textit{Big Data}}
+    \subsection{Le caratteristiche}
+        \paragraph{Finalità} Il sistema informazionale deve essere in grado di fornire un substrato informativo per la conoscenza dell'azienda, inoltre deve essere in grado di descrivere il passato ed aiutare ad identificare i problemi e le loro cause. Inoltre deve poter suggerire i cambiamenti da apportare e fornire anticipazioni sui scenari futuri.
+        \paragraph{Struttura} I dati devono essere articolati intorno ai soggetti di cui si vuol conoscere l'apporto alla vita aziendale
+        \paragraph{Utenza} I principali utenti del sistema informazionale sono i manager e i decisori che devono avere una visione e conoscenza ampia dell'azienda
+        \paragraph{Storicità} Il sistema deve mantenere e fornire uno storico dei dati con un arco temporale adeguato e molto più esteso rispetto a quello dei sistemi operazionale, inoltre deve fornire l'evoluzione storia dei soggetti di interesse.
+        \paragraph{Dettaglio} I dati sono quasi esclusivamente in forma aggregata e devono essere disponibili a diversi livelli di aggregazione.
+        \paragraph{Accesso} L'accesso ai dati è principalmente solo in lettura, eventuali aggiornamenti sono solo periodici e in momenti nei quali l'attività aziendale è ferma.
+\section{Modello multidimensionale}
+    \subsection{Introduzione}
+        Il modello multidimensionale è un modello di rappresentazione dei dati che permette di rappresentare i dati in maniera più intuitiva rispetto al modello relazionale. In questo modello il processo di analisi viene posto al centro del sistema e non più il processo di inserimento dei dati (i quali vengono inseriti non in maniera diretta ma vengono estratti da un \texttt{SI} Operazionale\footnote{Si rimanda al capitolo: \ref{ch:operazionali} \nameref{ch:operazionali} per ulteriori informazioni sui sistemi operazionali}).
+        In questo modello lo spazio delle informazioni viene rappresentato come insieme di matrici multidimensionali, dove ogni matrice rappresenta un tipo di evento (quale ad esempio l'immatricolazioni degli studenti), ogni elemento della matrice rappresenta un singolo evento (la singola immatricolazione) e ogni coordinata della matrice rappresenta una dimensione dell'evento (come ad esempio il corso di laurea, l'anno di immatricolazione, ecc\dots).

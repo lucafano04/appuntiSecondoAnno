@@ -1,5 +1,6 @@
 \chapter{I sistemi operazionali}
 \thispagestyle{chapterInit}
+\label{ch:operazionali}
 
 \section{Finalità dei sistemi operazionali}
     Le principali finalità dei \textbf{sistemi operazionali} riguardano:
@@ -53,5 +54,82 @@
             In sostanza un dato per essere di qualità non deve essere ridondante, deve essere coerente con la realtà e deve essere indipendente dalla struttura del sistema.
         \paragraph{Impatto della qualità dei dati}
             Se all'interno del proprio \texttt{SI} si ha una bassa qualità dei dati, allora si avrà un forte impatto economico/organizzativo tra cui: la difficoltà nell'introduzione di innovazioni tecnologiche (adozione di una nuova tecnologia) e di processo (modificare un processo produttivo), la difficoltà nell'avvio di processi del tipo \textit{data warehousing}, inoltre dal lato umano avere una bassa qualità dei dati può portare a una scarsa soddisfazione degli utenti finali del \texttt{SI} (ovvero quelle persone che utilizzano il \texttt{SI} per svolgere il proprio lavoro).
-\section{Potenzialità informativa}
-\section{Composizione dei sistemi informativi operazionali}
+    \subsection{Informazione Operativa}
+        L'informazione operativa è l'informazione che serve per svolgere le attività operative dell'azienda, questa informazione è costituita da dati che vengono acquisiti, memorizzati, elaborati e trasferiti all'interno dell'azienda. Questi dati sono utili per la gestione aziendale e per la pianificazione delle attività future. L'informazione operativa è caratterizzata da:
+        \begin{description}
+            \item[Aggregazione] I dati sono aggregati in base alle esigenze dell'utente, possono essere:
+                \subitem \textbf{Analitici} Se si vuole avere una visione dettagliata di un singolo evento.
+                \subitem \textbf{Analitici} Se si vuole avere una visione complessiva di un insieme di eventi, ottenuto aggregando i dati.
+            \item[Tempificazione] I dati possono essere temporizzati in base alle esigenze dell'utente, possono essere:
+                \subitem \textbf{Puntuale} Se si vuole avere una visione istantanea della situazione aziendale.
+                \subitem \textbf{Cumulata} Se si vuole avere una visione della situazione aziendale in un certo periodo di tempo.
+            \item[Dimensionalità] Intendiamo come dimensionalità il numero minimo di parametri necessari per estrarre una specifica informazione.
+        \end{description}
+        Esempio delle caratteristiche dell'informazione operativa:
+        \begin{table}[H]
+            \centering
+            \begin{tabular}{|c|c|c|c|}
+                \hline
+                & \textbf{Aggregazione} & \textbf{Tempificazione} & \textbf{Dimensionalità} \\
+                \hline
+                \textbf{Anagrafe} & Analitica & Puntuale & unitaria \\
+                \hline
+                \textbf{Movimenti \& Documenti} & Analitica & Puntuale & Contenuta \\
+                \hline
+                \textbf{Informazioni di stato} & Analitica o aggregata & Puntuale o cumulata & Contenuta \\
+                \hline
+            \end{tabular}
+        \end{table}
+\section{Potenzialità informatica}
+    \paragraph{Definzione} La \textbf{potenzialità informatica} è costituita principalmente da due indicatori:
+    \begin{description}
+        \item[Intensità informativa] Misura la quantità di informazioni della quale l'azienda necessita, sia che queste vengano da fonti interne o esterne.
+        \item[Attrattiva informatica] Ovvero la propensione dell'azienda ad utilizzare un \texttt{SI} per la gestione delle informazioni.
+    \end{description}
+    Inoltre la propensione del management verso l'investimento sulla infrastruttura informatica è un indicatore di potenzialità informatica. 
+    \subsection{Intensità informativa}
+        \paragraph{Definzione} L'intensità informativa è costituita da un insieme di fattori quali:
+        \begin{itemize}
+            \item La complessità dell'attività aziendale: dimensione, area geografica, appartenenza a strutture complesse, livello di diversificazione dei prodotti, dei mercati e delle tecnologie.
+            \item L'intensità informativa di prodotto
+                \subitem quantità di informazioni proprie degli oggetti prodotti o dei servizi erogati
+            \item L'intensità informativa di processo
+                \subitem quantità di informazioni necessarie all'avanzamento dei processi aziendali (o generati da questi)
+        \end{itemize}
+    \subsection{Attrattiva Informatica}
+        \paragraph{Definizione} L'attrattiva informatica e un insieme di fattori che concorrono a determinare quanto un processo aziendale sia attrattivo per l'automazione tramite un \texttt{SI}. Questi fattori sono:
+        \begin{itemize}
+            \item \textbf{Proceduralità}, ovvero il grado di formalizzazione dei processi aziendali
+                \subitem Più un processo è formalizzato, più è attrattivo
+            \item \textbf{Complessità}, grado di difficoltà delle azioni elementari previste dal processo
+                \subitem Meno un processo è complesso e più è attrattivo
+            \item \textbf{Ripetitività}: frequenza con cui un processo viene ripetuto
+                \subitem Più un processo è ripetuto, più è attrattivo    
+            \item \textbf{Volume}: quantità di dati e informazioni elaborate dal processo
+                \subitem Alti volumi di dati rendono un processo attrattivo         
+        \end{itemize}
+\section[Composizione dei \texttt{SI} Operazionali]{Composizione dei sistemi informativi operazionali}
+    I \texttt{SI} operazionali sono composti da diversi sotto-sistemi che si occupano di diverse funzioni. Al momento non esiste una classificazione standard dei sotto-sistemi in quanto varia in base all'azienda e al settore di appartenenza. I criteri principali usati per la distinzione tra diversi sotto-sistemi sono: la funzione svolta, il processo aziendale coinvolto, l'architettura tecnologica, ecc\dots
+    \subsubsection{Portafoglio Applicativo}
+        Definiamo come \textbf{portafoglio applicativo} l'insieme delle applicazioni software che costituiscono il \texttt{SI} operativo, possono essere individuate due aree principali, ovvero il \textbf{portafoglio operativo} e il \textbf{portafoglio istituzionale}.
+        \paragraph{Portafoglio Operativo} È costituito da applicazioni informatiche che trattano di processi legati al \textit{core-business} dell'azienda. Questo genere di portafoglio è caratterizzato da una elevata specializzazione ad un settore specifico oltre ad una elevata variabilità tra aziende dello stesso settore di appartenenza. Inoltre questo portafoglio è caratterizzato da una forte verticalizzazione e da una elevata specializzazione delle funzioni implementate.
+        \paragraph{Portafoglio istituzionale} È costituito da applicazioni informatiche che trattano di processi a sostegno delle principali attività aziendali. Questo genere di portafoglio è caratterizzato da una elevata attrattiva informatica e da una alta proceduralita (e ripetitività) dei processi. Inoltre questo genere di portafoglio è caratterizzato da una elevata omogeneità tra aziende anche di settori diversi e la poca variabilità tra servizi e prodotti offerti.
+    \subsection{Sistema gestionale classico}
+        Nel modello del sistema gestionale classico solitamente sono presenti delle isole informatiche autonome e molto specializzate, questo genere di sviluppo è causato principalmente da uno sviluppo incrementale (ovvero lo sviluppo viene eseguito a compartimenti "stagni" uno per volta), da una rigidità delle organizzazioni aziendali, dalla specializzazione dei produttori di software ecc\dots
+        \paragraph{Problematiche} Questo genere di sviluppo porta a diverse problematiche quando si discute sulla gestione dei dati, in questo sistema infatti i dati sono ridondanti, disomogenei e spesso incoerenti. Ad aggiungersi a ciò questo genere di gestionale rende difficile avere una visione complessiva dell'azienda.
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.5\textwidth]{05/gestionaleClassico.png}
+            \caption{Schema dei settori di un sistema gestionale classico}
+        \end{figure}
+    \subsection{Sistema \texttt{ERP} - \textit{Enterprise Resource Planning}}
+        Un sistema \texttt{ERP} è un sistema informativo aziendale integrato, ovvero un sistema che permette di gestire in maniera integrata e coordinata tutte le informazioni aziendali. Questo genere di sistema, grazie ad una basi di dati unica ed a processi integranti e cooperanti, punta a trattare i dati in modo ottimale e ottimizzato, oltre a gestire il controllo dei processi aziendali.
+        \paragraph{Vantaggi} Questo genere di sistema così implementato è molto flessibile ed in grado di assecondare l'azienda in ogni sua esigenza, inoltre permette di avere una visione complessiva dell'azienda e di avere una gestione ottimale dei processi aziendali. Inoltre questo si adatta molto rispetto all'organizzazione aziendale e all'architettura tecnologica.
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.33\textwidth]{05/gestionaleERP.png}
+            \caption{Schema dei settori di un sistema gestionale \texttt{ERP}}
+        \end{figure}
+    \subsection{Sistemi operazionali complementari}
+        I sistemi operazionali complementari sono sistemi che vengono aggiunti al sistema operativo principale per coprire delle funzioni che non sono presenti nel sistema operativo principale. Questi sistemi sono caratterizzati da una forte specializzazione e da una forte integrazione con il sistema operativo principale.
+        \paragraph{Esempi di sistemi operazionali complementari} Alcuni esempi di sistemi operazionali complementari sono: i sistemi di supporto alle decisioni, i sistemi di gestione della qualità, i sistemi di gestione ambientale, le estensioni dell'\texttt{ERP} ecc\dots
