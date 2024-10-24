@@ -4,7 +4,9 @@
         "AIMD",
         "CWND",
         "Datagram",
+        "Gbit",
         "Gopalpaliwal",
+        "ICANN",
         "IMAP",
         "interprocesso",
         "kbit",
@@ -19,7 +21,8 @@
         "RTOT",
         "RWND",
         "tupla",
-        "Wikibooks"
+        "Wikibooks",
+        "WLAN"
     ],
     "conventionalCommits.scopes": [
         "Reti"
