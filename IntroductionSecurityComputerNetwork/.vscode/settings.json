@@ -2,6 +2,7 @@
     "cSpell.words": [
         "Adleman",
         "ALPN",
+        "Bleichenbacher",
         "Cryptosystem",
         "Diffie",
         "Feistel",
@@ -13,6 +14,7 @@
         "pdfproducer",
         "pdfsubject",
         "pdftitle",
+        "RC4NOMORE",
         "Rijndael",
         "Rivest",
         "Shamir",
