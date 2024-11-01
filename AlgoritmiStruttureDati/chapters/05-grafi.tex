@@ -1,0 +1,533 @@
+\chapter{Grafi}
+\thispagestyle{chapterInit}
+\label{ch:grafi}
+\section{Introduzione}
+    \paragraph{Problemi relativi ai grafi} Per lo scopo del corso i nostri obbiettivi riguardanti i grafi li possiamo dividere in due categorie:
+        \subparagraph{Problemi in grafi non pesati} Studieremo problemi riguardanti grafi non pesati, ovvero grafi in cui gli archi non hanno un peso associato. In particolare, ci occuperemo di: \begin{itemize}
+            \item Ricerca del cammino più breve tra due nodi.
+            \item Componenti (fortemente) connesse, verifica ciclicità, ordinamento topologico.
+        \end{itemize}
+        \subparagraph{Problemi in grafi pesati} Studieremo problemi riguardanti grafi pesati, ovvero grafi in cui gli archi hanno un peso associato. In particolare, ci occuperemo di: \begin{itemize}
+            \item Cammini di peso minimo.
+            \item Alberi di copertura di peso minimo.
+            \item Flusso massimo.
+        \end{itemize}
+    \subsection{Definizioni}
+        \subsubsection{Grafo Orientato (\textit{directed})}
+            \begin{definition}
+                Un grafo orientato è una coppia $G = (V, E)$ dove $V$ è un insieme finito di nodi (\textit{node}) o vertici (\textit{vertex}) ed $E$ è un insieme finito di coppie di nodi $(u,v)$ detti anche archi (\textit{edge}) o lati (\textit{link}) orientati.
+            \end{definition}
+        \subsubsection{Grafo Non Orientato (\textit{undirected})}
+            \begin{definition}
+                Un grafo non orientato è una coppia $G = (V, E)$ dove $V$ è un insieme finito di nodi (\textit{node}) o vertici (\textit{vertex}) ed $E$ è un insieme finito di coppie di nodi non orientati $(u,v)$ detti anche archi (\textit{edge}) o lati (\textit{link}) non orientati.
+            \end{definition}
+        \subsubsection{Vertici}
+            \begin{definition}[Adiacenza]
+                Un vertice $v$ è detto \textbf{adiacente} ad un vertice $u$ se esiste un arco $(u,v)$.
+            \end{definition}
+            \begin{definition}[Incidenza]
+                Un arco $(u,v)$ è detto \textbf{incidente} al vertice $u$ e al vertice $v$.
+            \end{definition}
+            In un grafo indiretto la relazione di adiacenza è simmetrica, ovvero se $v$ è adiacente ad $u$ allora $u$ è adiacente a $v$.
+        \subsubsection{Dimensioni del grafo}
+            Numero di nodi: $|V| = n$ \newline
+            Numero di archi: $|E| = m$
+            \begin{theorem}[Relazioni tra $n$ e $m$]
+                In un grafo non orientato con $n$ nodi e $m$ archi vale che $m \leq \frac{n(n-1)}{2} = O(n^2)$.\newline
+                In un grafo orientato con $n$ nodi e $m$ archi vale che $m \leq n(n-1) = O(n^2)$.
+            \end{theorem}
+            La complessità è espressa in termini di $n$ e $m$ es. $O(n+m)$.
+        \subsubsection{Casi Speciali}
+            \begin{definition}[Grafo Completo]
+                Un grafo con un arco fra tutte le coppie di nodi è detto \textbf{grafo completo}.
+            \end{definition}
+            \begin{definition}[Grafo sparso/denso (informale)]
+                Si dice che un grafo è \textbf{sparso} se ha "pochi archi", ovvero grafi con $m = O(n), O(n \log n)$, e \textbf{denso} se ha "molti archi", ovvero grafi con $m = \Omega(n^2)$.
+            \end{definition}
+            \begin{definition}[Albero libero]
+                Un \textbf{albero libero} (\textit{free tree}) è un grafo connesso on $ m = n-1$.
+            \end{definition}
+            \begin{definition}[Albero radicato]
+                Un \textbf{albero radicato} (\textit{rooted tree}) è un albero libero in cui uno dei nodi è designato come radice.
+            \end{definition}
+        \subsubsection{Proprietà}
+            \begin{definition}[Grado]
+                Nei grafi non orientati il \textbf{grado} (\textit{degree}) di un nodo è il numero di archi incidenti su di esso.\newline
+                Nei grafi orientati si distinguono il \textbf{grado entrante} e il \textbf{grado uscente} di un nodo, rispettivamente il numero di archi entranti e uscenti da esso.
+            \end{definition}
+        \subsubsection{Cammino}
+            \begin{definition}[Cammino]
+                In un grafo $ G=(V,E) $ orientato o meno, un \textbf{cammino} $C$ di lunghezza $k$ tra i nodi $u_0,u_1,\dots,u_k$ è una sequenza di nodi tale che $(u_i,u_{i+1}) \in E$ per $i=0,\dots,k-1$.
+            \end{definition}
+    \subsection{Specifica}
+    \subsection{Memorizzazione}
+        \subsubsection{Matrice di aderenza - Grafi orientati}
+            Se si sceglie di memorizzare un grafo tramite una matrice di aderenza allora si avrà una matrice $A$ di dimensione $n \times n$ dove $n$ è il numero di nodi del grafo. La cella $A_{ij}$ sarà pari a 1 se esiste un arco tra il nodo $i$ e il nodo $j$, 0 altrimenti.
+            \paragraph{Esempio} Assumendo che il grafo orientato $$ G = (\{0,1,2,3,4,5\}, \{(0,1),(1,2),(0,3),(3,0),(2,3),(3,4),(4,2)\}) $$ sia memorizzato tramite una matrice di aderenza si avrà la seguente matrice:
+            \[
+                \begin{pNiceMatrix}[first-row,first-col]
+                    & 0 & 1 & 2 & 3 & 4 & 5 \\
+                    0 & 0 & 1 & 0 & 1 & 0 & 0 \\
+                    1 & 0 & 0 & 1 & 0 & 0 & 0 \\
+                    2 & 0 & 0 & 0 & 1 & 0 & 0 \\
+                    3 & 1 & 0 & 0 & 0 & 1 & 0 \\
+                    4 & 0 & 0 & 1 & 0 & 0 & 0 \\
+                    5 & 0 & 0 & 0 & 0 & 0 & 0 \\
+                \end{pNiceMatrix}
+            \]
+        \subsubsection{Lista di adiacenza - Grafi orientati}
+            Se si sceglie di memorizzare un grafo tramite una lista di adiacenza allora si avrà una lista di $n$ elementi, uno per ogni nodo del grafo. Ogni elemento della lista sarà a sua volta una lista contenente i nodi adiacenti al nodo corrispondente.
+            \paragraph{Esempio} Assumendo che il grafo orientato $$ G = (\{0,1,2,3,4,5\}, \{(0,1),(1,2),(0,3),(3,0),(2,3),(3,4),(4,2)\}) $$ sia memorizzato tramite una lista di adiacenza si avrà la seguente lista:
+            \begin{lstlisting}
+                0 -> 1 -> 3
+                1 -> 2
+                2 -> 3
+                3 -> 0 -> 4
+                4 -> 2
+                5
+            \end{lstlisting}
+        \subsubsection{Matrice di aderenza - Grafi non orientati}
+            Se si sceglie di memorizzare un grafo tramite una matrice di aderenza allora si avrà una matrice $A$ di dimensione $n \times n$ dove $n$ è il numero di nodi del grafo. La cella $A_{ij}$ sarà pari a 1 se esiste un arco tra il nodo $i$ e il nodo $j$, 0 altrimenti. In un grafo non orientato la matrice sarà simmetrica rispetto alla diagonale principale.
+            \paragraph{Esempio} Assumendo che il grafo non orientato $$ G = (\{0,1,2,3,4,5\}, \{(0,1),(1,2),(0,3),(2,3),(3,4),(4,2)\}) $$ sia memorizzato tramite una matrice di aderenza si avrà la seguente matrice:
+            \[
+                \begin{pNiceMatrix}[first-row,first-col]
+                    & 0 & 1 & 2 & 3 & 4 & 5 \\
+                    0 & & 1 & 0 & 1 & 0 & 0 \\
+                    1 & & & 1 & 0 & 0 & 0 \\
+                    2 & & & & 1 & 1 & 0 \\
+                    3 & & & & & 1 & 0 \\
+                    4 & & & & & & 0 \\
+                    5 & & & & & & \\
+                \end{pNiceMatrix}
+            \]
+        \subsubsection{Lista di adiacenza - Grafi non orientati}
+            Se si sceglie di memorizzare un grafo tramite una lista di adiacenza allora si avrà una lista di $n$ elementi, uno per ogni nodo del grafo. Ogni elemento della lista sarà a sua volta una lista contenente i nodi adiacenti al nodo corrispondente. In un grafo non orientato la lista di adiacenza non conterrà duplicati.
+            \paragraph{Esempio} Assumendo che il grafo non orientato $$ G = (\{0,1,2,3,4,5\}, \{(0,1),(1,2),(0,3),(2,3),(3,4),(4,2)\}) $$ sia memorizzato tramite una lista di adiacenza si avrà la seguente lista:
+            \begin{lstlisting}
+                0 -> 1 -> 3
+                1 -> 0 -> 2
+                2 -> 1 -> 3 -> 4
+                3 -> 0 -> 2 -> 4
+                4 -> 3 -> 2
+                5
+            \end{lstlisting}
+        \subsubsection{Matrice di adiacenza - Grafici non orientati pesati}
+            Se si sceglie di memorizzare un grafo tramite una matrice di aderenza allora si avrà una matrice $A$ di dimensione $n \times n$ dove $n$ è il numero di nodi del grafo. La cella $A_{ij}$ sarà pari al peso dell'arco tra il nodo $i$ e il nodo $j$, 0 altrimenti. In un grafo non orientato la matrice sarà simmetrica rispetto alla diagonale principale.
+            \paragraph{Esempio} Assumendo che il grafo non orientato pesato $$ G = (\{0,1,2,3,4,5\}, \{(0,1,3),(1,2,4),(0,3,1),(2,3,4),(3,4,8),(4,2,7)\}) $$ sia memorizzato tramite una matrice di aderenza si avrà la seguente matrice:
+            \[
+                \begin{pNiceMatrix}[first-row,first-col]
+                    & 0 & 1 & 2 & 3 & 4 & 5 \\
+                    0 & & 3 & 0 & 1 & 0 & 0 \\
+                    1 & & & 4 & 0 & 0 & 0 \\
+                    2 & & & & 4 & 7 & 0 \\
+                    3 & & & & & 8 & 0 \\
+                    4 & & & & & & 0 \\
+                    5 & & & & & & \\
+                \end{pNiceMatrix}
+            \]
+        \subsubsection{Lista di adiacenza - Grafici non orientati pesati}
+            Se si sceglie di memorizzare un grafo tramite una lista di adiacenza allora si avrà una lista di $n$ elementi, uno per ogni nodo del grafo. Ogni elemento della lista sarà a sua volta una lista contenente i nodi adiacenti al nodo corrispondente e il peso dell'arco. In un grafo non orientato la lista di adiacenza non conterrà duplicati.
+            \paragraph{Esempio} Assumendo che il grafo non orientato pesato $$ G = (\{0,1,2,3,4,5\}, \{(0,1,3),(1,2,4),(0,3,1),(2,3,4),(3,4,8),(4,2,7)\}) $$ sia memorizzato tramite una lista di adiacenza si avrà la seguente lista:
+            \begin{lstlisting}
+                0 -> 1(3) -> 3(1)
+                1 -> 0(3) -> 2(4)
+                2 -> 1(4) -> 3(4) -> 4(7)
+                3 -> 0(1) -> 2(4) -> 4(8)
+                4 -> 3(8) -> 2(7)
+                5
+            \end{lstlisting}
+        \subsubsection{Liste di adiacenza - variazioni sul tema}
+            Sia il grafo orientato che il grafo non orientato possono essere memorizzati tramite liste di adiacenza in diversi modi che variano a seconda del linguaggio di programmazione, di seguito alcuni esempi:
+            \begin{table}[h]
+                \centering
+                \begin{tabular}{|c|c|c|c|}
+                    \hline
+                    \textbf{Struttura} & \textbf{Java} & \textbf{Python} & \textbf{C++} \\
+                    \hline
+                    Lista collegata & \texttt{LinkedList} & \texttt{list} & \\
+                    \hline
+                    Vettore statico & [] & \texttt{list} & [] \\
+                    \hline
+                    Vettore dinamico & \texttt{ArrayList} & \texttt{list} & \texttt{vector} \\
+                    \hline
+                    Insieme & \texttt{HashSet}\texttt{TreeSet} & \texttt{set} & \texttt{set} \\
+                    \hline
+                    Dizionario & \texttt{HashMap}\newline\texttt{TreeMap} & \texttt{dict} & \texttt{map} \\
+                    \hline
+                \end{tabular}
+            \end{table}
+\section{Visite dei grafi}
+    \paragraph{Il problema} Dato un grafo $G = (V,E)$ e un vertice $r\in V$(\textbf{radice},\textbf{sorgente}) visitare una volta e una sola volta tutti i nodi connessi a $r$.
+    \paragraph{Visita in ampiezza \textit{Breath First Search} (\texttt{BFS})} Questo genere di visita dei nodi viene eseguita "per livelli" e si visita prima la radice e poi i nodi a distanza $1$ dalla radice, poi i nodi a distanza $2$ e così via, viene usata calcolare cammini più brevi da una singola sorgente.
+    \paragraph{Visita in profondità \textit{Depth First Search} (\texttt{DFS})} Questo genere di visita dei nodi viene eseguita "in profondità" e si visita la radice e poi si scende il più possibile in profondità prima di risalire, viene usata per ordinamento topologico, analisi di componenti connesse e componenti fortemente connesse.
+    \paragraph{Problemi} In entrambi i casi si deve tener conto del fatto che un grafo può essere ciclico e quindi si deve evitare di visitare più volte lo stesso nodo e di entrare in loop infiniti.\newline
+    \textbf{Algoritmo generico di attraversamento}
+    \begin{algorithm}
+        \caption{graphTrasversal(\Graph $G$, \Node $r$)}
+        \begin{algorithmic}
+            \State $ S \gets $Set()
+            \State $ S.\operatorname{insert}(r) $
+            \State \{ marca il nodo $ r $ \}
+            \While{$ S.\operatorname{size}() > 0 $}
+                \State \Node $u \gets S.\operatorname{remove}()$
+                \{ visita il nodo $ u $ \}
+                \For{\Node $v \in G.\operatorname{adj}(u)$}
+                    \If{$ v \notin S $}
+                        \{ marca il nodo $ v $ \}
+                        \State $ S.\operatorname{insert}(v) $
+                    \EndIf
+                \EndFor
+            \EndWhile
+        \end{algorithmic}
+    \end{algorithm}
+    \subsection{Visita in ampiezza \texttt{BFS}}
+        \paragraph{Obbiettivi \texttt{BFS}} Gli obbiettivi per la ricerca \texttt{BFS} sono: Visitare prima tutti i nodi a distanza $k$ poi $k+1$ e così via, calcolare il cammino più breve da $r$ a tutti gli altri nodi misurando la lunghezza degli archi attraversati, generare un albero \textbf{breadth-first} con radice $r$, quindi contente tutti i nodi raggiungibili da $r$ tale per cui un cammino dalla radice $r$ al nodo $u$ al con il cammino più breve.\newline
+        \textbf{Algoritmo generico di visita in ampiezza}
+            \begin{algorithm}
+                \caption{BFS(\Graph $G$, \Node $r$)}
+                \begin{algorithmic}
+                    \State Queue $ Q \gets $Queue()
+                    \State $ Q.\operatorname{enqueue}(r) $
+                    \State \Bool[] $ visited \gets \New \Bool[G.\operatorname{size}()] $
+                    \For {$ u\in G.\operatorname{V}() - \{r\}$}
+                        \State $ visited[u] \gets \False $
+                    \EndFor
+                    \State $ visited[r] \gets \True $
+                    \While{ \Not $ Q.\operatorname{isEmpty}() $}
+                        \State \Node $ u \gets Q.\operatorname{dequeue}() $
+                        \State \{ visita il nodo $ u $ \}
+                        \For {$ v \in G.\operatorname{adj}(u)$}
+                            \State \{ visita l'arco $ (u,v) $ \}
+                            \If \Not $ visited[v] $
+                                \State $ visited[v] \gets \True $
+                                \State $ Q.\operatorname{enqueue}(v) $
+                            \EndIf
+                        \EndFor
+                    \EndWhile
+                \end{algorithmic}
+            \end{algorithm}
+        \subsubsection{Calcolo minima distanza} 
+            Il principale problema risolto è quello del calcolo della minima distanza tra due nodi di un grafo, per farlo sfruttiamo la \texttt{BFS} e una coda. Il risultato di ciò è il seguente algoritmo:
+            \begin{algorithm}
+                \caption{distance(\Graph $G$, \Node $r$,\Int[] $distance$)}
+                \begin{algorithmic}
+                    \State Queue $ Q \gets $Queue()
+                    \State $ Q.\operatorname{enqueue}(r) $
+                    \ForEach {$ u\in G.\operatorname{V}() - \{r\}$}
+                        \State $ distance[u] \gets \infty $
+                    \EndFor
+                    \State $ distance[r] \gets 0 $
+                    \While{\Not $ Q.\operatorname{isEmpty}() $}
+                        \State \Node $ u \gets Q.\operatorname{dequeue}() $
+                        \For {$ v \in G.\operatorname{adj}(u)$}
+                            \If {$ distance[v] = \infty $} \Comment{Se $ v $ non è stato scoperto ancora}
+                                \State $ distance[v] \gets distance[u] + 1 $
+                                \State $ Q.\operatorname{enqueue}(v) $
+                            \EndIf
+                        \EndFor
+                    \EndWhile
+                \end{algorithmic}
+            \end{algorithm}
+        \subsubsection{Albero \texttt{BFS}} 
+            L'albero \texttt{BFS} è un albero radicato con radice $r$ utile per ottenere il cammino più breve tra $r$ e tutti gli altri nodi del grafo. Questo genere di albero è solitamente memorizzato in un vettore di padri detto \textit{parent}
+            \begin{algorithm}
+                \caption{distance(\dots, \Int[] $parent$)}
+                \begin{algorithmic}
+                    \State [\dots]
+                    \State $ parent[r] \gets \Nil $
+                    \While{\Not $ Q.\operatorname{isEmpty}() $}
+                        \State \Node $ u \gets Q.\operatorname{dequeue}() $
+                        \For {$ v \in G.\operatorname{adj}(u)$}
+                            \If {$ distance[v] = \infty $}
+                                \State $ distance[v] \gets distance[u] + 1 $
+                                \State $ parent[v] \gets u $
+                                \State $ Q.\operatorname{enqueue}(v) $
+                            \EndIf
+                        \EndFor
+                    \EndWhile
+                \end{algorithmic}
+            \end{algorithm}
+            Come algoritmo ausiliario per la "stampa" di questo albero si può usare il seguente:
+            \begin{algorithm}
+                \caption{printPath(\Node $r$,\Node $s$, \Node[] $parent$)}
+                \begin{algorithmic}
+                    \If {$ s == r $}
+                        \State \Print $ s $
+                    \ElsIf {$ parent[s] == \Nil $}
+                        \State \Print "Error"
+                    \Else
+                        \State \Call{printPath}{$ r, parent[s], parent $}
+                        \State \Print $ s $
+                    \EndIf
+                \end{algorithmic}
+            \end{algorithm}
+        \subsubsection{Complessità \texttt{BFS}}
+            La complessità dell'algoritmo di visita in ampiezza è $O(n+m)$, dove $n$ è il numero di nodi inserito nella coda, e ciò avviene una sola volta, inoltre in quanto un nodo viene estratto tutti i suoi archi vengono visitati una sola volta. Dunque il numero di archi analizzati è:
+            $$
+                m=\sum_{u\in V} d_{out}(u)
+            $$
+            dove $d_{out}(u)$ è il grado uscente del nodo $u$. (In un grafo non orientato coincide con il grado del nodo).
+    \subsection{Visita in profondità - \texttt{DFS}}
+        La visita in profondità viene usata per la risoluzione di diversi problemi, a differenza della \texttt{BFS} la \texttt{DFS} considera tutti i nodi del grafo anche quelli non connessi ad un singolo nodo. Come risultato abbiamo non un albero ma una foresta \textit{depth-first} $G_f=(V,E_f)$ formata da un insieme di alberi \textit{depth-first}. Solitamente per memorizzare questo viene usato o uno \textit{Stack} implicito (attraverso la ricorsione) o uno \textit{Stack} esplicito.
+        \paragraph{Algoritmo \textit{stack} implicito } Usando uno stack implicito otteniamo il seguente algoritmo:
+        \begin{algorithm}
+            \caption{dfs(\Graph $G$, \Node $u$, \Bool[] $visited$)}
+            \begin{algorithmic}
+                \State $ visited[r] \gets \True $
+                \State \{ visita il nodo $ r $ (\textit{pre-order}) \}
+                \ForEach {$ v \in G.\operatorname{adj}(u)$}
+                    \If \Not $ visited[v] $
+                        \State \{ visita l'arco $ (u,v) $ \}
+                        \State \Call{dfs}{$ G, v, visited $}
+                    \EndIf
+                \EndFor
+                \State \{ visita il nodo $ r $ (\textit{post-order}) \}
+            \end{algorithmic}
+        \end{algorithm}
+        Anche in questo caso la complessità per la visita di tutti i nodi è $O(n+m)$.
+        \paragraph{Algoritmo \textit{stack} esplicito} Usando uno stack esplicito otteniamo il seguente algoritmo:
+        \begin{algorithm}
+            \caption{dfs(\Graph $G$, \Node $r$)}
+            \begin{algorithmic}
+                \State Stack $ S \gets $Stack()
+                \State $ S.\operatorname{push}(r) $
+                \State \Bool[] $ visited \gets \New \Bool[G.\operatorname{size}()] $
+                \For {$ u\in G.\operatorname{V}() - \{r\}$}
+                    \State $ visited[u] \gets \False $
+                \EndFor
+                % \State $ visited[r] \gets \True $
+                \While{\Not $ S.\operatorname{isEmpty}() $}
+                    \State \Node $ u \gets S.\operatorname{pop}() $
+                    \If \Not $ visited[u] $
+                        \State \{ visita il nodo $ u $ (\textit{pre-order}) \}
+                        \State $ visited[u] \gets \True $
+                        \For {$ v \in G.\operatorname{adj}(u)$}
+                            \{ visita l'arco $ (u,v) $ \}
+                            \State $ S.\operatorname{push}(v) $
+                        \EndFor
+                    \EndIf
+                \EndWhile
+            \end{algorithmic}
+        \end{algorithm}
+
+        In questo algoritmo il nodo può essere inserito nella pila più volte, il controllo viene fatto all'estrazione e non all'inserimento, la complessità anche in questo caso è $O(n+m)$ in quanto somma di $O(m)$ visite agli archi, $O(m)$ inserimenti e estrazioni e $O(n)$ visite ai nodi.\newline
+        Tuttavia la visita in \textit{post-order} è più complessa da implementare con uno stack esplicito, in quanto bisogna introdurre un "\textit{tag}" per identificare se il nodo è in stato "\textit{discovery}" ovvero se è stato scoperto ma non visitato o se è in stato "\textit{finish}" ovvero quando è stato estratto e poi re-inserito, solo quando ha questo stato allora i suoi vicini vengono inseriti nello stack. Quando viene infine estratto un nodo con il tag "\textit{finish}" allora si può procedere con la visita del nodo.
+        \subsubsection{Analisi di componenti (fortemente) connesse}
+            La visita in profondità è utile per l'analisi di componenti connesse e fortemente connesse di un grafo. Prima di affrontare l'argomento è necessario introdurre diverse definizioni:
+            \begin{definition}[Compoennte connessa]
+                Una componente connessa in un grafo \underline{non orientato} è un sottoinsieme di nodi $C$ tale che per ogni coppia di nodi $u,v\in C$ esiste un cammino da $u$ a $v$. Quindi un grafo $G'$ sotto-grafo di $G$ deve essere un sotto-grafo connesso e massimale di $G$.
+            \end{definition}
+            \begin{definition}[Componente fortemente connessa]
+                Una componente connessa in un grafo \underline{orientato} è un sottoinsieme di nodi $C$ tale che per ogni coppia di nodi $u,v\in C$ esiste un cammino da $u$ a $v$ e da $v$ a $u$.
+            \end{definition}
+            \begin{definition}[Raggiungibilità]
+                In un grafo non orientato si dice che un nodo $v$ è \textbf{raggiungibile} da un nodo $u$ se esiste un cammino da $u$ a $v$, ne segue che la relazione di raggiungibilità è simmetrica e dunque se $v$ è raggiungibile da $u$ allora $u$ è raggiungibile da $v$.
+                In un grafo orientato si dice che un nodo $v$ è \textbf{raggiungibile} da un nodo $u$ se esiste un cammino da $u$ a $v$ e non necessariamente da $v$ a $u$.
+            \end{definition}
+            \begin{definition}[sotto-grafo]
+                Un grafo $G'=(V',E')$ è un sotto-grafo di un grafo $G=(V,E)$ se $V'\subseteq V$ e $E'\subseteq E$.
+            \end{definition}
+            \begin{definition}[Massimalità di un sotto-grafo]
+                Un sotto-grafo $G'=(V',E')$ di un grafo $G=(V,E)$ è detto massimale $\Leftrightarrow \not\exists$ un sotto-grafo $G''=(V'',E'')$ di $G$ tale che $G''$ sia connesso ed "più grande di $G'$" (ovvero $G'\subseteq G''\subseteq G$).
+            \end{definition}
+            \paragraph{Problema} L'obbiettivo è quello di verificare se un grafo è connesso o meno, e se non lo è trovare le componenti connesse o fortemente connesse.
+            \paragraph{Soluzione} Usando la \texttt{DFS} analizziamo se tutti i nodi sono marcati quando "non possiamo andare più avanti" e se non lo sono allora siamo in presenza di un grafo sconnesso e quelli marcati fino ad ora costituiscono una componente connessa. Usiamo per il problema un vettore $id$ contenete l'identificativo delle componenti con $id[u]$ uguale all'identificativo della componente connessa a cui appartiene il nodo $u$.
+            
+            \begin{algorithm}
+                \caption{\Int[] cc(\Graph $G$)}
+                \begin{algorithmic}
+                    \State \Int[] $ id \gets \New \Int[G.\operatorname{size}()] $
+                    \ForEach {$ u\in G.\operatorname{V}() $}
+                        \State $ id[u] \gets -1 $
+                    \EndFor
+                    \State \Int $ count \gets 0 $
+                    \ForEach {$ u\in G.\operatorname{V}() $}
+                        \If {$ id[u] == 0 $}
+                            \State $ count \gets count + 1 $
+                            \State \Call{ccdfs}{$ G, count, u, id $}
+                        \EndIf
+                    \EndFor
+                    \State \Return $ id $
+                \end{algorithmic}
+            \end{algorithm}
+
+            Come funzione ricorsiva di supporto si ha:
+            
+            \begin{algorithm}
+                \caption{ccdfs(\Graph $G$, \Int $count$, \Node $u$, \Int[] $id$)}
+                \begin{algorithmic}
+                    \State $ id[u] \gets count $
+                    \ForEach {$ v\in G.\operatorname{adj}(u) $}
+                        \If {$ id[v] == 0 $}
+                            \State \Call{ccdfs}{$ G, count, v, id $}
+                        \EndIf
+                    \EndFor
+                \end{algorithmic}
+            \end{algorithm}
+        \subsubsection{Analisi di presenza o meno di clicli}
+            Definiamo in primo luogo un ciclo:
+            \begin{definition}[Ciclo per un grafo non orientato]
+                In un grafo non orientato $G=(V,E)$, un ciclo $C$ di lunghezza $k>2$ è una sequenza di nodi $u_0,u_1,\dots,u_k$ tale che $(u_i,u_{i+1})\in E$ per $i=0,\dots,k-1$ e inoltre $u_k = u_0$.
+            \end{definition}
+            Definiamo quindi un grafo aciclico un grafo che non contiene cicli.
+            \paragraph{Problema} L'obbiettivo è quello di verificare se un grafo è aciclico (\textbf{true}) o meno (\textbf{false}).
+
+            \begin{algorithm}[H]
+                \label{alg:hasCycleRec}
+                \caption{\Bool hasCycleRec(\Graph $G$, \Node $u$, \Node $p$, \Bool[] $visited$)}
+                \begin{algorithmic}
+                    \State $ visited[u] \gets \True $
+                    \ForEach {$ v\in G.\operatorname{adj}(u) - \{p\}$}
+                        \If {$ visited[v] $}
+                            \State \Return \True
+                        \ElsIf {\Call{hasCycleRec}{$ G, v, u, visited $}}
+                            \State \Return \True
+                        \EndIf
+                    \EndFor
+                    \State \Return \False
+                \end{algorithmic}
+            \end{algorithm}
+            
+            Questa è la funzione ricorsiva di supporto che tiene in considerazione eventuali componenti sconnesse, per la funzione principale si ha:
+
+            \begin{algorithm}[H]
+                \caption{\Bool hasCycle(\Graph $G$)}
+                \begin{algorithmic}
+                    \State \Bool[] $ visited \gets \New \Bool[G.\operatorname{size}()] $
+                    \ForEach {$ u\in G.\operatorname{V}() $}
+                        \State $ visited[u] \gets \False $
+                    \EndFor
+                    \ForEach {$ u\in G.\operatorname{V}() $}
+                        \If {\Not $ visited[u] $}
+                            \If {\Call{hasCycleRec}{$ G, u, \Nil, visited $}}
+                                \State \Return \True
+                            \EndIf
+                        \EndIf
+                    \EndFor
+                    \State \Return \False
+                \end{algorithmic}
+            \end{algorithm}
+
+            \paragraph{Grafi orientati} La definizione di ciclo per un grafo orientato è leggermente diversa:
+            \begin{definition}[Ciclo per un grafo orientato]
+                In un grafo orientato $G=(V,E)$, un ciclo $C$ di lunghezza $k\geq2$ è una sequenza di nodi $u_0,u_1,\dots,u_k$ tale che $(u_i,u_{i+1})\in E$ per $i=0,\dots,k-1$ e inoltre $u_k = u_0$.
+            \end{definition}
+            Inoltre come per i grafi non orientati un grafo aciclico è un grafo che non contiene cicli. Definiamo anche un \textbf{DAG} un grafo orientato aciclico (\textit{Directed Acyclic Graph}).
+            \paragraph{Problema} L'obbiettivo è quello di verificare se un grafo è aciclico (\textbf{true}) o meno (\textbf{false}).\newline
+                Il suddetto problema non può essere risolto con l'algoritmo precedente, questo in quanto non basta rimuovere la condizione sul nodo di provenienza $p$, ma bisogna considerare solo la direzione degli archi, si veda la sotto-sotto-sezione "Analisi presenza o meno di cicli orientati" presente dopo la successiva sotto-sotto-sezione
+        \subsubsection{Classificazione degli archi}
+            Prima di poter parlare di Classificazione degli archi è necessario introdurre la definizione di albero di copertura \texttt{DFS}:
+            \begin{definition}[Albero di copertura \texttt{DFS}]
+                Dato un grafo $G=(V,E)$ allora esiste un albero di copertura \texttt{DFS} $G_f=(V_f,E_f)$ tale che $V_f=V$ e $E_f$ è un sottoinsieme di $E$ tale che per ogni nodo $u\in V$ esiste un cammino da $r$ a $u$ in $G_f$.
+            \end{definition}
+            L'algoritmo di visita in profondità permette di classificare gli archi $(u,v)$ non presi in considerazione dall'albero di copertura \texttt{DFS} in tre categorie:
+            \begin{itemize}
+                \item Se $(u,v)$ è un arco tale che $u$ è im "antenato" di $v$ in $G_f$ allora $(u,v)$ è un \textbf{arco in avanti}
+                \item Se $(u,v)$ è un arco tale che $u$ è un "discendente" di $v$ in $G_f$ allora $(u,v)$ è un \textbf{arco all'indietro}
+                \item In ogni altro caso $(u,v)$ è un \textbf{arco di attraversamento}
+            \end{itemize}
+        Si può ora definire l'algoritmo di classificazione degli archi. Usiamo all'interno dell'algoritmo le seguenti variabili $time$ è il contatore del tempo passato, $dt$ è il vettore contenete i tempi di \textit{discovery time} per ogni nodo del grafo e $ft$ è il vettore contenente i tempi di £\textit{finish}" di ogni vettore.
+            \begin{algorithm}
+                \label{alg:dfs-schema}
+                \caption{dfs-schema(\Graph $G$,\Node $u$,\Int $\&time$,\Int[] $dt$,\Int[] $ft$)}
+                \begin{algorithmic}
+                    \State \{Visita il nodo $u$ (\textit{pre-order})\}
+                    \State $ time \gets time + 1$
+                    \ForEach $v\in G.\operatorname{adj}(u)$
+                        \State \{ visita l'arco $(u,v)$ (qualsiasi) \}
+                        \If {dt[v] == 0}    \Comment{Il nodo non è stato ancora visitato}
+                            \State \{Visita l'arco $(u,v)$ albero \}
+                            \State \Call{dfs-schema}{$G$,$v$,$time$,$dt$,$ft$}
+                        \ElsIf{$ dt[u]>dt[v] \And ft[v]==0 $} \Comment{Nodo adiacente già visitato in precedenza e non ancora finito}
+                            \State \{Visita l'arco $(u,v)$ all'indietro \}
+                        \ElsIf{$ dt[u]<dt[v]\And ft[v]\neq 0 $} \Comment{Nodo adiacente già visitato e finito}
+                            \State \{Visita l'arco $(u,v)$ in avanti \}
+                        \Else \Comment{Tuti gli altri casi}
+                            \State \{Visita l'arco $(u,v)$ di attraversamento \}
+                        \EndIf
+                    \EndFor
+                    \State \{Visito il nodo $u$ (\textit{post-order})\}
+                    \State $time\gets time+1$
+                    \State $ft[u]=time$
+                \end{algorithmic}
+            \end{algorithm}
+            Si noti come alla fine dell'algoritmo otteniamo due vettori $dt$ e $ft$ popolati, su questi "tempi" di \textit{discovery} può essere formulato un teorema:
+            \begin{theorem}
+                Data una visita \texttt{DFS} di un grafo $G=(V,E)$, per ogni coppia di nodi $u,v\in V$, solo una delle seguenti condizioni è vera:
+                \begin{itemize}
+                    \item GLi intervalli $[dt[u],ft[u]]$ e $[dt[v],ft[v]]$ sono non-sovrapposti, allora \textbf{$u,v$ non sono discendenti l'uno dell'altro} nella \textbf{foresta} \texttt{DF}
+                    \item L'intervallo $[dt[u],ft[u]]$ è contenuto nell'intervallo $[dt[v],ft[v]]$, allora \textbf{$u$ è un discendente di $v$} in un albero \texttt{DF}
+                    \item L'intervallo $[dt[v],ft[v]]$ è contenuto nell'intervallo $[dt[u],ft[u]]$, allora \textbf{$u$ è un antenato di $v$} in un albero \texttt{DF}
+                \end{itemize}
+            \end{theorem}
+        \subsubsection{Analisi presenza o meno di cicli orientati}
+            Grazie alle conoscenze apprese dalla sotto-sotto-sezione precedente possiamo ora formulare un teorema riguardante la presenza o meno di cicli orientati:
+            \begin{theorem}[Grafi orientati aciclici]
+                Un grafo orientato è aciclico se e solo se non esistono archi all'indietro nel grafo.
+            \end{theorem}
+            \begin{proof} Procediamo per entrambe le direzioni:
+                \begin{description}
+                    \item[\textbullet\ \textbf{se:}] Esiste un ciclo, allora sia $u$ il primo nodo di questo e sia $(v,u)$ un arco del ciclo. Allora il cammino che connette $u$ ad $v$ sarà visitato, ed eletto come cammino dell'albero di copertura, prima o poi. Quando si raggiungerà il nodo $v$ si "scopre" l'esistenza di $(v,u)$ ovvero un arco all'indietro.
+                    \item[\textbullet\ \textbf{solo se:}] Se esiste un arco all'indietro $(u,v)$, dove $v$ è un antenato di $u$, allora esiste un cammino da $v$ a $u$ e un arco da $u$ a $v$ ovvero un ciclo.  
+                \end{description}
+            \end{proof}
+            Applichiamo dunque il teorema appena dimostrato tramite il seguente algoritmo che sfrutta gli algoritmi "$\operatorname{hasCycleRec}$" e "$\operatorname{dfs-schema}$" precedentemente definiti.\footnote{Va modificato l'algoritmo "$\operatorname{hasCycle}$" inizializzando $dt$ e $ft$ a vettori di $0$ e $time$ a $0$. Per il resto l'algoritmo è identico, omesso quindi brevità.}
+            \begin{algorithm}[H]
+                \caption{\Bool hasCycleRec(\Graph $G$, \Node $u$, \Int $\&time$,\Int[] $dt$,\Int $ft$)}
+                \begin{algorithmic}
+                    \State $ time \gets time + 1$
+                    \State $ dt[u] \gets time $
+                    \ForEach {$ v\in G.\operatorname{adj}(u)$}
+                        \If {$ dt[v] == 0 $}
+                            \If {\Call{hasCycleRec}{$ G, v, time, dt, ft $}}
+                                \State \Return \True
+                            \EndIf
+                        \ElsIf {$ ft[v] == 0 $}
+                            \State \Return \True
+                        \EndIf
+                    \EndFor
+                    \State $ time \gets time + 1$
+                    \State $ ft[u] \gets time $
+                    \State \Return \False
+                \end{algorithmic}
+            \end{algorithm}
+        \subsubsection{Ordinamento topologico}
+            La \texttt{DFS} può essere usata anche per stabilire un \textbf{ordinamento topologico} di un grafo \texttt{DAG}. Un ordinamento topologico è definito come segue:
+            \begin{definition}[Ordinamento topologico]
+                Dato un \texttt{DAG} $G$ un \textbf{ordinamento topologico} di $G$ è un ordinamento lineare dei sue noti tale che se $u,v\in E$ allora $u$ precede $v$ nell'ordinamento.
+            \end{definition}
+            Da questa definizione possiamo dedurre che per un \texttt{DAG} possano esistere più ordinamenti, inoltre se consideriamo un grafo qualunque nel quale sono presenti cicli non può esistere un ordinamento.
+            \paragraph{Problema} L'obbiettivo è quello prendere in \textit{input} un \texttt{DAG} e restituire un ordinamento topologico.
+            \paragraph{Soluzione "\textit{Naive}"} Si prende un nodo senza archi entranti (che esiste \underline{sempre}) si aggiunge questo nodo all'ordinamento e si "elimina" il nodo dal grafo, si ripete il procedimento fino a quando non si è eliminato tutti i nodi. 
+            \paragraph{Algoritmo} Eseguiamo una \texttt{DFS} con l'operazione di visita, in \textit{post-order}, che consiste nell'aggiungere il nodo in testa ad una lista, si restituisce la lista ottenuta (ribaltata).\newline
+            Questo funziona in quanto quando un nodo è "finito" allora tutti i suoi discendenti sono stati scoperti e aggiunti.
+            \begin{algorithm}[H]
+                \caption{\Stack topSort(\Graph $g$)}
+                \begin{algorithmic}
+                    \State \Stack $S \gets \operatorname{Stack}()$
+                    \State $\Bool[] visited \gets \Bool(G.\operatorname{size}(),\False)$
+                    \ForEach {$u\in G.\operatorname{V}()$}
+                        \If {\Not $visited[u]$}
+                            \State $\Call{ts-dfs}{G,u,visited,S}$
+                        \EndIf
+                    \EndFor
+                    \State \Return $S$
+                \end{algorithmic}
+            \end{algorithm}
+            \begin{algorithm}[H]
+                \caption{ts-dfs(\Graph $G$, \Node $u$, \Bool[] $visited$, \Stack $S$)}
+                \begin{algorithmic}
+                    \State $visited[u] \gets \True$
+                    \ForEach {$v\in G.\operatorname{adj}(u)$}
+                        \If {\Not $visited[v]$}
+                            \State $\Call{ts-dfs}{G,v,visited,S}$
+                        \EndIf
+                    \EndFor
+                    \State $S.\operatorname{push}(u)$
+                \end{algorithmic}
+            \end{algorithm}
+
+            Grazie al teorema precedentemente dimostrato possiamo affermare che l'algoritmo funziona in quanto se un nodo è "finito" allora tutti i suoi discendenti sono stati scoperti e aggiunti.
+            \paragraph{Applicazioni in the real world} L'ordinamento topologico è utilizzato in diversi campi, tra cui: L'ordine di valutazione delle celle in uno \textit{spreadsheet}, l'ordine di compilazione di un \texttt{Makefile}, la risoluzione di dipendenze in un \texttt{package manager} e la risoluzione di dipendenze in un \texttt{task scheduler}.
+        \subsubsection{Componenti fortemente connesse}
+            % Non spiegato ancora

@@ -15,6 +15,7 @@
 \usepackage[noend]{algpseudocode}
 \usepackage{fancyhdr}
 \usepackage{wrapfig}
+\usepackage{nicematrix}
 
 \graphicspath{{./images/}}
 
@@ -48,10 +49,20 @@
 \algnewcommand\Float{\textbf{float}\ }
 \algnewcommand\To{\textbf{to}\ }
 \algnewcommand\DownTo{\textbf{downto}\ }
+\algnewcommand\True{\textbf{true}\ }
+\algnewcommand\False{\textbf{false}\ }
+\algnewcommand\Not{\textbf{not}\ }
 % Definizione di Tree API
-\algnewcommand\Tree{\textbf{Tree}\ }
-\algnewcommand\Item{\textbf{Item}\ }
-\algnewcommand\Queue{\textbf{Queue}\ }
+\algnewcommand\Tree{\textsc{Tree}\ }
+\algnewcommand\Item{\textsc{Item}\ }
+\algnewcommand\Queue{\textsc{Queue}\ }
+% Grafi
+\algnewcommand\Graph{\textsc{Graph}\ }
+\algnewcommand\Node{\textsc{Node}\ }
+% Altro utile
+\algnewcommand\algorithmicforeach{\textbf{foreach}}
+\algdef{S}[FOR]{ForEach}[1]{\algorithmicforeach\ #1\ \algorithmicdo}
+\algnewcommand\Stack{\textsc{Stack}\ }
 % Definizione di header e footer
 
 % Definizione dei teoremi
@@ -102,6 +113,7 @@
         \begin{abstract}
             Appunti del corso di Algoritmi e Strutture Dati tenuto dal prof. Montresor Alberto presso l'Università degli Studi di Trento nell'anno accademico 2024/2025.
         \end{abstract}
+        \footnote{Le immagini e gli algoritmi (identificati da Algorithm \#\#) presenti in questo documento sono stati presi dai materiali forniti dal professor Montresor Alberto (\href{mailto:alberto.montresor@unitn.it}{alberto.montresor@unitn.it}) durante il corso, sono condivisi sotto licenza Creative Commons Attribution-ShareAlike 4.0 International License (\href{https://creativecommons.org/licenses/by-sa/4.0/}{CC BY-SA 4.0}). Come conseguenza le sole immagini sono soggette a questa licenza, il contenuto testuale in quanto appunti personali tratti da lezioni ed altro è soggetto alla licenza "genitore" del quale questo documento fa parte}
         
         \vfill  % Pushes the content to the center vertically
     \end{titlepage}
@@ -116,4 +128,5 @@
     \include{chapters/02-AnalisiFunzioni}
     \include{chapters/03-Alberi}
     \include{chapters/04-AlberiBinariRicerca}
+    \include{chapters/05-grafi}
 \end{document}

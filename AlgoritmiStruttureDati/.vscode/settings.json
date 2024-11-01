@@ -9,10 +9,12 @@
         "amssymb",
         "amsthm",
         "basecase",
+        "ccdfs",
         "documentclass",
         "hyperref",
         "inductivecase",
         "inputenc",
+        "Trasversal",
         "usepackage"
     ],
     "editor.wordWrap": "on"
