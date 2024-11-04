@@ -29,5 +29,39 @@
         \paragraph{Accesso} L'accesso ai dati è principalmente solo in lettura, eventuali aggiornamenti sono solo periodici e in momenti nei quali l'attività aziendale è ferma.
 \section{Modello multidimensionale}
     \subsection{Introduzione}
-        Il modello multidimensionale è un modello di rappresentazione dei dati che permette di rappresentare i dati in maniera più intuitiva rispetto al modello relazionale. In questo modello il processo di analisi viene posto al centro del sistema e non più il processo di inserimento dei dati (i quali vengono inseriti non in maniera diretta ma vengono estratti da un \texttt{SI} Operazionale\footnote{Si rimanda al capitolo: \ref{ch:operazionali} \nameref{ch:operazionali} per ulteriori informazioni sui sistemi operazionali}).
+        Il modello multidimensionale è un modello di rappresentazione dei dati che permette di rappresentare i dati in maniera più intuitiva rispetto al modello relazionale. In questo modello il processo di analisi viene posto al centro del sistema e non più il processo di inserimento dei dati (i quali vengono inseriti non in maniera diretta ma vengono estratti da un \texttt{SI} Operazionale\footnote{Si rimanda al capitolo \ref{ch:operazionali}: \nameref{ch:operazionali} per ulteriori informazioni sui sistemi operazionali}).\newline
         In questo modello lo spazio delle informazioni viene rappresentato come insieme di matrici multidimensionali, dove ogni matrice rappresenta un tipo di evento (quale ad esempio l'immatricolazioni degli studenti), ogni elemento della matrice rappresenta un singolo evento (la singola immatricolazione) e ogni coordinata della matrice rappresenta una dimensione dell'evento (come ad esempio il corso di laurea, l'anno di immatricolazione, ecc\dots).
+    \subsection{Caratteristiche}
+        \paragraph{Ipercubo} Il modello multidimensionale è rappresentato da un ipercubo, ovvero una matrice multidimensionale con $n$ dimensioni, dove ogni cella rappresenta un singolo \textbf{fatto elementare}, ogni \textbf{dimensione} costituisce una coordinata del fatto e ogni \textbf{misura} è il valore numerico del fatto.
+        \paragraph{Fatti} Un fatto è un evento che si vuole analizzare e misurare, quale una vendita, un acquisto, ecc\dots. I fatto sono caratterizzati da un insieme di dimensioni che lo collocano nel tempo (quando è avvenuto), nello spazio aziendale (dove è avvenuto) e inoltre sono presenti altre dimensioni che lo \underline{quantificano} e altre informazioni descrittive. 
+        \paragraph{Misure} La misura è una caratteristica (e non dimensione) del fatto che si vuole analizzare, e ne descrive un aspetto \underline{quantitativo}. Ogni fatto può contenere una o più misure, le quali possono essere: \textbf{effettive} se memorizzate in maniera diretta, \textbf{calcolate a \textit{run-time}} usando i valori delle misure effettive o \textbf{implicite} ovvero che indicano la presenza o meno di un fatto.
+    \subsection{Aggregabilità} 
+        A partire dai \textbf{fatti} elementari si possono ricavare dei \textbf{fatti} sintetici quando si procede all'eliminazione di una o più dimensioni, in questo caso si parla di \textbf{aggregazione} dei dati. Questo processo di aggregazione viene fatto tramite opportuni operatori sui dati, in base a cosa rappresenta la dimensione aggregata, ad esempio se aggreghiamo per mese non ha "senso" avere a fine anno la somma del totale dei prodotti in magazzino a fine mese, ma ha senso avere la media mensile.
+        \paragraph{Operatori di aggregazione} Per ogni coppia costituita da (misura, aggregazione) possono essere definiti operatori e regole di aggregazione, ad esempio può essere presente una misura non aggregabile lungo una dimensione (vedi esempio precedente), oppure un operatore può essere utilizzato per aggregare lungo determinate dimensioni ma non in altre. Definiamo quindi con il termine \textbf{aggregabilità} \begin{quote}
+            La possibilità di usare un operatore di aggregazione su una misura o su una coppia (misura, dimensione).
+        \end{quote}
+        Nel caso più specifico definiamo anche il termine \textbf{additività} ovvero \begin{quote}
+            La possibilità di usare l'operatore di aggregazione "somma" su una misura o su una coppia (misura, dimensione).
+        \end{quote}.
+        \paragraph{Tipi di misura} Le misure possono essere di diversi tipi, tra i quali troviamo:
+        \begin{description}
+            \item[di Livello] si prende in considerazione il valore proprio del fatto, ed il momento nel quale è stato registrato. Non viene mai usata l'aggregazione additiva sulla dimensione temporale.
+            \item[Unitaria] si prende in considerazione il valore di uno dei soggetti della misura, e non è mai aggregabile con l'additività.
+            \item[di Flusso] si prende in considerazione il valore proprio del fatto ed un intervallo di riferimento, questa misura è aggregabile con l'additività lungo una qualunque dimensione.
+        \end{description}
+        \paragraph{Esempio}
+        \begin{table}[H]
+            \begin{tabular}{|c|c|c|c|c|}
+                \hline
+            \multicolumn{2}{|c|}{\textbf{Articolo}} & \textbf{Deposito} & \textbf{Data} & \textbf{Misura (quantità)} \\ \hline
+            PP1007015 & Pannello di polistirolo 100x70x15 & 1 & 01/01/2019 & 100 \\ \hline
+            PP1007015 & Pannello di polistirolo 100x70x15 & 2 & 01/01/2019 & 200 \\ \hline
+            VA1010 & Vite autofilettante 10x10 & 1 & 01/01/2019 & 1000 \\ \hline
+            &\dots&\dots&\dots&\dots\\ \hline
+            PP1007015 & Pannello di polistirolo 100x70x15 & 1 & 01/02/2019 & 150 \\ \hline
+            PP1007015 & Pannello di polistirolo 100x70x15 & 2 & 01/02/2019 & 250 \\ \hline
+            VA1010 & Vite autofilettante 10x10 & 1 & 01/02/2019 & 1100 \\ \hline
+            \end{tabular}
+            \caption{Esempio di tabella di fatti}
+        \end{table}
+        In questo esempio abbiamo una tabella di fatti, dove ogni riga rappresenta un singolo fatto, ogni colonna rappresenta una dimensione del fatto e l'ultima colonna rappresenta la misura del fatto. In questo caso la misura è la quantità di prodotto in magazzino. Questa è additiva rispetto alla dimensione "Deposito" ma non lo è rispetto alla dimensione "Data", inoltre non è aggregabile rispetto alla dimensione "Articolo".
