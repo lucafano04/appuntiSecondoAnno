@@ -6,6 +6,7 @@
         "CHACHA",
         "Cryptosystem",
         "Diffie",
+        "ESSIF",
         "Feistel",
         "Heartbleed",
         "IDAS",
