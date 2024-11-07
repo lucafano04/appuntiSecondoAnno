@@ -103,5 +103,161 @@
         \subsubsection{Notazioni \texttt{CIDR}}
             \texttt{CIDR} o \textit{Classless Inter-Domain Routing} è un metodo per rappresentare le maschere di rete. Questo metodo consiste nel rappresentare la maschera di rete con un prefisso di bit. Ad esempio la maschera di rete $/24$ è uguale alla maschera di rete $11111111.11111111.11111111.00000000$, ovvero una maschera di rete di classe \texttt{C}, quindi i primi $3$ gruppi di bit sono appartenenti all'\textit{network-id} e l'ultimo gruppo di bit è appartenente all'\textit{host-id}. La notazione prevede inoltre che gli indirizzi \texttt{IP} siano rappresentati nel seguente modo: \texttt{ddd.ddd.ddd.ddd/m} dove ogni singolo \texttt{d} rappresenta un gruppo di bit e \texttt{m} rappresenta il numero di bit del prefisso di rete.
             \paragraph{Esempio} L'indirizzo $193.168.32.199/26$ ha un prefisso di rete di $26$ bit, quindi il \textit{network-id} è: $$11000001.1010100.000000010.11$$ e l'\textit{host-id} è $$00111$$ Esistono dunque $2^6=64$ indirizzi \texttt{IP} nella rete.
-            \paragraph{Inoltro con \texttt{CIDR}} L'inoltro con \texttt{CIDR} è molto semplice e non differisce dall'inoltro con le classi. Infatti si fa l'operazione di \texttt{AND} tra l'indirizzo IP di destinazione e la maschera di rete e si confronta il risultato con l'indirizzo di rete. Se il risultato è uguale all'indirizzo di rete allora l'indirizzo IP appartiene alla rete e il pacchetto viene inoltrato alla porta di uscita corretta. Nella situazione in cui ci siano più reti che corrispondono al risultato dell'operazione di \texttt{AND} allora si sceglie la rete con il prefisso più lungo in quanto si presume che questa sia la rete più specifica e quindi la più breve.
-            \subparagraph{Aggregazione dei percorsi} L'aggregazione dei percorsi è una tecnica che permette di ridurre il numero di percorsi che un router deve memorizzare. Questa tecnica consiste nel raggruppare più reti in un'unica rete più grande. Questa tecnica è molto utile in quanto permette di ridurre il numero di percorsi che un router deve memorizzare e quindi di velocizzare l'inoltro dei pacchetti. Esempio se un \texttt{ISP} controlla tutte le reti $200.23.16.0/23$, $200.23.18.0/23$\dots $200.23.30.0/23$ allora può raggruppare tutte queste reti in un'unica rete $200.23.16.0/20$
+            \paragraph{Inoltro con \texttt{CIDR}} L'inoltro con \texttt{CIDR} è molto semplice e non differisce dall'inoltro con le classi. Infatti si fa l'operazione di \texttt{AND} tra l'indirizzo \texttt{IP} di destinazione e la maschera di rete e si confronta il risultato con l'indirizzo di rete. Se il risultato è uguale all'indirizzo di rete allora l'indirizzo \texttt{IP} appartiene alla rete e il pacchetto viene inoltrato alla porta di uscita corretta. Nella situazione in cui ci siano più reti che corrispondono al risultato dell'operazione di \texttt{AND} allora si sceglie la rete con il prefisso più lungo in quanto si presume che questa sia la rete più specifica e quindi la più breve.
+            \paragraph{Aggregazione dei percorsi} L'aggregazione dei percorsi è una tecnica che permette di ridurre il numero di percorsi che un router deve memorizzare. Questa tecnica consiste nel raggruppare più reti in un'unica rete più grande. Questa tecnica è molto utile in quanto permette di ridurre il numero di percorsi che un router deve memorizzare e quindi di velocizzare l'inoltro dei pacchetti. Esempio se un \texttt{ISP} controlla tutte le reti $200.23.16.0/23$, $200.23.18.0/23$\dots $200.23.30.0/23$ allora può raggruppare tutte queste reti in un'unica rete $200.23.16.0/20$
+            \paragraph{Inoltro di default} L'inoltro di default è una tecnica "\textit{last resource}" usata nel caso in cui non si trovi nessuna corrispondenza tra l'indirizzo \texttt{IP} di destinazione e le reti memorizzate nel router. In questo caso il router inoltra il pacchetto alla porta di uscita di default definita dal router e che solitamente è la porta di uscita verso internet. In questo caso nel router è presente una rotta con \texttt{IP} di destinazione $0.0.0.0$ e maschera di rete $/0$, la cui combinazione è sempre vera per qualunque indirizzo, per la regola del "prefisso più lungo" il router inoltra il pacchetto alla porta di uscita di default solo se non trova nessuna corrispondenza tra l'indirizzo \texttt{IP} di destinazione e le reti memorizzate nel router.
+        \subsubsection{Tabella di routing}
+            Nella tabella di routing oltre all'associazione "maschera di rete - porta di uscita" è necessario memorizzare anche l'indirizzo \texttt{IP} del prossimo \textit{router} a cui inoltrare il pacchetto, questo in quanto sapere che il pacchetto deve essere inoltrato ad una determinata porta di uscita non è sufficiente se fossero presenti più dispositivi connessi alla stessa porta di uscita.
+    \subsection{Tipi di indirizzi}
+        In quanto gli indirizzi \texttt{IP} disponibili sono $2^{32}$ e il numero di dispositivi connessi a internet è molto maggiore, si è deciso di introdurre dei tipi di indirizzi pubblici e privati, in modo da risparmiare indirizzi \texttt{IP} pubblici e di proteggere la rete interna da attacchi esterni.
+        \subsubsection{Indirizzi pubblici e privati}
+            Gli indirizzi \texttt{IP} sono divisi in due categorie: \begin{description}
+                \item[Indirizzi pubblici] Gli indirizzi pubblici sono indirizzi che possono essere raggiunti da qualsiasi punto di internet. Questi indirizzi sono assegnati dalla \texttt{ICANN} e sono unici.
+                \item[Indirizzi privati] Gli indirizzi privati sono indirizzi che non possono essere raggiunti da internet. Questi indirizzi sono riservati per le reti private e non possono essere usati per comunicare con internet, vengono bloccati dai router. Gli indirizzi privati sono: \begin{itemize}
+                    \item Da \texttt{10.0.0.0} a \texttt{10.255.255.255} (\texttt{10.0.0.0/8})
+                    \item Da \texttt{172.16.0.0} a \texttt{172.31.255.255} (\texttt{172.16.0.0/12})
+                    \item Da \texttt{192.168.0.0} a \texttt{192.168.255.255} (\texttt{192.168.255.255/16})
+                \end{itemize}
+            \end{description}
+        \subsubsection{\textit{Network Area Translation} \texttt{NAT}}
+            Il \texttt{NAT} è una tecnica che permette di tradurre gli indirizzi privati in indirizzi pubblici e viceversa. Questo permette ai dispositivi di una rete privata di accedere a internet senza avere un indirizzo \texttt{IP} pubblico. Il \texttt{NAT} è un protocollo appartenente al \textit{router} funzionante nel seguente modo:
+            \begin{enumerate}
+                \item Il \textit{router} sostituisce l'indirizzo \texttt{IP} di sorgente e la porta di sorgente del pacchetto con il proprio indirizzo \texttt{IP} pubblico e una porta casuale.
+                \item Il \textit{router} memorizza l'associazione tra l'indirizzo \texttt{IP} e porta originale con l'indirizzo \texttt{IP} pubblico e la porta generata.
+                \item Viene inoltrato il pacchetto alla rete di destinazione, seguendo la tabella di routing.
+                \item Quando il pacchetto di risposta arriva al \textit{router}, il \textit{router} sostituisce l'indirizzo \texttt{IP} di destinazione e la porta di destinazione con l'indirizzo \texttt{IP} privato e la porta originale.
+                \item Il \textit{router} inoltra il pacchetto alla rete privata.
+            \end{enumerate}
+            \paragraph{Vantaggi/svantaggi del \texttt{NAT}} In quanto il numero di porta è costituito da $16$ bit, il numero di porte disponibili è $2^{16}=65536$, quindi il \texttt{NAT} permette di avere fino a $65536$ dispositivi connessi alla stessa rete privata. Il "problema" è che il protocollo \texttt{NAT} viola l'architettura a livelli, in quanto dispositivo di rete il \textit{router} non dovrebbe agire sulle porte. La mancanza di \texttt{IP} dovrebbe essere risolta con l'introduzione di \texttt{IPv6} (anche se lentamente). La sola esistenza di \texttt{NAT} deve essere tenuta in considerazione quando si progettano applicazioni (come una rete \texttt{P2P} che non funziona con \texttt{NAT}). Infine se si vuole accedere ad un dispositivo con \texttt{NAT} da internet è necessario usare altri protocolli come \textit{Port Forwarding}, \texttt{UPnP} o altri.
+            \subparagraph{\texttt{NAT} può essere utile} Oltre a risparmiare indirizzi \texttt{IP} pubblici, il \texttt{NAT} può essere utile per ovviare a problemi di routing, assumiamo per esempio che un router (al quale non abbiamo accesso) imposti una regola che impedisca l'uscita di pacchetti verso la nostra rete "interna" \texttt{B}, ma permetta che pacchetti verso la rete "pubblica" \texttt{P} vengano inoltrati. In questo caso il \texttt{NAT} può essere utile per far passare i pacchetti dalla rete "interna" \texttt{B} alla rete "interna" \texttt{A} senza modificare le regole di routing. Questo grazie al fatto che il \texttt{NAT} modifica l'indirizzo \texttt{IP} di sorgente, il router non riconosce i pacchetti come provenienti dalla rete "interna" \texttt{A} e quindi li inoltra.
+        \subsubsection{Indirizzi \texttt{IP} speciali}
+            Gli indirizzi \texttt{IP} speciali sono indirizzi che non possono essere assegnati ad un'interfaccia di rete. Questi indirizzi sono usati per scopi speciali e non possono essere usati per comunicare con internet. Alcuni tipi di indirizzi speciali sono: \begin{itemize}
+                \item Indirizzi che identificano tutta la rete
+                \item Indirizzi che permettono il \textit{broadcast} a tutti gli \textit{host} della rete
+                \item Indirizzi che permettono il \textit{broadcast} in una rete locale (\textit{Limited broadcast address})
+                \item Indirizzi di \textit{localhost}
+                \item Indirizzi di \textit{loopback}
+                \item Indirizzi di \textit{multicast}
+                \item Indirizzi di \textit{link-local}
+            \end{itemize}
+            \paragraph{Identificativi di tutta la rete} Gli indirizzi che identificano tutta la rete sono indirizzi che identificano tutta la rete. Questi indirizzi sono usati per identificare la rete e non possono essere assegnati ad un'interfaccia di rete, questi sono identificati con tutti i bit della parte di \textit{host} a $0$. Ad esempio l'indirizzo \texttt{128.211.0.16/28} identifica tutta la rete
+            \paragraph{Indirizzi di \textit{broadcast}} Per il \textit{Directed Broadcast Address} si ha che l'indirizzo di \textit{broadcast} è l'indirizzo che permette di inviare un pacchetto a tutti gli \textit{host} della rete. Questo indirizzo è identificato con tutti i bit della parte di \textit{host} a $1$. Ad esempio l'indirizzo \texttt{128.211.0.31/28} è l'indirizzo di \textit{broadcast} per la rete \texttt{128.211.0.16/28}
+            \paragraph{Indirizzi di \textit{broadcast} locale} L'indirizzo di \textit{broadcast} locale è l'indirizzo che permette di inviare un pacchetto a tutti gli \textit{host} della rete locale. Questo indirizzo è identificato con tutti i bit dell'indirizzo a $1$. Quindi l'indirizzo \texttt{255.255.255.255} è l'indirizzo di \textit{broadcast} locale, anche se possa sembrare globale questo rimane locale perché non viene inoltrato alla rete pubblica.
+            \paragraph{Indirizzi di \textit{localhost}} Per le regole del protocollo \texttt{TCP/IP} necessitiamo di un indirizzo \texttt{IP} anche per richiedere l'assegnazione di un indirizzo \texttt{IP} allora si è deciso di riservare un indirizzo \texttt{IP} ovvero: \texttt{0.0.0.0} che viene usato solo per le prime comunicazioni all'interno di una rete per "chiedere" l'assegnazione di un indirizzo \texttt{IP}
+            \paragraph{Indirizzi di \textit{loopback}} Indirizzo \texttt{IP} riservato per il \textit{loopback} del PC o del dispositivo. Questo indirizzi sono \texttt{127.0.0.0/8}, ma il più comune è \texttt{127.0.0.1}
+            \paragraph{Indirizzi di \textit{multicast}} Tutti gli indirizzi \texttt{IP} che iniziano con \texttt{1110} sono indirizzi di \textit{multicast}, molti apparati di rete bloccano il traffico di \textit{multicast} per evitare attacchi.
+            \paragraph{Indirizzi \texttt{IP} \textit{local}} Sono indirizzi che non vengono assegnati pubblici ma vengono assegnati autonomamente se ci si aspettava che l'indirizzo \texttt{IP} venisse assegnato da un apparato esterno ma ciò non è avvenuto. Questi indirizzi sono appartenenti alla rete $194.254.0.0/16$ 
+            \paragraph{Indirizzi \texttt{IP} dei \textit{router}} Un \textit{router} per definizione ha almeno $2$ interfacce di rete, quindi ha almeno $2$ indirizzi \texttt{IP}. Questo non limita un \textit{router} ad avere solo $1$ indirizzo \texttt{IP} per ogni interfaccia di rete. Da ricordare che un indirizzo \texttt{IP} non è associato ad un \textit{host} ma ad un'interfaccia di rete su un \textit{host}. La molteplicità di indirizzi \texttt{IP} per una sola interfaccia di rete risulta utile se ad esempio volgiamo suddividere la rete interna in più reti e impostare delle regole di \textit{firewall} tra le reti.
+            \paragraph{come si integra al livello 2} Per l'architettura a strati del modello \texttt{TCP/IP} il messaggio contenete gli indirizzi \texttt{IP} è incapsulato in un frame del livello 2, questo frame contiene l'indirizzo \texttt{MAC} di sorgente e di destinazione. Per ottenere questi ci avvaliamo dell'uso di \texttt{ARP}.
+    \subsection{\textit{Address Resolution Protocol} \texttt{ARP}}
+        L'\texttt{ARP} è un protocollo che permette di associare un indirizzo \texttt{IP} ad un indirizzo \texttt{MAC}. Questo protocollo è molto utile in quanto i \textit{router} inoltrano i pacchetti in base all'indirizzo \texttt{MAC} e non all'indirizzo \texttt{IP}. Il funzionamento dell'\texttt{ARP} è il seguente: \begin{enumerate}
+            \item Un \textit{host} vuole inviare un pacchetto ad un altro \textit{host} nella stessa rete e conosce l'indirizzo \texttt{IP} di destinazione ma non l'indirizzo \texttt{MAC}.
+            \item L'\textit{host} invia un pacchetto di \texttt{ARP} in \textit{broadcast} con l'indirizzo \texttt{IP} di destinazione.
+            \item Tutti gli \textit{host} della rete ricevono il pacchetto di \texttt{ARP} e solo l'\textit{host} con l'indirizzo \texttt{IP} di destinazione risponde con il proprio indirizzo \texttt{MAC}.
+            \item L'\textit{host} che ha inviato il pacchetto di \texttt{ARP} riceve l'indirizzo \texttt{MAC} e può inviare il pacchetto.
+            \item L'\textit{host} che ha inviato il pacchetto di \texttt{ARP} memorizza l'associazione tra l'indirizzo \texttt{IP} e l'indirizzo \texttt{MAC} per un certo periodo di tempo.
+            \item Se l'\textit{host} vuole inviare un altro pacchetto allo stesso \textit{host} allora non invia un altro pacchetto di \texttt{ARP} ma usa l'associazione precedentemente memorizzata.
+            \item Se l'associazione scade allora l'\textit{host} invia un altro pacchetto di \texttt{ARP} per rinnovare l'associazione.
+            \item Se l'\textit{host} non riceve risposta al pacchetto di \texttt{ARP} allora il pacchetto non può essere inviato.
+        \end{enumerate}
+        Questo protocollo con questa procedura permette di associare un indirizzo \texttt{IP} ad un indirizzo \texttt{MAC} e quindi di inoltrare i pacchetti correttamente filtrando i pacchetti da apparati come gli \textit{switch} di rete che non lavorano a livello di rete, ma solo a livello di collegamento.\newline
+        Questo protocollo non è mai usato su una rete pubblica, questo perché di base una destinazione pubblica prevede che il pacchetto passi per uno o più \textit{router} e quindi l'indirizzo \texttt{MAC} cambierebbe ad ogni \textit{hop} e quindi non si associa un indirizzo \texttt{MAC} ad un indirizzo \texttt{IP} pubblico, ma al suo posto gli \textit{header} dei pacchetti \texttt{IP} contengono l'indirizzo \texttt{MAC} del \textit{default gateway}.
+        \paragraph{Incapsulamento frame \texttt{ARP}} Il pacchetto di \texttt{ARP} è incapsulato in un frame (esempio \textit{Ethernet}) questi frame sono interpretati come dati da trasportare e incapsulati nel \textit{payload} del frame. Il frame contiene anche un campo \textit{type} che indica il tipo di pacchetto contenuto nel \textit{payload} del frame.
+        \paragraph{Il \textit{proxy} \texttt{ARP}} Il \textit{proxy} \texttt{ARP} è una tecnica che permette ad un \textit{router} di rispondere ai pacchetti di \texttt{ARP} al posto dell'\textit{host} di destinazione. Questa tecnica è molto utile in quanto permette di nascondere la topologia di rete e di proteggere gli \textit{host} dalla ricezione di pacchetti di \texttt{ARP} malevoli.
+    \subsection{\textit{Internet Control Message Protocol} \texttt{ICMP}}
+        Il protocollo \texttt{ICMP} è fondamentale per il funzionamento di internet, questo protocollo permette di inviare messaggi di errore e di controllo tra i dispositivi di rete.
+        \paragraph{Interdipendenza con \texttt{IP}}\texttt{IP} e \texttt{ICMP} sono \underline{interdipendenti} infatti il protocollo \texttt{IP} dipende da \texttt{ICMP} per il segnalamento di errori ma a sua volta \texttt{ICMP} necessita di \texttt{IP} per il trasporto di messaggi.
+        \paragraph{Formato messaggi \texttt{ICMP}} I messaggi di \texttt{ICMP} sono costituiti da un semplice \textit{header} composto da un campo \textit{type} da 1 byte, un codice di stato fatto da 1 byte e un campo \textit{checksum} di 2 byte. Il campo \textit{type} indica il tipo di messaggio, il codice di stato indica il dettaglio del messaggio e il campo \textit{checksum} è un campo di controllo degli errori.
+        \subsubsection{Principali \textit{type} di \texttt{ICMP}}
+            \begin{table}[H]
+                \begin{tabular}{|c|c|}
+                    \hline
+                    \textbf{Type} & \textbf{Descrizione} \\ \hline
+                    \textit{Destination Unreachable} & Indica che la destinazione non è raggiungibile \\ \hline
+                    \textit{Port Unreachable} & Indica che la porta di destinazione non è raggiungibile \\ \hline
+                    \textit{Time Exceeded} & Indica che il tempo di vita del pacchetto è 0 \\ \hline
+                    \textit{Parameter Problem} & Indica che c'è un problema con i parametri del pacchetto \texttt{IP} \\ \hline
+                    \textit{Source Quench} & Indica che il mittente deve rallentare l'invio di pacchetti \\ \hline
+                    \textit{Redirect} & Indica che il mittente deve cambiare il percorso di inoltro \\ \hline
+                    \textit{Echo \& Echo Reply} & Usato per il \textit{ping} \\ \hline
+                    \textit{Timestamp request/reply} & Usato per ottenere il tempo di un dispositivo \\ \hline
+                    \textit{Router Advertisement/solicitation} & Usato per proporsi come \textit{router} o scoprire i \textit{router} \\ \hline
+                    \textit{Fragmentation needed} & Indica che il pacchetto è troppo grande e deve essere frammentato \\ \hline
+                \end{tabular}
+            \end{table}
+        Sono presenti dunque due classi principali di messaggi: quelli per segnalare errori e quelli per recuperare informazioni. Da notare che i messaggi di \texttt{ICMP} vengono trasportati nel campo \textit{payload} di un pacchetto \texttt{IP}.
+        \subsubsection{Sfruttare \texttt{ICMP}} \texttt{ICMP} può essere sfruttato per il "\textit{ping}" e per il "\textit{traceroute}". Il \textit{ping} è un comando che permette di verificare la connessione tra due dispositivi (\textit{echo request} e \textit{echo reply}), mentre il \textit{traceroute} permette di verificare il percorso che un pacchetto fa per arrivare ad un determinato dispositivo. Questo comando invia pacchetti con un campo \textit{time to live} incrementale e aspetta un messaggio di \textit{time exceeded} per sapere che il pacchetto è arrivato al \textit{router} di destinazione.
+
+    \subsection{\textit{Dynamic Host Configuration Protocol} \texttt{DHCP}}
+        Il protocollo \texttt{DHCP} è un protocollo che permette di assegnare automaticamente un indirizzo \texttt{IP} ad un \textit{host} che si connette ad una rete. Gli indirizzi possono essere liberati quando non vengono più usati e possono essere riassegnati ad altri \textit{host}. La sintesi del funzionamento del protocollo è la seguente: \begin{enumerate}
+            \item \textit\textbf{\texttt{DHCP} discover} L'\textit{host} invia un pacchetto di \texttt{DHCP} in \textit{broadcast} per trovare un \textit{server} \texttt{DHCP}. Nel pacchetto sono contenuti una sorgente generica, una destinazione generica un mio \texttt{IP} e una \textit{transaction ID}.
+            \item \textit\textbf{\texttt{DHCP} offer} Il \textit{server} \texttt{DHCP} risponde con un pacchetto di \texttt{DHCP} con un indirizzo \texttt{IP} disponibile per l'\textit{host}. Nel pacchetto sono contenuti l'indirizzo \texttt{IP} di sorgente del server, l'indirizzo \texttt{IP} generico di destinazione, il mio \texttt{IP} e la stessa \textit{transaction ID} del pacchetto di \texttt{DHCP} \textit{discover} e un \textit{lifetime} dell'indirizzo \texttt{IP} offerto.
+            \item \textit\textbf{\texttt{DHCP} request} L'\textit{host} invia un pacchetto di \texttt{DHCP} per richiedere l'indirizzo \texttt{IP} offerto dal \textit{server} \texttt{DHCP}. 
+            \item \textit\textbf{\texttt{DHCP} ack} Il \textit{server} \texttt{DHCP} risponde con un pacchetto di \texttt{DHCP} per confermare l'assegnazione dell'indirizzo \texttt{IP} all'\textit{host}.
+        \end{enumerate}
+        \paragraph{Prestiti \texttt{DHCP}} L'indirizzo \texttt{IP} assegnato ad un \textit{host} può essere riassegnato ad un altro \textit{host} quando l'\textit{host} non lo usa più. Un indirizzo può però essere rinnovato quando l'\textit{host} lo usa ancora. Se il \textit{server} non rinnova l'indirizzo allora l'indirizzo viene rilasciato e l'\textit{host} deve smettere di usarlo.
+        \paragraph{Altri dettagli} Il protocollo \texttt{DHCP} usa \texttt{UDP} e quindi non è affidabile ma è progettato per essere robusto a perdite e a duplicati. Inoltre il \textit{client} memorizza l'indirizzo del \textit{server} \texttt{DHCP} per richieste successive.
+        \subsubsection{Formato dei messaggi \texttt{DHCP}} 
+            Di seguito lo schema dei messaggi \texttt{DHCP}:
+            
+            \begin{figure}[H]
+                \centering
+                \includegraphics[width=0.5\textwidth]{04/dhcp-message.png}
+                \caption{Formato dei messaggi \texttt{DHCP}}
+            \end{figure}
+            
+            Vediamo ora a cosa servono i principali parametri:
+            \begin{description}
+                \item[\texttt{OP}] Campo di 1 byte che indica se il messaggio è un \textit{request} o un \textit{reply}
+                \item[\texttt{HTYPE} e \texttt{HLEN}] Campi di 1 byte l'uno specificano il tipo di \textit{hardware} e la lunghezza dell'indirizzo \texttt{MAC}
+                \item[\texttt{FLAGS}] Campo di 2 byte che contiene, ad esempio, se il mittente può ricevere \textit{broadcast} o solo risposte dirette
+                \item[\texttt{HOPS}] Campo di 1 byte che indica quanti \textit{server} hanno inoltrato la risposta
+                \item[\texttt{TRANSACTION IDENTIFIER}] Campo di 4 byte che identifica la transazione
+                \item[\texttt{SECONDS ELAPSED}] Campo di 2 byte che indica da quanto tempo il \textit{client} è in attesa
+                \item[\textit{altri}] Ci sono altri campi che indicano l'indirizzo \texttt{IP} del \textit{client}, l'indirizzo \texttt{IP} del \textit{server}, l'indirizzo \texttt{IP} del \textit{router} e l'indirizzo \texttt{IP} del \textit{DNS}.
+            \end{description}
+        \subsubsection{Se non c'è un \textit{server} \texttt{DHCP}}
+            Se non c'è un \textit{server} \texttt{DHCP} allora ci sono due situazioni: la prima è si configura un indirizzo \texttt{IP} statico, mentre, se non riceviamo risposta dopo un certo periodo di tempo, l'\textit{host} provvede all'impostazione di un indirizzo \textit{link-local} che permette la comunicazione con altri \textit{host} nella stessa rete che hanno lo stesso problema.
+            \paragraph{Configurazione \textit{link-local}} Per configurare un indirizzo \textit{link-local} si seguono i seguenti passi: \begin{enumerate}
+                \item Si sceglie un indirizzo \texttt{IP} compreso tra \texttt{169.254.0.1} e \texttt{169.254.255.254} con maschera di rete \texttt{/16}
+                \item Si cerca se esiste una interfaccia di rete con un indirizzo \texttt{IP} \textit{link-local} scelto (tramite \texttt{ARP})
+                \item[3.a.] Se esiste un'altra interfaccia con lo stesso indirizzo \texttt{IP} allora si ripete il processo
+                \item[3.b.] Altrimenti si configura l'indirizzo \texttt{IP} \textit{link-local}
+            \end{enumerate}
+    \subsection{Il viaggio di un pacchetto}
+        Analizziamo ora il viaggio di un pacchetto da un \textit{host} \texttt{A} ad un \textit{host} \texttt{B} in una rete. assumiamo che \texttt{A} conosca l'indirizzo \texttt{IP} di \texttt{B} e l'indirizzo \texttt{UP} del router \texttt{R} (che è il \textit{default gateway}) (Tramite \texttt{DHCP}), inoltre conosce già l'indirizzo \texttt{MAC} del router \texttt{R} (Tramite \texttt{ARP}).\newline
+        Quindi in una rete costituita da \texttt{A}, \texttt{R} e \texttt{B}, con \texttt{R} nel mezzo, il pacchetto viaggia in questo modo: \begin{enumerate}
+            \item \texttt{A} crea il datagramma \texttt{IP} con sorgente \texttt{A} e destinazione \texttt{B}
+            \item \texttt{A} incapsula il datagramma in un frame di livello 2 con indirizzo \texttt{MAC} di \texttt{R} come destinazione e \texttt{MAC} di \texttt{A} come sorgente
+            \item Il frame viene inviato alla rete da \texttt{A} a \texttt{R}\footnote{\label{netSwitch}
+                In questo punto possono essere presenti all'interno della rete altri dispositivi di livello 2 come \textit{switch} che inoltrano il pacchetto in base all'indirizzo \texttt{MAC}}
+            \item Il frame arriva a \texttt{R} che estrae il datagramma \texttt{IP} e lo passa al livello 3
+            \item \texttt{R} controlla la tabella di routing e inoltra il pacchetto a \texttt{B}, per fare ciò incapsula il datagramma in un frame con indirizzo \texttt{MAC} di \texttt{B} come destinazione e \texttt{MAC} di \texttt{R} come sorgente
+            \item Il frame viene inviato da \texttt{R} a \texttt{B}\footref{netSwitch}
+            \item \texttt{B} estrae il datagramma \texttt{IP} e lo passa al livello 3 per l'elaborazione
+        \end{enumerate}
+    \subsection{\texttt{IPv6}}
+        Il protocollo \texttt{IPv6} è un protocollo nato per ampliare la quantità di indirizzi \texttt{IP} disponibili rispetto quelli di \texttt{IPv4}, successivamente si è voluto standardizzarlo anche in quanto il formato dell'\textit{header} velocizza l'elaborazione dei frammenti, inoltre facilita la gestione della qualità del servizio.\subsubsection{Formato del datagramma \texttt{IPv6}}
+            Il formato di un frammento è: \textbf{header} da $40$ byte e la frammentazione è proibita.
+            \paragraph{Header} L'\textit{header} di un datagramma \texttt{IPv6} è composto da: \begin{itemize}
+                \item \textbf{Flow label} Campo di $20$ bit che permette di identificare un flusso di dati.
+                \item \textbf{Priority} Campo di $4$ bit che permette di identificare la priorità del pacchetto.
+                \item \textbf{Next header} Campo di $8$ bit che permette di identificare il protocollo di trasporto.
+            \end{itemize}
+        \subsubsection{Cambiamenti rispetto \texttt{IPv4}}
+            In quanto la rete è diventata più affidabile è stato rimosso il \textit{checksum}, vengono rimosse le \textit{options} e il \textit{header} è più corto. Inoltre viene introdotto il protocollo \textit{ICMPv6} con più funzionalità rispetto a \textit{ICMP}.
+        \subsubsection{Transizione da \texttt{IPv4} a \texttt{IPv6}}
+            La transizione da \texttt{IPv4} a \texttt{IPv6} è molto lenta in quanto richiede un cambiamento di infrastruttura molto grande, per questo si è deciso che se un pacchetto \texttt{IPv6} deve transitare obbligatoriamente per una rete \texttt{IPv4} allora il pacchetto viene incapsulato in un pacchetto \texttt{IPv4} e poi inviato alla rete \texttt{IPv4} e poi riconvertito in un pacchetto \texttt{IPv6} alla destinazione.
+        \subsubsection{Indirizzi \texttt{IPv6}}
+            La lunghezza non permette notazione \textit{dotted decimal} e quindi si usa la notazione esadecimale: Ogni gruppo di $4$ bit è scritto come una cifra $0,1,\dots,9$ o una lettera: $a,b,\dots,f$. In totale $32$ cifre esadecimali costituiscono un indirizzo \texttt{IPv6}.
+            \paragraph{Esempio} Un indirizzo di esempio è \texttt{2a03:2880:f108:0083:face:b00c:0000:25de} che è un indirizzo \texttt{IPv6} valido.
+            \paragraph{Raggruppamento} Si possono raggruppare $0$ o omettendoli oppure se è un intero gruppo di $0$ si può omettere tutto il gruppo. Ad esempio l'indirizzo \texttt{2a03:2880:f108:0083:face:b00c:0000:25de} può essere scritto come\texttt{2a03:2880:f108:83:face:b00c:0:25de}. 
+        \subsubsection{Indirizzi speciali}
+            Gli indirizzi speciali di \texttt{IPv6} sono: \begin{itemize}
+                \item \textbf{Unspecified address} Indirizzo $0:0:0:0:0:0:0:0$ che indica che l'indirizzo non è assegnato.
+                \item \textbf{Loopback address} Indirizzo $0:0:0:0:0:0:0:1$ che indica l'indirizzo di \textit{loopback}.
+                \item \textbf{Link-local address} Indirizzo $fe80::/10$ che indica un indirizzo di \textit{link-local}.
+                \item \textbf{Site-local address} Indirizzo $fec0::/10$ che indica un indirizzo di \textit{site-local}.
+                \item \textbf{Multicast address} Indirizzo $ff00::/8$ che indica un indirizzo di \textit{multicast}.
+            \end{itemize}
+        
