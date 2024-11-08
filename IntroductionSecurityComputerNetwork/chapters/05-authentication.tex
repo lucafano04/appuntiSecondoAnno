@@ -1,4 +1,4 @@
-\chapter{Authentication II: \texttt{SSO}\& \texttt{SAML}}
+\chapter{Authentication II: \texttt{SSO} \& \texttt{SAML}}
 \label{chap:authentication-ii}
 \thispagestyle{chapterInit}
 Questo capitolo è dedicato all'approfondimento dell'autenticazione all'interno di internet, in particolare verrà trattato il concetto di \texttt{Single Sign-On} per la riduzione del numero di credenziali da memorizzare e la gestione di queste ultime. Inoltre verrà trattato il protocollo \texttt{SAML} ovvero \textit{Security Assertion Markup Language} per la gestione di autenticazioni e autorizzazioni tra domini diversi, infine si parlerà di \texttt{SPID}, \texttt{CIE} \& \texttt{eIDAS} come esempi di implementazioni a livello nazionale ed europeo di \texttt{SSO}.
@@ -19,12 +19,13 @@ Questo capitolo è dedicato all'approfondimento dell'autenticazione all'interno 
 \section{Security Assertion Markup Language (\texttt{SAML})}
     \texttt{SAML} è un paradigma di autenticazione standard che sfrutta il formato \texttt{XML} per lo scambio di informazioni, questo lo rende molto \textit{verbose} anche per una piccola porzione di dati. Questo standard è stato introdotto nel 2002 e aggiornato nel 2005 in risposta alla mancanza di standard per lo scambio di informazioni di autenticazione e autorizzazione tra domini diversi.
     
-    \begin{wrapfigure}{r}{0.25\textwidth}
+    \paragraph{Esempio d'uso di \texttt{SAML}} In uno scenario dove ad esempio per avere uno sconto sul noleggio di un'auto è necessario essere membri VIP di una compagnia aerea, allora un utente (\textit{alice}) eseguirà il login sul sito della compagnia aerea (che agisce da \texttt{IdP} e \texttt{SP}) e poi verrà reindirizzata al sito di noleggio auto (che agisce solo da \texttt{SP}) con le informazioni dello status VIP dell'utente. A questo punto \textit{alice} può ottenere lo sconto da parte del sito di noleggio auto anche senza essersi autenticata su quest'ultimo, in quanto valgono le informazioni inviate dal sito della compagnia aerea.
+    
+    \begin{wrapfigure}{r}{0.2\textwidth}
         \centering
-        \includegraphics[width=0.25\textwidth]{05/SAML-Auth.png}
+        \includegraphics[width=0.2\textwidth]{05/SAML-Auth.png}
         \caption{Esempio di utilizzo di \texttt{SAML}}
     \end{wrapfigure}
-    \paragraph{Esempio d'uso di \texttt{SAML}} In uno scenario dove ad esempio per avere uno sconto sul noleggio di un'auto è necessario essere membri VIP di una compagnia aerea, allora un utente (\textit{alice}) eseguirà il login sul sito della compagnia aerea (che agisce da \texttt{IdP} e \texttt{SP}) e poi verrà reindirizzata al sito di noleggio auto (che agisce solo da \texttt{SP}) con le informazioni dello status VIP dell'utente. A questo punto \textit{alice} può ottenere lo sconto da parte del sito di noleggio auto anche senza essersi autenticata su quest'ultimo, in quanto valgono le informazioni inviate dal sito della compagnia aerea.\newline
     In breve:
         \begin{enumerate}
             \item L'utente vuole accedere ad un servizio \texttt{SP}
@@ -120,16 +121,13 @@ Questo capitolo è dedicato all'approfondimento dell'autenticazione all'interno 
         \paragraph{Sicurezza} Da notare come le informazioni su chi sia l'utente assieme a quelle per l'autenticazione sono conservate all'interno della \texttt{CIE}, in questo modo il server centrare non ha bisogno di memorizzare le informazioni dell'utente e quindi anche in caso di \textit{data breach} le informazioni di autenticazione e dell'utente sono al sicuro.
 
         Di seguito vengono riportati lo schema delle comunicazioni che avvengono tra le varie entità coinvolte nel processo di autenticazione con la \texttt{CIE} e il diagramma di sequenza per l'autenticazione con la \texttt{CIE}.
+        \newpage
         
         \begin{figure}[H]
             \centering
-            \includegraphics[width=0.6\textwidth]{05/CIE-auth-01.png}
+            \includegraphics[width=0.45\textwidth]{05/CIE-auth-01.png}
+            \includegraphics[width=0.45\textwidth]{05/CIE-auth-02.png}
             \caption{Diagramma di sequenza per l'autenticazione con la \texttt{CIE} - Parte 1}
-        \end{figure}
-        \begin{figure}[H]
-            \centering
-            \includegraphics[width=0.6\textwidth]{05/CIE-auth-02.png}
-            \caption{Diagramma di sequenza per l'autenticazione con la \texttt{CIE} - Parte 2}
         \end{figure}
 
         Di questi l'importante è notare la quantità di attori coinvolti: "\texttt{CIE}", "\texttt{CIE Id} App", "Utente", "\textit{Browser}", "\texttt{SP} \textit{server}" e "\texttt{CIE Id} \textit{server}". Questo è un esempio di un sistema di autenticazione molto complesso, ma decentralizzato e sicuro, in questo caso a differenza dello \texttt{SPID} non c'è un \textit{single point of failure}. Notare inoltre le diverse fasi: "\textit{Authentication request}", "\textit{User Info}", "\textit{Challenge}", "\textit{Response}", "\textit{OTP verification}" e "\textit{Redirection}".
