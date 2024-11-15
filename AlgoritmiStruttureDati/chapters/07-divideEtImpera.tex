@@ -1,0 +1,128 @@
+\chapter{\textit{Divide-et-impera}}
+\label{ch:divideEtImpera}
+\thispagestyle{chapterInit}
+\section{Introduzione}
+    \paragraph{Classificazione dei problemi}
+        Prima di iniziare bisogna saper classificare i problemi, infatti non tutti i problemi possono essere risolti con la tecnica \textit{divide-et-impera}. Di seguito vengono elencati i vari tipi di problemi:
+        \subparagraph{Problemi decisionali} Sono problemi per i quali la risposta è un semplice "sì" o "no". Ad esempio: "Esiste un cammino di lunghezza $k$ tra due nodi $u$ e $v$?".
+        \subparagraph{Problemi di ricerca} Sono problemi per i quali si cerca una soluzione all'interno di uno spazio di ricerca, in questo genere di problemi le soluzioni ammissibili sono quelle che rispettano certi vincoli e si cerca la migliore tra queste. Ad esempio: "qual'è la posizione di una data sotto-stringa all'interno di una stringa?".
+        \subparagraph{Problemi di ottimizzazione} Sono problemi per i quali si cerca la soluzione migliore tra tutte le soluzioni ammissibili. Ad esempio: "qual'è il cammino più breve tra due nodi $u$ e $v$?".
+    \paragraph{Definizione matematica}
+        Spesso è fondamentale definire bene il problema in modo formale, questo in quanto una definizione formale permette di capire meglio il problema e di trovare una soluzione più facilmente (in alcuni casi),
+    \paragraph{Tecniche di soluzione problemi}
+        \subparagraph{\textit{Divide-et-impera}} Un problema viene suddiviso in sotto-problemi più piccoli, indipendenti risolti ricorsivamente (\textit{top-down}). La soluzione del problema originale viene costruita a partire dalle soluzioni dei sotto-problemi. Lavora in modo efficiente nei problemi di decisione e ricerca.
+        \subparagraph{Programmazione dinamica} La soluzione viene costruita a partire dalle soluzioni dei sotto-problemi, ma i sotto-problemi vengono risolti una sola volta e la soluzione viene memorizzata in una tabella. Tecnica spesso usata per i problemi di ottimizzazione.
+        \subparagraph{\textit{Memorization} (o annotazione)} Semplicemente la versione \textit{top-down} della programmazione dinamica, in cui si memorizzano i risultati dei sotto-problemi per evitare di ricalcolarli.
+        \subparagraph{Tecnica \textit{Gready}} Si costruisce la soluzione in modo incrementale, scegliendo ogni volta la soluzione migliore locale. Questa tecnica non garantisce la soluzione ottima.
+        \subparagraph{\textit{Backtrack}} Si costruisce procedendo per "tentativi" e si torna indietro quando se non si trova una soluzione. Questa tecnica è spesso usata per i problemi di decisione.
+        \subparagraph{Ricerca locale} Si parte da una soluzione iniziale e si cerca di migliorarla iterativamente. Questa tecnica è spesso usata per i problemi di ottimizzazione.
+        \subparagraph{Algoritmi probabilistici} Si basano su tecniche di campionamento casuale. Questi algoritmi non garantiscono la soluzione ottima, ma spesso sono più efficienti.
+    \paragraph{Le tre fasi di \textit{divide-et-impera}} La tecnica \textit{divide-et-impera} si divide in tre fasi: \textit{Divide} ovvero la divisione del problema in sotto-problemi più piccoli, \textit{Impera} ovvero la risoluzione dei sotto-problemi in modo ricorsivo e \textit{Combina} ovvero la combinazione delle soluzioni dei sotto-problemi per ottenere la soluzione del problema originale.
+\section{Torre di Hanoi}
+    La torre di Hanoi è un gioco che consiste in tre pioli e $n$ dischi di diametro diverso, i dischi sono impilati in ordine decrescente di diametro su uno dei pioli. Lo scopo del gioco è spostare tutti i dischi da un piolo di partenza ad un piolo di arrivo, rispettando le seguenti regole:
+    \begin{itemize}
+        \item Si può spostare un solo disco alla volta.
+        \item Un disco può essere spostato solo se è il disco più in alto su un piolo.
+        \item Un disco può essere spostato solo su un piolo vuoto o su un disco più grande.
+        \item Si può usare il piolo di mezzo come piolo di appoggio.
+    \end{itemize}
+    Questo problema può essere risolto in modo ricorsivo, dividendo il problema in sotto-problemi più piccoli. La soluzione è la seguente:
+
+    \begin{algorithm}[H]
+        \caption{hanoi(\Int $n$,\Int $src$,\Int $dest$, \Int $middle$)}
+        \begin{algorithmic}
+            \If{$n = 1$}
+                \State \textbf{print} $scr \rightarrow dest$
+            \Else
+                \State \Call{hanoi}{$n-1$, $src$, $middle$, $dest$}
+                \State \textbf{print} $src \rightarrow dest$
+                \State \Call{hanoi}{$n-1$, $middle$, $dest$, $src$}
+            \EndIf
+        \end{algorithmic}
+    \end{algorithm}
+    
+    Concettualmente il presente algoritmo funziona in questo modo: sposto $n-1$ dischi dal piolo di partenza al piolo di mezzo, sposto il disco rimanente dal piolo di partenza al piolo di arrivo e infine sposto i $n-1$ dischi dal piolo di mezzo al piolo di arrivo.
+    \paragraph{Costo computazionale} Il costo del problema è esprimibile con la seguente equazione di ricorrenza:
+    \[
+        T(n)=\begin{cases}
+            1 & n = 1\\
+            2T(n-1) + 1 &  n > 1
+        \end{cases}
+    \]
+    dunque il costo del problema è $O(2^n)$, questo in quanto vengono effettuate due chiamate ricorsive per ogni chiamata ricorsiva, inoltre tutte le volte che eseguo una chiamata ricorsiva ho costo $1$.
+\section{\texttt{QuickSort}}
+    Il \texttt{QuickSort} è un algoritmo di ordinamento basato sulla tecnica \textit{divide-et-impera}. Dove il caso medio ha costo $O(n\log n)$, il caso peggiore ha costo $O(n^2)$. Viene usato il \texttt{QuickSort} rispetto al \texttt{MergeSort} per la sua minore complessità costante ed il suo minor uso di memoria, ciò in quanto il \texttt{QuickSort} non necessita di un array ausiliario.
+    \paragraph{Input} L'input dell'algoritmo è un array $A$ di $n$ elementi, inoltre come parametri si passano l'indice di inizio e l'indice di fine dell'array.
+    \paragraph{\textit{Divide}} Viene scelto un valore $p\in A[start\dots end]$ detto perno (\textit{pivot}), vengono spostati gli elementi minori di $p$ a sinistra e quelli maggiori a destra.
+    \paragraph{\textit{Impera}} Viene chiamato ricorsivamente l'algoritmo su due sotto-array: $A[start\dots p-1]$ e $A[p+1\dots end]$, in quanto avendo spostato a destra i maggiori e a sinistra i minori, il perno è già nella posizione corretta.
+    \paragraph{\textit{Combina}} Non è necessario, in quanto l'array è già ordinato.
+    \paragraph{Scelta del perno} 
+        Di seguito viene riportato l'algoritmo per la scelta del perno e per la divisione dell'array:
+        \begin{algorithm}[H]
+            \caption{\Int pivot(\Item $A[]$, \Int $start$, \Int $end$)}
+            \begin{algorithmic}
+                \State \Item $pivot \gets A[start]$
+                \State \Int $i \gets start$
+                \For{\Int $j \gets start+1$ \textbf{to} $end$}
+                    \If{$A[j] < pivot$}
+                        \State $i \gets i+1$
+                        \State \Call{swap}{$A[i]$, $A[j]$}
+                    \EndIf
+                \EndFor
+                \State \Call{swap}{$A[i]$, $A[start]$}
+                \State \Return $i$
+            \end{algorithmic}
+        \end{algorithm}
+        Al'interno del presente algoritmo viene usata la seguente funzione \texttt{swap}:
+        \begin{algorithm}[H]
+            \caption{swap(\Item $a$, \Item $b$)}
+            \begin{algorithmic}
+                \State \Item $temp \gets a$
+                \State $a \gets b$
+                \State $b \gets temp$
+            \end{algorithmic}
+        \end{algorithm}
+    \paragraph{Algoritmo principale} Dopo aver definito la funzione \texttt{pivot} possiamo definire l'algoritmo principale:
+        \begin{algorithm}[H]
+            \caption{quickSort(\Item $A[]$, \Int $start$, \Int $end$)}
+            \begin{algorithmic}
+                \If{$start < end$}
+                    \State \Int $j \gets$ \Call{pivot}{$A$, $start$, $end$}
+                    \State \Call{quickSort}{$A$, $start$, $j-1$}
+                    \State \Call{quickSort}{$A$, $j+1$, $end$}
+                \EndIf
+            \end{algorithmic}
+        \end{algorithm}
+\section{Algoritmo di Strassen}
+    L'algoritmo di Strassen è un algoritmo di moltiplicazione di matrici basato sulla tecnica \textit{divide-et-impera}. Normalmente per il calcolo di una matrice $C = A \cdot B$ si ha un costo di $O(n^3)$, dato dal seguente algoritmo:
+    \begin{algorithm}[H]
+        \caption{matrixMultiplication(\Float[][] $A$,$B$,$C$, \Int $n_i, n_j, n_k$)}
+        \begin{algorithmic}
+            \For{\Int $i \gets 1$ \textbf{to} $n_i$}
+                \State \For{\Int $j \gets 1$ \textbf{to} $n_j$}
+                    \State $C[i][j] \gets 0$
+                    \For{\Int $k \gets 1$ \textbf{to} $n_k$}
+                        \State $C[i][j] \gets C[i][j] + A[i][k] \cdot B[k][j]$
+                    \EndFor
+                \EndFor
+            \EndFor
+        \end{algorithmic}
+    \end{algorithm}
+    \paragraph{Approccio \textit{divide-et-impra}}Il principio di \textit{divide-et-impera} si basa sulla divisione di una matrice $n\times n$ in quattro sotto-matrici $n/2 \times n/2$, in modo tale da ridurre il costo della moltiplicazione.
+    \subparagraph{Equazione di ricorrenza} L'equazione di ricorrenza dell'algoritmo di Strassen è la seguente:
+    \[
+        T(n)=\begin{cases}
+            1 & n = 1\\
+            8T(n/2) + n^2 &  n > 1
+        \end{cases}
+    \]
+    Il che per il teorema del master ci da un costo di $O(n^{\log_2 8}) = O(n^3)$, dunque l'algoritmo di Strassen non è più efficiente dell'algoritmo classico.
+    \paragraph{Algoritmo di Strassen} L'algoritmo di Strassen prevede il calcolo di sette matrici $n/2 \times n/2$, e la ricorrenza su queste.\footnote{Il funzionamento dell'algoritmo di Strassen non è di grande importanza per il corso, basti sapere che questo è migliore rispetto all'approccio \textit{divide-et-impera}} Il che porta alla seguente equazione di ricorrenza:
+    \[
+        T(n)=\begin{cases}
+            1 & n = 1\\
+            7T(n/2) + O(n^2) &  n > 1
+        \end{cases}
+    \]
+    Portando il costo dell'algoritmo a $O(n^{\log_2 7}) \approx O(n^{2.81})$.
+    

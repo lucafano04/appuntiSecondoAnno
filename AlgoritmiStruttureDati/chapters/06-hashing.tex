@@ -1,0 +1,252 @@
+\chapter{Hashing}
+\thispagestyle{chapterInit}
+
+\section{Introduzione}
+    \subsection{Preambolo}
+        Prima di iniziare a parlare di hashing, è necessario definire cos'è un dizionario
+        \begin{definition}[Dizionario]
+            Un dizionario è una struttura dati utilizzata per memorizzare un insieme dinamico di elementi, costituiti da \textbf{coppie} $\left< k, v \right>$, dove $k$ è la chiave e $v$ è il valore associato alla chiave. Le coppie sono uniche rispetto alla chiave, il valore è un \textbf{"dato satellite"} associato alla chiave.
+        \end{definition}
+        Le operazioni di un dizionario sono:
+        \begin{itemize}
+            \item $\operatorname{lookup}(key)\rightarrow value$: inserisce la coppia $\left< k, v \right>$ nel dizionario
+            \item $\operatorname{insert}(key, value)$: cerca la chiave $k$ nel dizionario e restituisce il valore associato
+            \item $\operatorname{delete}(key)$: elimina la coppia $\left< k, v \right>$ dal dizionario
+        \end{itemize}
+        Le strutture dati che implementano un dizionario sono ad esempio: Le tabelle di simboli, i dizionari di Python, le mappe di Java, gli oggetti di JavaScript, ecc\dots
+        \paragraph{Implementazione ideale} L'implementazione ideale di un dizionario, ovvero quella che garantisce le complessità di $O(1)$ per \texttt{insert},\texttt{lookup},\texttt{remove} è la tabella hash.
+        
+        \begin{table}
+            \centering
+            \begin{tabular}{|c|c|c|c|c|c|}
+                \hline
+                & \textbf{Array non ordinato} & \textbf{Array ordinato} & \textbf{Lista} & \textbf{Albero RB} & $\begin{aligned}\st{\textbf{Impl. Ideale}}\\ \textbf{Hash}\end{aligned}$\\
+                \hline
+                $\operatorname{insert}()$ & $O(1), O(n)$ & $O(n)$ & $O(1), O(n)$ & $O(\log n)$ & $O(1)$\\
+                \hline
+                $\operatorname{lookup}()$ & $O(n)$ & $O(\log n)$ & $O(n)$ & $O(\log n)$ & $O(1)$\\
+                \hline
+                $\operatorname{remove}()$ & $O(n)$ & $O(n)$ & $O(n)$ & $O(\log n)$ & $O(1)$\\
+                \hline
+                \textbf{foreach} & $O(n)$ & $O(n)$ & $O(n)$ & $O(n)$ & \st{$O(n)$} $O(m)$\\
+                \hline
+            \end{tabular}
+        \end{table}
+
+    \subsection{Tabelle Hash}
+        \subsubsection{Definizioni}
+            Una \textbf{funzione hash} è definita come: $h: \mathcal{U} \rightarrow \{0, 1, \dots, m-1\}$, dove $\mathcal{U}$ è l'universo delle chiavi e $m$ è la dimensione della tabella hash.\newline
+            La coppia $\left< k, v \right>$ è memorizzata nella cella $h(k)$ della tabella hash.
+        \subsubsection{Collisioni}
+            Quando due chiavi $k_1$ e $k_2$ hanno lo stesso valore di hash, ovvero $h(k_1) = h(k_2)$, si verifica una collisione. Idealmente si vorrebbe che la funzione hash sia senza collisioni.
+\section{Funzioni Hash}
+    \subsection{Introduzione}
+        \begin{definition}[Funzione Hash Perfetta]
+            Una funzione hash $h$ si dice \textbf{perfetta} se è \textbf{iniettiva}, ovvero se non ci sono collisioni.
+            $$
+                \forall k_1, k_2 \in \mathcal{U} \quad k_1 \neq k_2 \Rightarrow h(k_1) \neq h(k_2)
+            $$
+        \end{definition}
+        Ottenere una funzione hash perfetta è pressoché impossibile, in quanto spesso la chiave ha una dimensione maggiore della tabella hash e/o un dominio molto grande.\newline
+        Per ovviare a questo cerchiamo di minimizzare il numero di collisioni, questo cercando di distribuire \textbf{uniformemente} le chiavi negli indici $[0, m-1]$ della tabella hash.
+        \begin{definition}[Uniformità Semplice]
+            Sia $P(k)$ la probabilità che una chiave $k$ venga inserita in tabella,\newline
+            Sia $Q(i)$ la probabilità che una chiave venga inserita nella cella $i$ dove:
+            $$
+                Q(i) = \sum_{k \in \mathcal{U}:h(k)=i} P(k)
+            $$
+            Allora una funzione hash $h$ gode di \textbf{uniformità semplice} se:
+            $$
+                \forall i \in [0,\dots ,m-1] \quad Q(i) = \frac{1}{m}
+            $$
+        \end{definition}
+    
+    \subsection{Funzioni Hash Semplici}
+        Prima di definire delle funzioni di hash, dobbiamo prima assumere che le chiavi possano essere tradotte in valori numerici, anche interpretando la loro rappresentazione in memoria come un numero.
+        \begin{example}[Trasformazione di stringhe]
+            Di seguito sono riportate alcune funzioni di trasformazione di stringhe in numeri:
+            \begin{itemize}
+                \item $\operatorname{ord}(c)$: valore ordinale binario del carattere $c$ in qualche codifica
+                \item $\operatorname{bin}(k)$: rappresentazione binaria della chiave $k$ concatenando i valori ordinari dei caratteri della chiave
+                \item $\operatorname{int}(b)$: valore numerico associato al numero binario $b$
+                \item $\operatorname{int}(k) = \operatorname{int}(\operatorname{bin}(k))$
+            \end{itemize}
+        \end{example}
+
+        \paragraph{Funzioni hash semplici}
+            Alcuni esempi di funzioni hash semplici sono:
+            \begin{itemize}
+                \item Estrazione $\Rightarrow m=2^p$: $h(k) = \operatorname{int}(b)$ dove $b$ è un sottoinsieme di $p$ bit di $\operatorname{bin}(k)$
+                    \subitem Molto veloce, ma con molte collisioni
+                \item \texttt{XOR} $\Rightarrow m=2^p$: $h(k) = \operatorname{int}(b)$ dove $b$ è dato dalla somma modulo $2$, effettuata bit a bit, di sottoinsiemi di $p$ bit di $\operatorname{bin}(k)$
+                    \subitem Permutazioni della stessa chiave danno lo stesso risultato
+                \item Metodo della Divisione $\Rightarrow m$ dispari meglio se primo, $h(k) = \operatorname{int}(k)\mod m$.
+                    \subitem Non va bene $m=2^p$: solo i $p$ bit meno significativi vengono considerati
+                    \subitem Non va bene $m=2^p-1$: permutazione di stringhe con set di caratteri uguali hanno lo stesso valore hash
+                    \subitem Vanno bene: Numeri primi, distanti da potenze di $2$ (e di $10$)
+                \item Metodo della Moltiplicazione $\Rightarrow m$ qualsiasi meglio se potenza di $2$, $C$ costante $0<C<1$. Sia $i=\operatorname{int}(k)$ e $H(k)=\left\lfloor m\cdot (C\cdot i - \left\lfloor C\cdot i \right\rfloor) \right\rfloor$
+                    \subitem $C$ è una costante che si sceglie in base a $m$
+                    \subitem $C$ è un numero irrazionale, quindi non si ha un pattern di collisioni
+            \end{itemize}
+            \paragraph{Implementazione della moltiplicazione} Si sceglie un valore $m=2^p$, sia $w$ la dimensione in bit della parola di memoria: $i,m\leq 2^w$. Sia $s=\left\lfloor C\cdot 2^w \right\rfloor$, allora: $i\cdot s$ può essere scritto come $r_1\cdot 2^w + r_0$ dove $r_1$ contiene la parte intera di $i\cdot C$ e $r_0$ la parte frazionaria. \newline
+            Si restituiscono i $p-$bit più significativi di $r_0$ come valore hash.
+\section{Gestione delle collisioni}
+    \subsection{Liste/Vettori di trabocco}
+        \subsubsection{Idea Generale}
+            L'idea di usare una lista di trabocco è quella di memorizzare in una cella della tabella hash non solo il valore corrispondente alla chiave, ma anche una lista di coppie $\left< k, v \right>$ le quali chiavi hanno lo stesso valore di hash.\newline
+            Quando si vuole aggiungere una coppia $\left< k, v \right>$ e $k$ ha lo stesso valore di hash di una chiave già presente, si "fà puntare" la testa della lista di trabocco alla nuova coppia appena inserita e la nuova coppia "punta" alla vecchia testa.
+        \subsubsection{Operazioni}
+            \begin{itemize}
+                \item \texttt{insert}: si inserisce la coppia $\left< k, v \right>$ in testa alla lista di trabocco
+                \item \texttt{lookup}: si scorre la lista di trabocco fino a trovare la chiave $k$ e si restituisce il valore associato
+                \item \texttt{delete}: si scorre la lista di trabocco fino a trovare la chiave $k$ e si elimina la coppia $\left< k, v \right>$
+            \end{itemize}
+        \subsubsection{Analisi complessità}
+        In quanto si hanno $n$ chiavi memorizzate nella tabella hash e $m$ è la capacità della tabella, si ha che il fattore di carico $\alpha = \frac{n}{m}$. Inoltre definendo $I(\alpha)$ come il numero medio di accessi alla tabella per la ricerca di una chiave con insuccesso e $S(\alpha)$ come il numero medio di accessi alla tabella per la ricerca di una chiave con successo, si ha che:\newline
+        \textbf{Caso peggiore}:
+        \begin{itemize}
+            \item $\operatorname{insert}()\rightarrow \Theta(1)$
+            \item $\operatorname{lookup}(), \operatorname{delete}()\rightarrow \Theta(n)$
+        \end{itemize}
+        \textbf{Caso medio}:
+        Dipende da come le chiavi sono distribuite nella tabella hash, assumendo un hash uniforme semplice e costo di hashing $O(1)$:
+        Allora il valore atteso della lunghezza di una lista pari a $\alpha = \frac{n}{m}$. Per la ricerca distinguiamo due casi:
+        \begin{itemize}
+            \item \textbf{Successo}, costo atteso: $\Theta(1)+\alpha$
+            \item \textbf{Insuccesso}, costo atteso: $\Theta(1)+\frac\alpha2$
+        \end{itemize}
+        Nel caso medio si può osservare come il costo computazionale sia influenzato dal fattore di carico $\alpha$, nel caso ottimale se fossimo in una situazione nella quale $n=O(m)$ e $\alpha=O(1)$, allora per ogni operazione il costo sarebbe $O(1)$.
+    \subsection{Indirizzamento aperto}
+        \subsubsection{Idea}
+            La tecnica dell'Indirizzamento aperto punta a risolvere la complessità, a livello strutturale, delle liste di trabocco. L'idea è quella di memorizzare le chiavi nella tabella hash stessa, ed ogni slot può contenere o una chiave o \Nil (indicante che la cella è vuota).
+            \paragraph{Inserimento} Quando si vuole inserire una chiave $k$ e la cella $h(k)$ è occupata, si cerca la prima cella vuota a partire da $h(k)$.
+        \subsubsection{Operazioni}
+            \paragraph{Ricerca} Quando si vuole cercare una chiave $k$ si parte da $h(k)$ e si scorre la tabella fino a trovare la chiave $k$ o una cella vuota.
+            \paragraph{Funzione Hash} La funzione hash deve essere estesa, infatti questa in caso di Indirizzamento aperto assumerà la forma:
+            $$
+                H: \mathcal{U} \times \overbrace{\{0, 1, \dots, m-1\}}^{\text{Numero ispezione}} \rightarrow \overbrace{\{0, 1, \dots, m-1\}}^{\text{Indice vettore}}
+            $$
+        \subsubsection{Ispezione} Definiamo il termine \textbf{ispezione}
+            \begin{definition}[Ispezione]
+                L'ispezione è l'esame di uno slot durante la ricerca.
+            \end{definition}
+            Definiamo inoltre il termine \textbf{sequenza di ispezione}
+            \begin{definition}[Sequenza di Ispezione]
+                Una sequenza di ispezione $[H(k,0), H(k,1), \dots, H(k,m-1)]$ è una sequenza di \textbf{permutazione} degli indici $[0, 1, \dots, m-1]$ corrispondente all'ordine in cui vengono esaminati gli slot.\newline Questa rispetta le seguenti regole: Non ci sono ripetizioni di uno slot già visitato e, nel caso la tabella sia piena, potrebbe essere necessario visitare tutti gli slot.
+            \end{definition}
+            \paragraph{Tecniche di ispezione} La situazione ideale prende il nome di \textit{hashing uniforme} ovvero ogni chiave ha la stessa probabilità di avere come sequenza di ispezione una qualsiasi delle $m!$ permutazioni di $[0, 1, \dots, m-1]$. In quanto ciò è impossibile, si ricorre a tecniche di ispezione:
+                \subparagraph{Ispesione Lineare} La sequenza di ispezione è data da $H(k,i) = (H_1(k) + h\cdot i) \mod m$ la quale genera le varie sequenze: $[H_1(k), H_1(k)+h, H_1(k)+2h, \dots]$ che determina il primo elemento. Al massimo sono presenti $m$ sequenze di ispezione. Incontriamo ora il problema del \textit{clustering}, ovvero la formazione di gruppi di chiavi che si trovano vicine tra loro. \begin{definition}[Agglomerazione Primaria (\textit{primary clustering})]
+                    L'agglomerazione primaria è la formazione di lunghe sotto-sequenze occupate che tendono a crescere in quanto uno slot vuoto preceduto da uno slot occupato ha probabilità $\frac{(i+1)}m$ di essere occupato. 
+                \end{definition}
+                Conseguenza diretta del clustering è l'incremento dei tempi medi di inserimento e cancellazione.
+                \subparagraph{Ispezione Quadratica} La sequenza di ispezione è data da $H(k,i) = \left(H_1(k) + h \cdot i^2\right) \mod m$ con questa tecnica dopo il primo elemento ($H_1(k,0)$) le ispezioni successive saranno distanti tra loro di $1, 4, 9, \dots$ slot. Come risultato non si ha però una \textbf{permutazione} in quanto alcuni slot potrebbero non essere mai visitati, anche in questo caso abbiamo al massimo $m$ sequenze di ispezione distinte. Eliminiamo di fatto l'agglomerazione primaria, ma introduciamo l'\textbf{agglomerazione secondaria}.
+                \begin{definition}[Agglomerazione Secondaria (\textit{secondary clustering})]
+                    Se due chiavi hanno la stessa ispezione iniziale allora le loro sequenze sono identiche.
+                \end{definition}
+                \subparagraph{Doppio Hashing} La sequenza di ispezione è data da $H(k,i) = (H_1(k) + i\cdot H_2(k)) \mod m$ con $H_2(k)$ che fornisce l'\textit{offset} delle successive ispezioni. In questo caso si hanno $m^2$ sequenze di ispezione distinte, inoltre se si vuole garantire una permutazione completa allora $H_2(k)$ deve essere co-primo con $m$.
+        \subsubsection{Cancellazione} 
+            Come probabilmente si è già intuito non si possono sostituire le chiavi con \Nil, in quanto si potrebbe interrompere la sequenza di ispezione. Per ovviare a questo problema si introduce il concetto di \textbf{tombstone}, ovvero un valore speciale, \textbf{deleted}, usato al posto di \Nil sopo la cancellazione di una chiave. Questo permette di mantenere la sequenza di ispezione intatta.\newline
+            Durante la ricerca se ci si imbatte in un \textit{tombstone} si continua la ricerca, in quanto la chiave potrebbe essere presente in una cella successiva, mentre in caso di inserimento si sovrascrive il \textit{tombstone} con la nuova chiave.\newline
+            Il tempo di ricerca ora non dipende più da $\alpha$, inoltre se si rende possibile la cancellazione il concatenamento diventa più comune.
+        \subsubsection{Implementazione - Hashing doppio} Di seguito una possibile implementazione dell'Indirizzamento aperto con doppio hashing:
+            \begin{algorithm}[H]
+                \caption{\textsc{Hash}}
+                \begin{algorithmic}
+                    \State \Item[] $K$ \Comment{Tabella delle chiavi}
+                    \State \Item[] $V$ \Comment{Tabella dei valori}
+                    \State \Int $m$ \Comment{Dimensione della tabella}
+                    
+                    \State \textsc{Hash}\Function{Hash}{\Int $dim$}
+                        \State \textsc{Hash} $t \gets \New \textsc{Hash}$
+                        \State $t.m \gets dim$
+                        \State $t.K \gets \New \Item[dim-1]$
+                        \State $t.V \gets \New \Item[dim-1]$
+                        \For{$i \gets 0$ \textbf{to} $dim-1$}
+                            \State $t.K[i] \gets \Nil$
+                        \EndFor
+                    \EndFunction
+                \end{algorithmic}
+            \end{algorithm}
+            Di seguito l'algoritmo di ricerca, senza che venga considerata la cancellazione:
+            \begin{algorithm}[H]
+                \caption{\textsc{Search}}
+                \begin{algorithmic}
+                    \State \Int \Function{scan}{\Item $k$}
+                        \State $\Int i\gets 0$
+                        \State $\Int j\gets H_1(k)$
+                        \While{$keys[j]\neq k \And keys[j]\neq \Nil \And i<m$}
+                            \State $j\gets (j+H_2(k))\mod m$
+                            \State $i\gets i+1$
+                        \EndWhile
+                        \State \Return $j$
+                    \EndFunction
+                \end{algorithmic}
+            \end{algorithm}
+            Se si vuole implementare la cancellazione, si deve aggiungere un controllo per i 
+            \textit{tombstone}, ovvero se si incontra un \textit{tombstone} si continua la ricerca tranne nel caso in cui si stia inserendo una nuova chiave.
+            \newpage
+            \begin{algorithm}[H]
+                \caption{\textsc{Search}}
+                \begin{algorithmic}
+                    \State \Int \Function{scan}{\Item $k$, \Bool $insert$}
+                        \State \Int $delpos = m$
+                        \State $\Int i\gets 0$
+                        \State $\Int j\gets H_1(k)$
+                        \While{$keys[j]\neq k \And keys[j]\neq \Nil \And i<m$}
+                            \If{$keys[j]=\Deleted \And delpos=m$}
+                                \State $delpos\gets j$
+                            \EndIf
+                            \State $j\gets (j+H_2(k))\mod m$
+                            \State $i\gets i+1$
+                        \EndWhile
+                        \If{$insert \And keys[j]\neq k \And delpos < m$}
+                            \State \Return $delpos$
+                        \ElsIf
+                            \State \Return $j$
+                        \EndIf
+                    \EndFunction
+                \end{algorithmic}
+            \end{algorithm}
+            Si riporta ora il codice delle \texttt{API} per il \textit{lookup}, l'\textit{insert} e il \textit{remove}:
+            \begin{algorithm}[H]
+                \caption{\textsc{API}}
+                \begin{algorithmic}
+                    \State \Item \Function{lookup}{\Item $k$}
+                        \State $j\gets \Call{scan}{k, \False}$
+                        \If{$keys[j]==k$}
+                            \State \Return $values[j]$
+                        \Else
+                            \State \Return \Nil
+                        \EndIf
+                    \EndFunction
+                    \State \Function{insert}{\Item $k$, \Item $v$}
+                        \State $j\gets \Call{scan}{k, \True}$
+                        \If{$keys[j] == \Nil \Or keys[j] == \Deleted \Or keys[j] == k$}
+                            \State $keys[j]\gets k$
+                            \State $values[j]\gets v$
+                        \ElsIf
+                            \State \Comment{Errore, tabella hash piena}
+                        \EndIf
+                    \EndFunction
+                    \State \Function{remove}{\Item $k$}
+                        \State $j\gets \Call{scan}{k, \False}$
+                        \If{$keys[j]==k$}
+                            \State $keys[j]\gets \Deleted$
+                            \State $values[j]\gets \Nil$
+                        \EndIf
+                    \EndFunction
+                \end{algorithmic}
+            \end{algorithm}
+            \paragraph{Fattore di carico} Il fattore di carico $\alpha$ è sempre compreso tra $0$ e $1$, ma la tabella può andare in overflow, ovvero avere più chiavi di slot disponibili.
+        \subsection{Analisi complessità}
+            La complessità delle operazioni coi vari metodi di ispezione è la seguente:
+            \begin{table}[H]
+                \centering
+                \begin{tabular}{l c c c}
+                    \textbf{Metodo} & $\alpha$ & $I(\alpha)$ & $S(\alpha)$\\
+                    \hline
+                    Lineare & $0\leq \alpha < 1$ & $\frac{{1-\alpha}^2+1}{2(1-\alpha)^2}$ & $\frac{1-\frac{\alpha}2}{1-\alpha}$\\
+                    Hashing Doppio & $0\leq \alpha < 1$ & $\frac{1}{1-\alpha}$ & $-\frac{1}{\alpha}\ln\left(1-\alpha\right)$\\
+                    Liste di Trabocco & $\alpha\geq 0$ & $1+\alpha$ & $1+\frac{\alpha}2$
+                \end{tabular}
+            \end{table}

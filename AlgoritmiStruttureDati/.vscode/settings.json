@@ -13,7 +13,9 @@
         "documentclass",
         "hyperref",
         "inductivecase",
+        "iniettiva",
         "inputenc",
+        "Strassen",
         "Trasversal",
         "usepackage"
     ],

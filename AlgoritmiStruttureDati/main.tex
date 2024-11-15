@@ -16,6 +16,7 @@
 \usepackage{fancyhdr}
 \usepackage{wrapfig}
 \usepackage{nicematrix}
+\usepackage{soul}
 
 \graphicspath{{./images/}}
 
@@ -52,6 +53,7 @@
 \algnewcommand\True{\textbf{true}\ }
 \algnewcommand\False{\textbf{false}\ }
 \algnewcommand\Not{\textbf{not}\ }
+\algnewcommand\Or{\textbf{or}\ }
 % Definizione di Tree API
 \algnewcommand\Tree{\textsc{Tree}\ }
 \algnewcommand\Item{\textsc{Item}\ }
@@ -63,10 +65,12 @@
 \algnewcommand\algorithmicforeach{\textbf{foreach}}
 \algdef{S}[FOR]{ForEach}[1]{\algorithmicforeach\ #1\ \algorithmicdo}
 \algnewcommand\Stack{\textsc{Stack}\ }
+\algnewcommand\Deleted{\textsc{deleted}\ }
 % Definizione di header e footer
 
 % Definizione dei teoremi
 \newtheorem{theorem}{Teorema}[chapter]
+\newtheorem{example}{Esempio}[chapter]
 
 \title{Appunti di Algoritmi e Strutture Dati}
 \author{Luca Facchini (mat. 245965)}
@@ -129,4 +133,6 @@
     \include{chapters/03-Alberi}
     \include{chapters/04-AlberiBinariRicerca}
     \include{chapters/05-grafi}
+    \include{chapters/06-hashing}
+    \include{chapters/07-divideEtImpera}
 \end{document}
