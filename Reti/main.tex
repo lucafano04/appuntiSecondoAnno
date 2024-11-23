@@ -16,7 +16,9 @@
 \usepackage{float}
 \usepackage{graphicx}
 \usepackage{float}
-
+\usepackage{algpseudocode}
+\usepackage[linesnumbered,ruled,vlined]{algorithm2e}
+\usepackage{xcolor}
 
 \setlength{\parskip}{0pt}
 \titlespacing*{\subparagraph}{1em}{0em}{0em} 
@@ -53,6 +55,7 @@
     \fancyfoot[LO,RE]{"Appunti di Reti" di Luca Facchini}
 }
 \fancypagestyle{stdPage}{
+    \setlength{\headheight}{14.5pt}
     \fancyhead{}
     \fancyhead[RE,LO]{\rightmark}
     \fancyhead[RO,LE]{\leftmark}

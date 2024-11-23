@@ -260,4 +260,181 @@
                 \item \textbf{Site-local address} Indirizzo $fec0::/10$ che indica un indirizzo di \textit{site-local}.
                 \item \textbf{Multicast address} Indirizzo $ff00::/8$ che indica un indirizzo di \textit{multicast}.
             \end{itemize}
+\section{Protocolli di instradamento}
+    I protocolli di instradamento sono protocolli che permettono la creazione di una tabella di \textit{routing} per instradare i pacchetti da un \textit{host} ad un altro tramite il miglior percorso possibile. Un "buon percorso" è definito in base a diversi fattori come: il "costo" più basso, la "velocità" più alta il percorso meno congestionato. 
+    \paragraph{Modello a Grafo} Possiamo rappresentare una rete come un grafo, dove i nodi sono i \textit{router} e gli archi sono i collegamenti tra i \textit{router}. Ad ogni arco è associato un "costo" di trasmissione di un pacchetto da un \textit{router} all'altro. Il costo potrebbe essere: il numero di salti, la banda del link (proporzionale al costo monetario), l'inverso della banda, la congestione del link o l'algoritmo usato. Per il calcolo di un costo tra più router si sommano i costi di ogni arco.
+    \paragraph{Tipi di routing}
+        I protocolli di instradamento possono essere classificati in due categorie: \begin{itemize}
+            \item \textbf{Routing statico} Il percorso è definito manualmente dall'amministratore di rete. Questo percorso non cambia se non manualmente.
+            \item \textbf{Routing dinamico} Le rotte cambiano più frequentemente sulla base di aggiornamenti periodici e tipicamente a causa di cambiamenti nel costo dei collegamenti.
+        \end{itemize}
+        Le informazioni su questo tipo di cambiamenti può essere globale o distribuita.
+        \begin{itemize}
+            \item \textbf{Routing globale} Tutti i \textit{router} conoscono la topologia della rete e i costi di trasmissione.
+            \item \textbf{Routing distribuito} I \textit{router} conoscono solo i costi dei collegamenti diretti ai quali sono collegati, il processo di calcolo è iterativo e distribuito (uso di algoritmi \textit{distance-vector}).
+        \end{itemize}
+    \subsection{\textit{Link State} "Dijkstra"}
+        Nell'algoritmo di \textit{Dijkstra} si assume che la topologia di rete e i costi dei link, siano noti a tutti i \textit{router}. Allora in output otteniamo il percorso a costo minimo. Inoltre l'algoritmo è iterativo in quanto dopo $k$ iterazioni si conosce il percorso a costo minimo verso $k$ destinazioni.\newline
+        Viene usata la seguente notazione: \begin{itemize}
+            \item $c(x,y)$ costo del collegamento tra $x$ e $y$
+            \item $D(v)$ costo del percorso a costo minimo verso $v$
+            \item $p(v)$ nodo precedente di $v$ lingo il cammino dalla sorgente a $v$
+            \item $N'$ insieme dei nodi per cui il cammino a costo minimo è già stato trovato
+        \end{itemize}\newpage
+        L'algoritmo funziona in questo modo:
+
+        \begin{algorithm}[H]
+            \SetAlgoLined
+            \textbf{Inizializzazione:}\;
+            $N' \gets \{u\}$ \tcp*[f]{\textcolor{orange}{nodo corrente}} \;
+            \ForEach{nodo $v$}{
+                \eIf{$v$ è adiacente a $u$}{
+                    $D(v) \gets c(u, v)$\;
+                    $p(v) \gets u$\;
+                }{
+                    $D(v) \gets \infty$\;
+                }
+            }
+            \textbf{Loop:}\;
+            \While{tutti i nodi non sono contenuti in $N'$}{
+                Trova $w \notin N'$ tale che $D(w)$ è minimo\;
+                Aggiungi $w$ a $N'$\;
+                \ForEach{nodo $v$ adiacente a $w$ e $v \notin N'$}{
+                    \If{$D(w) + c(w, v) < D(v)$}{
+                        $D(v) \gets D(w) + c(w, v)$\;
+                        $p(v) \gets w$\;
+                    }
+                }
+            }
+            \tcp*[f]{\textcolor{orange}{Il nuovo costo verso $v$ è il costo già noto, oppure il costo minimo verso $w$ più il costo da $w$ a $v$}} \;
+            \caption{Algoritmo per la ricerca dei percorsi minimi}
+        \end{algorithm}
+        Come si può notare il seguente algoritmo costruisce i percorsi minimi tracciando a ritroso i nodi predecessori, possono esserci più percorsi minimi tra due nodi in questo caso se ne sceglie uno a caso.
+        \paragraph{Complessità dell'algoritmo} L'algoritmo di \textit{Dijkstra} con una rete di $n$ nodi deve controllare ad ogni iterazione tutti i nodi tale che $w\neq N'$ dunque questo tende a: $ \frac{n(n+1)}2$ operazioni, quindi la complessità è $O(n^2)$. Esistono però algoritmi di complessità $O(n\log n)$. 
+    \subsection{Internet, \texttt{AS}, \texttt{OSPF}}
+        Internet è una rete di reti, ognuna di queste reti è proprietà di un'organizzazione quale un \texttt{ISP}, un operatore di rete, una azienda o anche uno stato. Ogni rete idealmente dovrebbe avere due Caratteristiche importanti: \begin{itemize}
+            \item \textbf{Autonomia} Ogni rete dovrebbe essere amministrativamente autonoma e avere il controllo della propria politica di instradamento.
+            \item \textbf{Connessione} Ogni rete dovrebbe essere in grado di collegarsi ad ognuna delle altre reti.
+        \end{itemize}
+        Da queste necessità vengono creati gli \texttt{AS} (\textit{Autonomous System}) i quali vengono definiti come: "Un gruppo di \textit{router} sotto lo stesso controllo amministrativo", ognuno di questi \texttt{AS} è identificato da un numero univoco chiamato \texttt{ASN} (\textit{Autonomous System Number}) assegnato da un ente chiamato \texttt{ICANN} (\textit{Internet Corporation for Assigned Names and Numbers}). \newline
+        Nasce ora la necessità di definire degli algoritmi di \textbf{Intra-\texttt{AS}} e \textbf{Inter-\texttt{AS}}. Per l'\textit{Intra-\texttt{AS}} intendiamo l'instradamento all'interno di un \texttt{AS}, mentre per l'\textit{Inter-\texttt{AS}} intendiamo l'instradamento tra due \texttt{AS} differenti.
+        \subsubsection{Intra-\texttt{AS}: \textit{Open Shortest Path First} (\texttt{OSPF})}
+            Il protocollo \texttt{OSPF} è un protocollo di instradamento Intra-\texttt{AS} basato su \textit{link-state}, questo protocollo è basato sull'assunzione che ogni router che lo applica conosca tutta la topologia della rete. Per il funzionamento sfrutta dei datagramma \texttt{IP} senza servirsi del livello di trasporto, in quanto la comunicazione deve essere inviata a tutti i router sfrutta l'indirizzo \texttt{IP} di \textit{broadcast} \texttt{224.0.0.5}.
+            \paragraph{Procedure} Il protocollo \texttt{OSPF} implementa tre procedure: \begin{itemize}
+                \item Protocollo "\texttt{Hello}" - I \textit{router} si scambiano messaggi di mantenimento per controllare il corretto funzionamento del link e dei nodi ad esso collegati.
+                \item Protocollo "\texttt{Exchange}" - I \textit{router} si scambiano informazioni di \textit{link-state} sulla topologia della rete al momento conosciuta.
+                \item Protocollo "\texttt{Flooding}" - I \textit{router} inviano i messaggi di \textit{link-state} a tutti i \textit{router} della rete contenenti un cambio di stato di un \textit{link}.
+            \end{itemize}
+            \subparagraph{\textit{Flooding} controllato} Normalmente in caso di \textit{flooding} quando un router riceve un messaggio di questo genere provvede a inoltrarlo a tutti i suoi vicini: in reti del genere \texttt{/30} tramite un messaggio diretto, in tutte le altre reti tramite \textit{broadcast}. In questo modo si evitano inutili repliche di messaggi.
+        \paragraph{\texttt{OSPF} gerarchico} Generalmente un router potrebbe non voler conoscere tutta la topologia della rete, ma solo una parte di essa. Per questo motivo si è deciso di instaurare una gerarchia a due livelli: \begin{itemize}
+            \item \textbf{Dorsale} (\textit{Backbone}) Questo livello è costituito da \textit{router} che conoscono tutta la topologia della rete.
+            \item \textbf{Area} Questo livello è costituito da \textit{router} che conoscono solo la topologia della propria area, ma sanno che esiste un percorso tramite un router di bordo\footnote{Da \underline{\textbf{NON}} confondere con il \textit{router} di confine \texttt{AS}} per raggiungere un'altra area.
+        \end{itemize}
+        La dorsale oltre a conoscere tutta la topologia della rete, è considerata anche come "area" infatti questa non fà girare i messaggi di \texttt{OSPF} al di fuori di essa, se non per i \textit{router} di bordo.
+        \paragraph{Gestione dei costi} \texttt{OSPF} è un protocollo \textit{link-state} dunque l'unica cosa della quale si tiene consto è il costo del collegamento e non altri fattori esterni. Alcuni operatori potrebbero agire sul costo dei \textit{link} per influenzare il percorso dei pacchetti.
+    \subsection{Routing con \textit{distance vector}: \textit{Bellman-Ford}}
+        L'algoritmo di \textit{Bellman-Ford} è un algoritmo di instradamento che permette di trovare il percorso a costo minimo senza dover conoscere l'intera tipologia di rete, richiede però che ogni nodo conosca i suoi "vicini" e il coso del \textit{link} che li collega. L'eventuale presenza di ulteriori nodi che non siano i vicini viene notificata tramite messaggi.
+        \paragraph{Notazione} \begin{itemize}
+            \item $N$: insieme di vicini $\Rightarrow N_x$ i vicini del \textit{router} $x$
+            \item $R$: tabella di \textit{routing} $\Rightarrow R_x$ la tabella di \textit{routing} del \textit{router} $x$
+                \subitem $R[d]$ riga della tabella di \textit{routing} che contiene le informazioni per raggiungere il nodo $d$, $R[d].\operatorname{cost}$ il costo per raggiungere il nodo $d$ e $R[d].\operatorname{nexthop}$ il prossimo nodo per raggiungere il nodo $d$, $R[d].\operatorname{time}$ il tempo dell'ultima modifica.
+            \item $D$ vettore con tutte le distanze $\Rightarrow D_x$ il \textit{distance vector} del \textit{router} $x$
+                \subitem $D_x=[<d,R_x[d].\operatorname{cost}>]$ tale che $d\in R_x$
+        \end{itemize}
+        \paragraph{Algoritmo} L'algoritmo funziona in questo modo:
+
+            \begin{algorithm}[H]
+                \SetAlgoLined
+                \textbf{Inizializzazione:}\;
+                Per tutte le destinazioni $y \rightarrow D_x(y) = c(x,y)$\;
+                Per tutti i vicini $w$, e tutte le destinazioni $y \rightarrow D_w(y) = ?$\;
+                Per ogni vicino $w \rightarrow \text{invia } D_x = [D_x(y):y\in N_x] \text{ a } w$\;
+                \textbf{Loop:}\;
+                Aspetto finché il costo verso in vicino non cambia o non ricevo $D_w$ da un vicino $w$\;
+                \ForEach{destinazione $y$}{
+                    $D_x(y) = \min_v \{c(x,v) + D_v(y)\}$\;
+                    $\operatorname{nexthop}_x(y) = \operatorname{argmin}_v \{c(x,v) + D_v(y)\}$\;
+                }
+                \If{$D_x(y)$ cambia per qualche $y$}{
+                    \ForEach{vicino $w$}{
+                        \text{invia } $D_x = [D_x(y):y\in N_x] \text{ a } w$\;
+                    }
+                }
+                \caption{Algoritmo di \textit{Bellman-Ford}}
+            \end{algorithm}
+        \paragraph{\textit{Count to infinity}} Un problema che si può presentare in questo algoritmo è il problema del \textit{count to infinity}, ovvero il problema che al momento di una interruzione di un collegamento si potrebbero creare \textit{loop} di instradamento. Andando quindi a rendere irraggiungibile una destinazione. Vengono quindi adottate delle tecniche per ovviare il problema:
+            \subparagraph{Massimo numero di \textit{hop}} Si può decidere di limitare il numero di \textit{hop} per la propagazione dei \texttt{DV}, solitamente si usa $15$ come numero massimo di \textit{hop}. Questa soluzione abbassa il tempo di convergenza ma non elimina il problema.
+            \subparagraph{\textit{Split Horizon}} Questa semplice tecnica consiste nell'omissione delle nuove rotte allo stesso nodo da cui sono state ricevute. Più in avanti un esempio di "non funzionamento" di questa tecnica.
+            \subparagraph{\textit{Poison Reverse}} Questa soluzione prevede che "Finché un nodo $x$ raggiunge un nodo $z$ passando per $y$ allora $x$ comunica a $y$ che $D_x(z)=\infty$". In questo modo il \textit{router} $y$ non cercherà di raggiungere $z$ passando per $x$. Più in avanti un esempio di "non funzionamento" di questa tecnica.
+        \paragraph{Cambio di costi} Nel caso in cui il costo di un \textit{link} cambi se questo è in diminuzione, allora la propagazione viaggia velocemente, mentre se il costo è in aumento allora la propagazione viaggia lentamente.
+        \paragraph{Caso di non-funzionamento di \textit{split-horizon} e \textit{poisoned reverse}}
+        Si prenda in considerazione il seguente esempio:
+            \begin{figure}[H]
+                \centering
+                \includegraphics[width=0.4\textwidth]{04/exampleFail.png}
+                \caption{Esempio di non funzionamento di \textit{split-horizon} e \textit{poisoned reverse}}
+            \end{figure}
         
+        Partendo dal presupposto che per raggiungere $W$ il router $X$ abbia \textit{next-hop} a $Y$, $y$ abbia \textit{next-hop} a $Z$ e $Z$ abbia \textit{next-hop} a $W$ in quanto questi sono i collegamenti più convenienti.\newline
+        Nel caso di rottura del \textit{link} $Z-W$ allora in quanto i nodi operano in modo distribuito il \textit{router} $X$ potrebbe inviare un pacchetto del tipo: $D_X=[(Y,1),(Z,3)]$ a $Y$ e $D_X=[(W,3),(Y,1),(Z,3)]$ a $Z$. In questo modo $Y$ lascia la sua tabella invariata in quanto già sapeva che $Z$ era il \textit{next-hop} per $W$, mentre $Z$ che ha "perso" il \textit{link} diretto con $W$ non ha nulla sulla sua tabella ed inserisce il che il prossimo \textit{hop} per $W$ è $X$ con costo $6$. Ma $X$ si aspetta di inviare i pacchetti per $W$ a $Y$ il quale li invierà a $Z$ creando un \textit{loop} di instradamento. Questo problema accadrà finché $X$ non si "accorgerà" che il link diretto ma più costoso $X-W$ è il migliore per raggiungere $W$, a quel punto $X$ invierà a $Y$ il pacchetto $D_X=[(Y,1),(Z,3),(W,100)]$. 
+    \subsection{Intra-\texttt{AS}: \textit{Routing Information Protocol} (\texttt{RIP})}
+        Il protocollo \texttt{RIP} è un protocollo di \textit{routing} Intra-\texttt{AS}, questo implementa \textit{distance vector} ed ha come vantaggio che è semplice da implementare e gestire, d'altra parte è a convergenza lenta e si ha una dimensione limitata della rete.
+        \subsubsection{funzionamento} Nel \texttt{RIP} il costo dei link è dato dal numero di \textit{hop} dove $15$ è il numero massimo di salti e da $16$ la distanza è $\infty$ (non raggiungibile) limitando la convergenza. Ogni $30$ secondi poi il protocollo \texttt{RIP} precede di un nuovo invio di \textit{distance vector} (\texttt{DV}) dove ogni messaggio di \textit{\texttt{RIP} advertisement} contiene al massimo $25$ destinazioni all'interno dell'\texttt{AS}, per eseguire lo scambio di messaggi si usa la porta \texttt{UDP} $520$ con indirizzo di destinazione \texttt{224.0.0.9}.
+        \subsubsection{In caso di guasto}
+            Nel caso un \textit{router} non riceva per $180$ secondi un messaggio di \texttt{RIP} da un \textit{router} vicino allora il \textit{router} considera il collegamento come guasto, andando a modificare la tabella di \textit{routing} e propagando il cambiamento agli altri \textit{router}.
+        \subsubsection{Tabella d'instradamento}
+            Un processo chiamato \texttt{routed} esegue \texttt{RIP}, ossia un \textit{daemon} che esegue il protocollo \texttt{RIP} e mantiene la tabella di \textit{routing}. 
+        \subsubsection{Confronto con \textit{link-state}}
+            A livello di complessità di scambio negli algoritmi \textit{link-state} avendo $n$ nodi e $E$ link allora vengono scambiati $O(ne)$ messaggi, mentre in \texttt{RIP} vengono inviati messaggi solo ai vicini e quindi il numero di messaggi scambiati è $O(n)$, ma il tempo di convergenza dipende.\newline
+            Per la velocità di convergenza nel caso di \texttt{RIP} e quindi \textit{distance vector} si ha che la convergenza è lenta e si potrebbero avere \textit{loop} di instradamento, mentre in \textit{link-state} la complessità è $O(n^2)$ e quindi la convergenza è più veloce e non si hanno \textit{loop} di instradamento.\newline
+            Infine a livello di robustezza si ha che in \texttt{LS} i nodi potrebbero comunicare costi sbagliati per i \textit{link} e spetta al singolo nodo gestire la propria tabella, mentre in \texttt{DV} i nodi comunicano solo con i vicini e quindi si ha una maggiore robustezza ma i nodi potrebbero comunicare costi sbagliati per i percorsi.
+    \subsection{\textit{Border Gateway Protocol} (\texttt{BGP})}
+        Il protocollo \texttt{BGP} è un protocollo di instradamento Inter-\texttt{AS} che permette di instradare pacchetti tra \textit{AS} differenti. Questo protocollo è stato creato perché i protocolli di instradamento Intra-\texttt{AS} non sono adatti per la scalabilità di internet. Gli \texttt{AS} comunicano tra loro per scambiare informazioni di instradamento e di raggiungibilità, ogni \texttt{AS} decide autonomamente come instradare i pacchetti decidendo inoltre con quali altri \texttt{AS} scambiare informazioni.
+        \subsubsection{funzionamento}
+            Il protocollo \texttt{BGP} è un protocollo \textit{path vector} che, in quanto le relazioni tra \texttt{AS} possono essere complesse, permette di adattarsi a tutti i possibili casi. Ogni \texttt{AS} è in grado di decidere se: pubblicizzare o meno le proprie informazioni di raggiungibilità, ritirare la raggiungibilità di qualunque rete, offrire o meno transito ad altri \texttt{AS} e filtrare le informazioni di raggiungibilità.\newline
+            Ogni \texttt{AS} ha un certo numero di \textit{router} "\texttt{BGP} \textit{speaker}" che scambiano informazioni con i \textit{router} degli altri \texttt{AS} una volta messi in relazione. Questi \textit{speaker} scambiano informazioni su quale è la rete raggiungibile, quale è il prossimo \textit{hop} e quale è il percorso.
+            \paragraph{Interconnessioni tra \texttt{AS}} Le interconnessioni tra \texttt{AS} possono essere di due tipi: \begin{itemize}
+                \item \textbf{Peering} Due \texttt{AS} si scambiano informazioni di raggiungibilità senza scambiarsi denaro.
+                \item \textbf{client - provider} Un \texttt{AS} paga un \textit{provider} per l'accesso a internet.
+                \item \textbf{provider - client} il provider viene pagato dal \textit{client} per l'accesso alle informazioni di raggiungibilità.
+            \end{itemize}
+        \subsubsection{\textit{Best Path} \texttt{BGP}}
+            Il \textit{best path} di \texttt{BGP} si differenzia da \texttt{OSPF} e \texttt{RIP} nei quali si preferiva il percorso più breve, in \texttt{BGP} il percorso migliore dipende dalle \textit{policy} degli \texttt{AS} e non dal costo del percorso. Un cambiamento di \textit{policy} dovuto a delle modifiche economiche di contratto potrebbe portare alla modifica del percorso per altri \texttt{AS} oltre a quello che ha cambiato la \textit{policy}.\newline
+            Considerando questi fattori imo \textit{speaker} \texttt{BGP} condivide solamente la sua \textit{best path} con gli altri \textit{speaker} \texttt{BGP}, se uno \textit{speaker} decide di ignorare una altro percorso allora non lo comunica, ciò potrebbe comportare a delle destinazioni irraggiungibili se un terzo \textit{AS} ha politiche in conflitto con la rotta comunicata da un altro \textit{AS}.
+            
+        \subsubsection{Messaggi \texttt{BGP}}
+            Il protocollo \texttt{BGP} usa 4 messaggi:
+            \paragraph{\texttt{OPEN}} Messaggio di apertura di una connessione \texttt{BGP}, se il messaggio viene accettato allora si invia un messaggio \texttt{KEEPALIVE} di conferma, alla ricezione la connessione è aperta. All'interno di un messaggio \texttt{OPEN} viene inviato il numero di versione, l'\texttt{ASN} del mittente, il tempo di \textit{hold} che viene prima proposto da chi apre la connessione e poi confermato o confermato con un valore più altro oppure viene rifiutato rispondendo con un tempo minore. Viene inviato con il messaggio di apertura anche il \texttt{BGP Identifier} che è l'identificativo univoco dello speaker \texttt{BGP}, uguale per tutte le sue interfacce \texttt{BGP}.
+            \paragraph{\texttt{NOTIFICATION}} Messaggio di errore con $6$ possibili codici di errore relativi al tipo di questo, $20$ possibili sottotipi in base a dove l'errore si presenta. 
+            \paragraph{\texttt{KEEPALIVE}} Messaggio di conferma di ricezione, inviato ogni $x$ secondi per mantenere la connessione aperta, questo messaggio non contiene dati ma solo un \textit{header} di $19$ byte.
+            \paragraph{\texttt{UPDATE}} Messaggio più complesso, contiene le informazioni di raggiungibilità, il percorso e le \textit{policy} di instradamento. Questo messaggio può contenere informazioni del tipo: \texttt{Additive}, quando nuove informazioni vengono aggiunte, \texttt{Sottrattive} quando informazioni vengono rimosse.
+                \subparagraph{\texttt{WITHDRAW}} Questo tipo di messaggio viene inviato quando un percorso viene rimosso, in questo caso il messaggio contiene solo l'identificativo del percorso rimosso. Questo messaggio viene inviato in caso di \textit{link} guasti o di cambiamenti di \textit{policy} e solo se questi cambiamenti comportano la irraggiungibilità di un \texttt{AS} da parte di chi invia il messaggio.
+                \subparagraph{\texttt{UPDATE + WITHDRAW}} Questi messaggi vengono inviati quando un percorso viene rimosso e ne viene aggiunto un altro, in questo caso viene prima inviato il messaggio di \texttt{WITHDRAW} contenente il percorso rimosso e poi il messaggio di \texttt{UPDATE} contenente il nuovo percorso.
+                \subparagraph{\textit{Implicit} \texttt{WITHDRAW}} Questo tipo di messaggio viene inviato quando un percorso viene rimosso e viene aggiunto un altro percorso, in questo caso il messaggio contiene solo il nuovo percorso. Piccola nota a margine solo alcuni \textit{speaker} \texttt{BGP} supportano questo tipo di messaggio.
+        \subsubsection{Aggregazione delle rotte}
+            In quanto un \texttt{AS} potrebbe essere il \textit{best path} per più \texttt{AS} differenti questo potrebbe decidere di aggregare le rotte per ridurre il numero di rotte pubblicizzate. In questo modo il \texttt{AS} invia solo una rotta per raggiungere un insieme di \texttt{AS}, questa viene pubblicizzata come una qualsiasi combinazione degli \texttt{AS} raggiungibili. Questo permette di ridurre il numero di rotte pubblicizzate e quindi di ridurre il carico sui \textit{router} e sui \textit{link}.
+        \subsubsection{Filtri}
+            I \texttt{BGP} \textit{speaker} possono filtrare le informazioni che entrano e/o escono da questi, possono essere filtri specifici del tipo: \texttt{Ingress filters} o \texttt{Egress filters} che permettono di filtrare le informazioni in entrata o in uscita, possono anche esserci però filtri generici che permettono di bloccare "tutto ciò che contenga $X$". Questi filtri possono essere molto o poco precisi e possono essere usati per bloccare informazioni di raggiungibilità o per bloccare informazioni di \textit{policy}.
+        \subsubsection{\textit{Routing Information Base} (\texttt{RIB})}
+            Le informazioni sulle rotte devono essere in qualche modo conservate sul \textit{router}, queste informazioni vengono conservate nella \texttt{RIB} che, costituita da 3 tabelle, contiene le informazioni di raggiungibilità accettate (\texttt{ADJ\_RIB\_IN}), le informazioni su quelle che vengono attualmente usate (\texttt{LOC\_RIB}) e le informazioni che vengono pubblicizzate (\texttt{ADJ\_RIB\_OUT}). Queste tabelle vengono modificate sulla base di messaggi \texttt{BGP} ricevuti e di \textit{policy} impostate.
+            \paragraph{Ricezione di un \texttt{UPDATE}} Se il pacchetto ricevuto viene approvato dai filtri in ingresso, allora questa nuova rotta viene aggiunta alla tabella \texttt{ADJ\_RIB\_IN}, viene quindi ri-valutata la \textit{best path} sulla base delle nuove aggiornate informazioni, nel caso in cui la nuova rotta sia migliore di quella attuale allora viene aggiornata la tabella \texttt{LOC\_RIB} poi se i filtri lo permettono viene aggiornata la tabella \texttt{ADJ\_RIB\_OUT} e inoltrati i cambiamenti ai \textit{router} vicini. Nel caso in cui la nuova rotta sia peggiore di quella attuale allora viene comunque tenuta in memoria per eventuali cambiamenti futuri ma non viene ne aggiornata la tabella \texttt{LOC\_RIB} ne la tabella \texttt{ADJ\_RIB\_OUT} e quindi non viene inoltrata ai \textit{router} vicini.
+            \paragraph{Ricezione di un \texttt{WITHDRAW}} Se un \textit{router} riceve un messaggio di \texttt{WITHDRAW} e questo soddisfa i filtri di ingresso, allora le informazioni relative al percorso vengono rimosse dalla tabella \texttt{ADJ\_RIB\_IN} e quindi viene ri-valutata la \textit{best path} e aggiornata, eventualmente, la tabella \texttt{LOC\_RIB} e la tabella \texttt{ADJ\_RIB\_OUT} diffondendo i cambiamenti ai \textit{router} vicini, se ve ne sono.
+        \subsubsection{\texttt{BGP} all'interno di \texttt{AS} - \texttt{iBGP}}
+            Un grande \texttt{AS} potrebbe avere diversi \textit{router} che agiscono da \textit{speaker} \texttt{BGP}, in quanto \texttt{BGP} si occupa di instradare i pacchetti attraverso \texttt{AS} non si distingue tra quali router devo passare. Per questo motivo si è deciso di creare un protocollo di \textit{routing} interno all'\texttt{AS} chiamato \texttt{iBGP} che permette di scambiare informazioni tra i \textit{router} dello stesso \texttt{AS} e di mantenere aggiornate le tabelle di \textit{routing} all'interno dell'\texttt{AS} in modo da poter instradare i pacchetti che provengono da un \texttt{AS} esterno e devono essere instradati verso un altro \texttt{AS} esterno.
+        \paragraph{In caso di più rotte} Nel caso un \textit{router} interno ad un \texttt{AS} abbia la possibilità di passare per rotte diverse per raggiungere un \texttt{AS} esterno allora tramite \texttt{iBGP} i \textit{router} interni possono scambiarsi informazioni e decidere quale percorso è il migliore per raggiungere l'\texttt{AS} esterno. Esempio: considerando gli \texttt{AS}: \texttt{AS1}, \texttt{AS2}, \texttt{AS3} i quali contengono tutti i router \texttt{xA}, \texttt{xB}, \texttt{xC} e \texttt{xD} con i \textit{router} interni collegati a maglia completa\footnote{Tutti i \textit{router} sono collegati a tutti gli altri internamente} e i \textit{router} esterni collegati come segue: \texttt{1C-2A}, \texttt{1C-3A}, \texttt{3A-2C} e \texttt{3D-X}\footnote{Considerando \texttt{X} una altra rete esterna}. Allora i router interni \texttt{2B} e \texttt{2D} avranno la possibilità di raggiungere la rete \texttt{X} sia tramite $[2[B\mid D],2A,1C,3A,3D,X]$ che tramite $[2[B\mid D],2C,3A,3D,X]$ la scelta del percorso migliore verrà fatta tramite politiche interne all'\texttt{AS} e tramite il protocollo \texttt{iBGP}.\newline
+        Figura di riferimento: \ref{fig:reteAS-iBGP}
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.6\textwidth]{04/reteAS-iBGP.png}
+            \caption{Esempio di rete con \texttt{iBGP} e scelta di percorso}
+            \label{fig:reteAS-iBGP}
+        \end{figure}
+    \subsection*{Riassumendo}
+        \begin{itemize}
+            \item Gli \texttt{AS} sono interconnessi tra loro e comunicano informazioni di raggiungibilità tramite il protocollo \texttt{BGP}.
+            \item Gli \texttt{AS} formano un grafo gerarchico e possono essere di solo transito
+            \item Ogni \texttt{AS} è autonomo per definizione (\textit{\textbf{\underline{Autonomous}  System}})
+            \item Il \textit{\textbf{Best Path}} di \texttt{BGP} è determinato dalle \textit{policy} degli \texttt{AS} ed non è per forza il percorso più breve. (Politiche economiche, commerciali, estere possono influenzare il percorso)
+            \item \texttt{BGP} è un protocollo \textit{path vector} e non \textit{distance vector}, condivide il percorso ma non il costo e/o la distanza.
+            \item \texttt{BGP} può contenere diversi filtri sulla base di \textit{policy} e di raggiungibilità.
+        \end{itemize}
