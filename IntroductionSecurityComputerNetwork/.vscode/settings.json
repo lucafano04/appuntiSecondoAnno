@@ -1,5 +1,6 @@
 {
     "cSpell.words": [
+        "ABAC",
         "Adleman",
         "ALPN",
         "Bleichenbacher",
@@ -24,7 +25,8 @@
         "smartcard",
         "SPID",
         "tupla",
-        "Vigenère"
+        "Vigenère",
+        "XACML"
     ],
     "editor.wordWrap": "on",
     "conventionalCommits.scopes": [

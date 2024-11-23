@@ -143,3 +143,18 @@
             \paragraph{Associazione Utente-Ruolo (\texttt{UA})} Un utente può essere membro di uno o più ruoli. Un ruolo può avere uno o più membri.
             \paragraph{Associazione Ruolo-Permesso (\texttt{PA})} Un ruolo può avere uno o più permessi. Un permesso può essere associato a uno o più ruoli.
             \paragraph{Sessione} Un utente può invocare più sessioni, in ogni sessione un utente può invocare un sotto-insieme di ruoli dei quali è membro. Utile per garantire il principio del minimo privilegio.
+    \subsection{\textit{Role Based Access Control model} \texttt{RBAC}}
+        \label{subsec:RBAC}
+        Il modello \texttt{RBAC} è un modello di controllo degli accessi che si basa su degli utenti $U$, dei ruoli $R$ e dei permessi $P$, le associazioni utenti-ruoli $UA$, ruoli-permessi $PA$. Allora in questo caso esiste una \textit{role hierarchy} ovvero una gerarchia dei ruoli $R\times R\supset RH$ che è un ordine parziale su $R$ con $(R,R')\in RH$ se $R$ è un ruolo padre di $R'$. Inoltre questo modello prevede anche una funzione \textit{roles} che associa una sessione $S$ ad un sotto-insieme dell'insieme delle parti di $R$: $operatorname{roles}: S \rightarrow 2^R$, questa funzione serve per "capire" quali ruoli sono presenti nella sessione corrente. Infine esiste una funzione \textit{permissions} che associa un ruolo $R$ ad un sotto-insieme dell'insieme delle parti di $P$: $\operatorname{permissions}: R \rightarrow 2^P$, questa funzione serve per "capire" quali permessi sono associati ad un ruolo. Entrambe queste funzioni sono utili per garantire il principio del minimo privilegio.
+        \subsubsection{Pro e contro}
+            \begin{enumerate}
+                \item Pro:\begin{enumerate}
+                    \item Gerarchia dei ruoli semplice da capire
+                    \item Facile da gestire
+                    \item Facile da dire quali ruoli hanno accesso a quali permessi
+                \end{enumerate}
+                \item Contro:\begin{enumerate}
+                    \item Difficile da decidere la granularità dei ruoli (Spesso bisogna creare ruoli per modificare/eliminare delle singole informazioni)
+                    \item Il significato dei ruoli è confuso (La posizione di un ruolo nella gerarchia non è sempre chiara)
+                \end{enumerate}
+            \end{enumerate}
