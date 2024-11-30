@@ -16,6 +16,8 @@
 \usepackage{fancyhdr}
 \usepackage{float}
 \usepackage{wrapfig}
+\usepackage{listings}
+\usepackage{xcolor}
 
 
 \graphicspath{{./images/}}
@@ -58,6 +60,26 @@
 
 \addtocontents{toc}{\protect\thispagestyle{stdPageS}}
 
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{white},   
+    commentstyle=\color{green},
+    keywordstyle=\color{blue},
+    numberstyle=\tiny\color{gray},
+    stringstyle=\color{red},
+    basicstyle=\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+\lstset{style=mystyle}
+
 \title{Appunti di Introduction to Computer and Network Security}
 \author{Luca Facchini (mat. 245965)}
 \date{A.A. 2024/2025}
@@ -65,7 +87,7 @@
 \hypersetup{
     pdfauthor={Luca Facchini},
     pdftitle={Appunti di Introduction to Computer and Network Security},
-    pdfsubject={Appunti del corso di Introduction to Computer and Network Security tenuto dal prof. Raniese Silvio presso l'Università degli Studi di Trento nell'anno accademico 2024/2025.},
+    pdfsubject={Appunti del corso di Introduction to Computer and Network Security tenuto dal prof. Ranise Silvio presso l'Università degli Studi di Trento nell'anno accademico 2024/2025.},
     pdfkeywords={Computer Security, Network Security, Introduction to Computer and Network Security, UniTN, Università degli Studi di Trento},
     pdfproducer={LaTeX},
     pdfcreator={pdflatex},
@@ -81,7 +103,7 @@
         \vspace{0.3cm}
         {\large Matricola: 245965} \\[2cm] % Additional author info
         
-        {\large Corso tenuto dal prof. Raniese Silvio} \\[0.3cm] % Course information
+        {\large Corso tenuto dal prof. Ranise Silvio} \\[0.3cm] % Course information
         {\large Università degli Studi di Trento} \\[1.5cm]
         
         {\large A.A. 2024/2025} \\[3cm] % Academic year
@@ -89,7 +111,7 @@
         % Abstract section with spacing control
         \vfill
         \begin{abstract}
-            Appunti del corso di Introduction to Computer and Network Security tenuto dal prof. Raniese Silvio presso l'Università degli Studi di Trento nell'anno accademico 2024/2025.
+            Appunti del corso di Introduction to Computer and Network Security tenuto dal prof. Ranise Silvio presso l'Università degli Studi di Trento nell'anno accademico 2024/2025.
         \end{abstract}
         
         \vfill  % Pushes the content to the center vertically
@@ -106,4 +128,5 @@
     \include{chapters/05-authentication}
     \include{chapters/06-accessControl}
     \include{chapters/07-accessControlII}
+    \include{chapters/08-webIOTSecurity}
 \end{document}

