@@ -52,7 +52,7 @@
     \renewcommand{\footrulewidth}{0.4pt}
     \fancyfoot{}
     \fancyfoot[LE,RO]{\thepage}
-    \fancyfoot[LO,RE]{"Appunti di Reti" di Luca Facchini}
+    \fancyfoot[LO,RE]{``Appunti di Reti" di Luca Facchini}
 }
 \fancypagestyle{stdPage}{
     \setlength{\headheight}{14.5pt}
@@ -62,7 +62,7 @@
     \fancyfoot{}
     \renewcommand{\footrulewidth}{0.4pt}
     \fancyfoot[LE,RO]{\thepage}
-    \fancyfoot[LO,RE]{"Appunti di Reti" di Luca Facchini}
+    \fancyfoot[LO,RE]{``Appunti di Reti" di Luca Facchini}
 }
 
 \fancypagestyle{tocStyle}{
@@ -72,6 +72,7 @@
 
 \graphicspath{{./images/}}
 
+\newtheorem{definition}{Definizione}[chapter]
 
 \title{Appunti di Reti}
 \author{Luca Facchini (mat. 245965)}
@@ -81,25 +82,49 @@
     \begin{titlepage}
         \centering  % Center everything on the title page
         {\Huge\textbf{Appunti di Reti}} \\[1cm] % Title
-        \vspace{0.5cm}
+        \vspace{1.5cm}
         
-        {\Large Luca Facchini} \\ % Author name
-        \vspace{0.3cm}
-        {\large Matricola: 245965} \\[2cm] % Additional author info
+        {\normalsize di: } \\[.3cm]
+        {\Large Facchini Luca} \\ % Author name
+        \vspace{1.5cm}
         
-        {\large Corso tenuto dal prof. Casari Paolo} \\[0.3cm] % Course information
+
+        {\normalsize Corso tenuto dal prof. Casari Paolo} \\[0.3cm] % Course information
         {\large Università degli Studi di Trento} \\[1.5cm]
         
         {\large A.A. 2024/2025} \\[3cm] % Academic year
         
         % Abstract section with spacing control
         \vfill
+        \begin{minipage}[t]{0.4\textwidth}
+            \begin{flushleft} \normalsize
+                \emph{Autore:}\\
+                \textsc{Facchini} Luca \\ % Author name
+                Mat. 245965 \\
+                \vspace{-\baselineskip}
+                \begin{tabbing}
+                    Email:\= \href{mailto:luca.facchini-1@studenti.unitn.it}{luca.facchini-1@studenti.unitn.it} \\
+                        \>  \href{mailto:luca@fc-software.it}{luca@fc-software.it}
+                \end{tabbing}
+            \end{flushleft}
+        \end{minipage}%
+        \hfill
+        \begin{minipage}[t]{0.4\textwidth}
+            \begin{flushleft} \normalsize
+                \emph{Corso:}\\
+                Reti [145417] \\
+                \textsc{CdL}: Laurea Triennale in Informatica \\
+                Prof. \textsc{Casari} Paolo \\
+                Email: \href{mailto:paolo.casari@unitn.it}{paolo.casari@unitn.it}
+            \end{flushleft}
+        \end{minipage}
+        \vfill
         \begin{abstract}
             Appunti del corso di Reti, tenuto dal prof. Casari Paolo presso l'Università degli Studi di Trento. Corso seguito nell'anno accademico 2024/2025.\newline
             Dove non specificato diversamente, il le immagini e i contenuti sono tratti dalle slide del corso del prof. Casari Paolo (\href{mailto:paolo.casari@unitn.it}{paolo.casari@unitn.it})
         \end{abstract}
         
-        \vfill  % Pushes the content to the center vertically
+        % Pushes the content to the center vertically
     \end{titlepage}
     \begingroup
         \pagestyle{tocStyle}
@@ -113,4 +138,22 @@
     \include{chapters/02-livelloApplicazione}
     \include{chapters/03-livelloTrasporto}
     \include{chapters/04-livelloRete}
+    \include{chapters/05-livelloDataLink}
+
+    \chapter*{Conclusioni e Ringraziamenti}
+    \thispagestyle{chapterInit}
+    \addcontentsline{toc}{chapter}{Conclusioni e Ringraziamenti}
+    \markboth{Conclusioni e Ringraziamenti}{Conclusioni e Ringraziamenti}
+    
+    \section*{Conclusioni}
+    Con questo si concludono gli appunti del corso di Reti, il corso ha affrontato partendo dal livello applicazione fino al livello fisico la struttura e il funzionamento delle reti di calcolatori. Durante il percorso sono stati affrontati i principali protocolli e le tecnologie che permettono la comunicazione tra i dispositivi che compongono una rete. Da notare una particolare attenzione verso i "problemi del \textit{routing}" che sono ancora ad oggi uno dei principali problemi delle reti di calcolatori. Il mondo delle reti ad oggi è un settore dell'informatica nel quale la ricerca e lo sviluppo sono in continua, e rapida, evoluzione, e che ha un impatto sempre maggiore nella vita di tutti i giorni in quanto tutti (o per lo meno chi legge) utilizzano quotidianamente il complesso mondo di internet e delle reti, e quindi è importante conoscere e capire come funzionano e come le tecnologie attuali influenzino la nostra vita quotidiana.
+    \section*{Ringraziamenti}
+    Voglio ringraziare in primo luogo il prof. Casari Paolo per il materiale sulla quale si basano questi appunti e per l'interesse e la passione che ha dimostrato durante il corso.\newline
+    Ringrazio anche i miei colleghi di corso per le discussioni e le collaborazioni che ci sono state durante il corso, è grazie anche ad alcuni di loro che ha avuto e trovato il tempo e la dedizione per scrivere questi appunti.\newline
+    Infine ringrazio chi ha letto questi appunti, spero che siano stati utili e che abbiano aiutato a chiarire e a comprendere meglio gli argomenti trattati durante il corso, e che possano essere utili anche a chi leggerà in futuro.
+    \vfill
+    \footnotesize\section*{Note}
+    Questi appunti sono stati scritti durante il corso di Reti, tenuto dal prof. Casari Paolo presso l'Università degli Studi di Trento nell'anno accademico 2024/2025. Gli appunti sono stati scritti in \LaTeX{} e sono disponibili su \href{https://github.com/lucafano04/appuntisecondoanno}{GitHub} e sono rilasciati sotto licenza \href{https://creativecommons.org/licenses/by-nc-sa/4.0/}{CC BY-NC-SA 4.0} come conseguenza sono liberamente utilizzabili e modificabili, ma non possono essere utilizzati a scopi commerciali e devono mantenere la stessa licenza, il materiale rimane liberamente usabile e modificabile nell'ambito accademico, della formazione e della divulgazione scientifica e tecnologica. L'utilizzatore è tenuto a citare l'autore originale e a mantenere la stessa licenza per le opere derivate. Ognuno è libero di usare questi come punto di partenza per lo studio in funzione delle proprie esigenze e di condividerli con chiunque ne possa trarre beneficio, anzi è incoraggiato a farlo.
+    L'autore (Luca Facchini) non si assume nessuna responsabilità sull'uso che verrà fatto di questi appunti e non garantisce la completa correttezza e completezza degli stessi, inoltre non si assume nessuna responsabilità per eventuali errori o imprecisioni presenti negli appunti, questi vengono infatti distribuiti \textit{as is} e possono contenere errori o imprecisioni, l'utilizzatore è tenuto a verificare e a correggere eventuali errori presenti negli appunti. Nell'eventualità di errori o imprecisioni si prega di contattare l'autore e/o di aprire una \textit{issue} sul repository di GitHub. (Ultimo aggiornamento: \today)
+
 \end{document}
