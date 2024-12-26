@@ -1,0 +1,282 @@
+\chapter{Strutture dati speciali}
+\thispagestyle{chapterInit}
+\section{Code con priorità}
+    \subsection{Introduzione}
+        Una coda con priorità è una struttura dati astratta, simile ad una coda, in cui ogni elemento ha un valore di priorità associato. Le code con priorità possono essere divise in \textit{Min-Priority Queue} e \textit{Max-Priority Queue}, a seconda che l'elemento con la priorità più bassa o più alta sia quello che viene estratto per primo.
+        \subsubsection{Operazioni Permesse}
+            Sono permesse le operazioni di inserimento in coda, estrazione dell'elemento con la priorità più alta e la modifica della priorità di un elemento.
+        \subsubsection{Specifica}
+            \begin{algorithm}
+                \caption{\textsc{MinPriorityQueue}}
+                \begin{algorithmic}
+                    \State \Comment{Crea una coda con capacità massima $n$, vuota}
+                    \State \textsc{PriorityQueue}PriorityQueue(\Int $n$)
+                    \State \Comment{Restituisce \True se la coda è vuota, \False altrimenti}
+                    \State \Bool \Call{IsEmpty}{}
+                    \State \Comment{Inserisce l'elemento \Item $x$ con priorità \Int $p$ minima}
+                    \State \Item \Call{Min}{}
+                    \State \Comment{Restituisce l'elemento con priorità minima}
+                    \State \Item \Call{deleteMin}{}
+                    \State \Comment{Inserisce l'elemento \Item $x$ con priorità \Int $p$}
+                    \State \textsc{PriorityItem} \Call{Insert}{\Item $x$, \Int $p$}
+                    \State \Comment{Modifica la priorità dell'elemento \textsc{PriorityItem} $x$ a \Int $p$}
+                    \State \Call{DecreaseKey}{\textsc{PriorityItem} $x$, \Int $p$}
+                \end{algorithmic}
+            \end{algorithm}
+        \subsubsection{Reality Check - simulatore \textit{event-drivven}}
+            Un esempio di utilizzo delle code con priorità è la simulazione di un sistema \textit{event-driven}, in cui gli eventi con un timestamp associato, sono inseriti in coda con priorità in base al tempo di esecuzione. Ogni evento può generarne altri con timestamp arbitrati. Una coda \textit{min-priority} è perfetta per questo tipo di simulazione in quanto possiamo estrarre l'evento con timestamp minore.
+        \subsubsection{Altre applicazioni}
+            ALtre applicazioni includono:
+                \begin{itemize}
+                    \item Algoritmo di Dijkstra
+                    \item Codifica di Huffman
+                    \item Algoritmo di Prim per gli alberi di copertura di peso minimo
+                \end{itemize}
+        \subsubsection{Implementazioni}
+            Le code con priorità possono essere implementate con diverse strutture dati, di seguito una tabella riassuntiva con le relative complessità:
+            \begin{center}
+                \begin{tabular}{|c|c|c|c|c|}
+                    \hline
+                    \textbf{Metodo} & \textbf{Lista/Vettore non ordinato} & \textbf{Vettore ordinato} & \textbf{Lista ordinata} & \textbf{Albero \texttt{RB}} \\
+                    \hline
+                    min() & $O(n) $ & $O(1)$ & $O(1)$ & $O(\log(n))$ \\
+                    \hline
+                    deleteMin() & $O(n)$ & $O(n)$ & $O(1)$ & $O(\log(n))$ \\
+                    \hline
+                    insert() & $O(n)$ & $O(n)$ & $O(n)$ & $O(\log(n))$ \\
+                    \hline
+                    decreaseKey() & $O(n)$ & $O(\log(n))$ & $O(n)$ & $O(\log(n))$ \\
+                    \hline
+                \end{tabular}
+            \end{center}
+            Spesso per la memorizzazione viene usata la memoria \textit{heap} che è una struttura dati speciale che associa i vantaggi di un albero per l'esecuzione ($O(\log(n))$) ed inoltre prende i vantaggi di un vettore.
+    \subsection{Vettore \textit{Heap}}
+        \subsubsection{Alberi binari}
+            \begin{definition}[Albero binario perfetto]
+                Si definisce \textbf{albero binario perfetto} un albero binario che rispetti tutte le seguenti condizioni:
+                \begin{itemize}
+                    \item Tutte le foglie hanno la stessa profondità $h$
+                    \item Tutti i nodi interni hanno esattamente grado $2$
+                    \item Dato il numero di nodi $n$, ha altezza $h = \left\lfloor\log_2(n)\right\rfloor$
+                    \item Data l'altezza $h$, ha $n=2^{h+1}-1$ nodi
+                \end{itemize}
+            \end{definition}
+            \begin{definition}[Albero binario completo]
+                Si definisce \textbf{albero binario completo} un albero binario che rispetti tutte le seguenti condizioni:
+                \begin{itemize}
+                    \item Tutte le foglie hanno profondità $h$ o $h-1$
+                    \item Tutti i nodi al livello $h$ sono "accatastati a sinistra"
+                    \item Tutti i nodi interni hanno grado $2$ eccetto al più un solo nodo con grado $1$
+                    \item Dato il numero di nodi $n$, ha altezza $h = \left\lfloor\log_2(n)\right\rfloor$
+                \end{itemize}
+            \end{definition}
+        \subsubsection{Alberi binari \textit{heap}}
+            \begin{definition}[Albero \textit{\{max|min\}-heap}]
+                Un \textbf{albero \textit{max-heap}} o \textbf{albero \textit{min-heap}} è un albero binario completo tale che il vettore memorizzato in ogni nodo è maggiore (minore) dei valori memorizzati nei suoi figli.
+            \end{definition}
+            È utile notare come un albero \textit{max-heap} non impone una relazione di \textbf{ordinamento totale} fra i figli di un nodo questo però non esclude che non sia un \textbf{ordinamento parziale}. Questo è verificabile in quanto si applica: la proprietà di \textbf{riflessività} (Ogni nodo è $\geq $ se stesso), la proprietà di \textbf{anti-simmetria} ($n\geq m \land m\geq n \Rightarrow n=m$) e la proprietà \textbf{transitiva} ($n\geq m \land m\geq p \Rightarrow n\geq p$).\newline
+            Un ordinamento parziale è più debole ma più semplice da costruire.
+            \paragraph{Vettore \textit{heap}} Un albero \textit{heap} può essere rappresentato tramite un \textbf{vettore \textit{heap}}. In particolare rispettiamo le seguenti regole per la memorizzazione ($A[1\dots n]$):
+            \begin{description}
+                \item[Radice] $\operatorname{root}()=1$
+                \item[Padre nodo $i$] $\operatorname{p}(i)=\left\lfloor\frac{i}{2}\right\rfloor$
+                \item[Figlio sinistro nodo $i$] $\operatorname{l}(i)=2i$
+                \item[Figlio destro nodo $i$] $\operatorname{r}(i)=2i+1$
+            \end{description}
+            vengono rispettate le seguenti proprietà: su un albero \textit{max-heap} $A[i]\geq A[\operatorname{l}(i)]$ e $A[i]\geq A[\operatorname{r}(i)]$. Su un albero \textit{min-heap} $A[i]\leq A[\operatorname{l}(i)]$ e $A[i]\leq A[\operatorname{r}(i)]$.
+    \subsection{\textit{HeapSort}}
+        L'algoritmo \textit{HeapSort} è un algoritmo di ordinamento \textit{in-place} che sfrutta un \textit{max-heap} nel vettore e sposta l'elemento più grande in fondo al vettore. L'algoritmo è composto da due fasi: $\operatorname{heapBuild}()$ e $\operatorname{maxHeapRestore}()$.
+        \subsubsection{Funzione $\operatorname{maxHeapRestore}()$}
+            L'algoritmo $\operatorname{maxHeapRestore}()$ prende in input un vettore $A$ ed un indice $i$ tale per cui gli alberi binari con radici $\operatorname{l}(i)$ e $\operatorname{r}(i)$ siano \textit{max-heap}. Notare come ciò non esclude il fatto che $A[i]$ sia minore di $A[\operatorname{l}(i)]$ o $A[\operatorname{r}(i)]$. L'algoritmo $\operatorname{maxHeapRestore}()$ ha come obbiettivo quello di modificare \textit{in-place} il vettore $A$ in modo che l'albero con radice $i$ sia un \textit{max-heap}.
+            
+            \begin{algorithm}
+                \caption{\textsc{maxHeapRestore}(\Item[] $A$, \Int $i$, \Int $dim$)}
+                \begin{algorithmic}
+                    \State \Int $max \gets i$
+                    \If {$\operatorname{l}(i) \leq \text{dim} \And A[\operatorname{l}(i)] > A[max]$}
+                        \State \Int $max \gets \operatorname{l}(i)$
+                    \EndIf
+                    \If {$\operatorname{r}(i) \leq \text{dim} \And A[\operatorname{r}(i)] > A[max]$}
+                        \State \Int $max \gets \operatorname{r}(i)$
+                    \EndIf
+                    \If {$max \neq i$}
+                        \State \Call{swap}{$A$, $i$, $max$}
+                        \State \Call{maxHeapRestore}{$A$, $max$, $dim$}
+                    \EndIf
+                \end{algorithmic}
+            \end{algorithm}
+            \paragraph{Complessità}
+                La complessità dell'algoritmo $\operatorname{maxHeapRestore}()$ dove, ad ogni chiamata vengono eseguiti $O(1)$ confronti, se il nodo $i$ non è il massimo si chiama ricorsivamente $\operatorname{maxHeapRestore}()$ su uno dei due figli, l'esecuzione termina quando si raggiunge una foglia ed l'altezza dell'albero è $\lfloor\log(n)\rfloor$. Allora la complessità è $O(\log(n))$ in quanto il numero massimo di chiamate ricorsive è $T(n)=O(\log(n))$.
+            \paragraph{Dimostrazione della correttezza dell'algoritmo}
+                \begin{theorem}
+                    Al termine dell'esecuzione, l'albero radicato in $A[i]$ rispetta la proprietà di \textit{max-heap}.
+                \end{theorem}
+                \begin{proof}
+                    La dimostrazione è per induzione sull'altezza $h$ dell'albero:\newline
+                    \textbf{Base} ($h=0$): l'albero è una foglia e rispetta la proprietà di \textit{max-heap}.\newline
+                    \textbf{Induzione} ($\forall i\leq h \rightarrow A[i]$ albero radicato rispetta la proprietà di \textit{max-heap}): Si distinguono 2 casi:
+                    \begin{itemize}
+                        \item $A[i]\geq [A[\operatorname{l}(i)]$ e $A[i]\geq A[\operatorname{r}(i)]$: l'albero radicato in $A[i]$ rispetta la proprietà di \textit{max-heap}
+                        \item $A[i] < A[\operatorname{l}(i)]$ e $A[i] > A[\operatorname{r}(i)]$: si scambia $A[i]$ con $A[\operatorname{l}(i)]$ dopo lo scambio siamo sicuri che $A[i] \geq A[\operatorname{l}(i)], A[i] \geq A[\operatorname{r}(i)]$ allora il sotto-albero $A[\operatorname{r}(i)]$ è inalterato e rispetta la proprietà \textit{heap}, il sotto-albero $A[\operatorname{l}(i)]$ potrebbe non rispettare la proprietà \textit{heap} e quindi si chiama ricorsivamente $\operatorname{maxHeapRestore}()$ su $A[\operatorname{l}(i)]$, questo ha altezza minore di $h$ e quindi dopo la chiamata rispetta la proprietà di \textit{max-heap}.
+                        \item Il caso simmetrico si dimostra in modo analogo.
+                    \end{itemize}
+                    Per il principio di induzione, il corretto funzionamento dell'algoritmo è dimostrato.
+                \end{proof}
+        \subsubsection{Funzione $\operatorname{heapBuild}()$}
+            Il principio di funzionamento dell'algoritmo $\operatorname{heapBuild}()$ è così descrivibile: a partire da un vettore $A[1\dots n]$ da ordinare, dove tutti i nodi $A\left[\left\lfloor \frac{n}2 \right\rfloor+1\dots n\right]$ sono foglie dell'albero e quindi \textit{heap} contenenti $1$ elemento. La procedura $\operatorname{heapBuild}()$ attraversa i nodi restanti da $\left\lfloor \frac{n}2 \right\rfloor$ a $1$ ed esegue $\operatorname{maxHeapRestore}()$ su ogni nodo.
+            
+            \begin{algorithm}
+                \caption{\textsc{heapBuild}(\Item[] $A$, \Int $n$)}
+                \begin{algorithmic}
+                    \For{$i \gets \left\lfloor \frac{n}{2} \right\rfloor$ \textbf{to} $1$}
+                        \State \Call{maxHeapRestore}{$A$, $i$, $n$}
+                    \EndFor
+                \end{algorithmic}
+            \end{algorithm}
+            \begin{proof}
+                Quando viene eseguito l'algoritmo $\operatorname{heapBuild}()$ si ha che all'inizio di ogni interazione del ciclo \texttt{for} i nodi $[i+1\dots n]$ sono radice di un \textit{heap}.\newline
+                All'inizio del ciclo "prendiamo" $i = \lfloor \frac{n}2\rfloor$, supponendo che $\lfloor \frac{n}2\rfloor + 1$ non sia una foglia, allora ha almeno un figlio sinistro che sarà allocato in posizione $2\lfloor \frac{n}2\rfloor+2$ ovvero $n+1$ o $n+2$ il che è un assurdo in quanto $n$ è la dimensione massima del nostro vettore. Allora $\lfloor \frac{n}2\rfloor + 1$ è una foglia e quindi un \textit{heap} di un solo elemento.\newline
+                Possiamo applicare l'algoritmo $\operatorname{maxHeapRestore}()$ sul nodo $i$ in quanto $2i<2i+1\leq n$ e questi sono entrambi radici di un \textit{heap}. Quando l'algoritmo termina tutti i nodi $[i\dots n]$ sono radici di un \textit{heap} rendendo il nodo $1$ la radice di un \textit{heap} e quindi $A$ un \textit{heap} completo.
+            \end{proof}
+            \paragraph{Complessità}
+                La complessità dell'algoritmo $\operatorname{heapBuild}()$, data dal numero di chiamate a $\operatorname{maxHeapRestore}()$ è $O(n\log n)$ in quanto il numero di chiamate a $\operatorname{maxHeapRestore}()$ và da $\lfloor\frac{n}2\rfloor$ a $1$ il che anche se minore di $n$ è comunque $O(n)$. Inoltre la complessità di $\operatorname{maxHeapRestore}()$ è $O(\log n)$. Il che porta ad una complessità totale di $O(n\log n)$.
+        \subsubsection{Funzione $\operatorname{heapSort}()$}
+            Una volta costruito l'\textit{heap} grazie alle funzioni $\operatorname{heapBuild}()$ e $\operatorname{maxHeapRestore}()$ possiamo assembrale l'algoritmo di ordinamento \textit{HeapSort}.
+            \paragraph{Principio di funzionamento} \textit{HeapSort} si basa sul fatto che il primo elemento contenga il massimo, viene quindi scambiato con l'ultimo elemento, viene quindi eseguito $\operatorname{maxHeapRestore}()$ sui nodi $[1\dots i-1]$, dove $i$ è un contatore da $n$ a $2$, si ripete il processo fino a che non si arriva a $2$.
+            \begin{algorithm}
+                \caption{\textsc{heapSort}(\Item[] $A$, \Int $n$)}
+                \begin{algorithmic}
+                    \State \Call{heapBuild}{$A$, $n$}
+                    \For{$i \gets n$ \DownTo $2$}
+                        \State \Call{swap}{$A$, $1$, $i$}
+                        \State \Call{maxHeapRestore}{$A$, $1$, $i-1$}
+                    \EndFor
+                \end{algorithmic}
+            \end{algorithm}
+            \paragraph{Complessità} In quanto l'algoritmo $\operatorname{heapBuild}()$ ha complessità $\Theta(n)$, l'algoritmo $\operatorname{heapMaxRestore}()$ ha complessità $\Theta(\log i)$, allora possiamo esprimere la complessità dell'algoritmo \textit{HeapSort} come: $$
+                T(n)=\sum_{i=2}^{n}\log i+\Theta(n)=\Theta(n\log n)
+            $$
+            Dunque la complessità dell'algoritmo \textit{HeapSort} è $\Theta(n\log n)$.
+    \subsection{Implementazione code con priorità}
+        Di seguito viene riportata una possibile implementazione di una coda con priorità utilizzando un \textit{min-heap}, e dunque $\operatorname{minHeapRestore}()$.
+        \subsubsection{Memorizzazione}
+            
+            \begin{algorithm}[H]
+                \caption{\textsc{PriorityItem}}
+                \begin{algorithmic}
+                    \State \Int $priority$ \Comment{Priorità}
+                    \State \Item $item$ \Comment{Elemento}
+                    \State \Int $pos$ \Comment{Posizione nel vettore \textit{heap}}
+                \end{algorithmic}
+            \end{algorithm}
+
+            \begin{algorithm}[H]
+                \caption{$\operatorname{swap}(\textsc{PriorityItem}[] H, \Int i, \Int j)$}
+                \begin{algorithmic}
+                    \State \textsc{PriorityItem} $temp \gets H[i]$
+                    \State $H[i] \gets H[j]$
+                    \State $H[j] \gets temp$
+                    \State $H[i].pos \gets i$
+                    \State $H[j].pos \gets j$
+                \end{algorithmic}
+            \end{algorithm}
+        
+        \subsubsection{Inizializzazione}
+            \begin{algorithm}[H]
+                \caption{\textsc{PriorityQueue}}
+                \begin{algorithmic}
+                    \State \Int $capacity$ \Comment{Numero massimo di elementi nella coda}
+                    \State \Int $dim$ \Comment{Numero di elementi attualmente nella coda}
+                    \State \textsc{PriorityItem}[] $H$ \Comment{Vettore heap}
+                    \State \textsc{PriorityQueue} \Function{PriorityQueue}{\Int $n$}
+                            \State \textsc{PriorityQueue} $t$ = \New \textsc{PriorityQueue}
+                            \State $t.capacity \gets n$
+                            \State $t.dim \gets 0$
+                            \State $t.H \gets \New \textsc{PriorityItem}[1\dots n]$
+                            \State \Return $t$
+                        \EndFunction
+                \end{algorithmic}
+            \end{algorithm}
+        \subsubsection{Inserimento}
+            \begin{algorithm}[H]
+                \caption{\textsc{PriorityItem} insert(\Item $x$, \Int $p$)}
+                \begin{algorithmic}
+                    \State \textbf{precondition} $dim < capacity$
+                    \State $dim \gets dim+1$
+                    \State $H[dim] = \New \textsc{PriorityItem}$
+                    \State $H[dim].value \gets x$
+                    \State $H[dim].priority \gets p$
+                    \State $H[dim].pos \gets dim$
+                    \State \Int $i \gets dim$
+                    \While{$i > 1 \And H[i].priority < H[p(i)].priority$}
+                        \State \Call{swap}{$H$, $i$, $p(i)$}
+                        \State $i \gets p(i)$
+                    \EndWhile
+                    \State \Return $H[i]$
+                \end{algorithmic}
+            \end{algorithm}
+        \subsubsection{\texttt{minHeapRestore}()}
+            \begin{algorithm}[H]
+                \caption{minHeapRestore(\textsc{PriorityItem}[] $A$, \Int $i$, \Int $dim$)}
+                \begin{algorithmic}
+                    \State \Int $min \gets i$
+                    \If {$\operatorname{l}(i) \leq \text{dim} \And A[\operatorname{l}(i)].priority < A[min].priority$}
+                        \State \Int $min \gets \operatorname{l}(i)$
+                    \EndIf
+                    \If {$\operatorname{r}(i) \leq \text{dim} \And A[\operatorname{r}(i)].priority < A[min].priority$}
+                        \State \Int $min \gets \operatorname{r}(i)$
+                    \EndIf
+                    \If {$min \neq i$}
+                        \State \Call{swap}{$A$, $i$, $min$}
+                        \State \Call{minHeapRestore}{$A$, $min$, $dim$}
+                    \EndIf
+                \end{algorithmic}
+            \end{algorithm}
+        \subsubsection{Cancellazione e/o Lettura minimo}
+            \begin{algorithm}[H]
+                \caption{\textsc{Item} deleteMin()}
+                \begin{algorithmic}
+                    \State \textbf{precondition} $dim > 0$
+                    \State \Call{swap}{$H$, $1$, $dim$}
+                    \State $dim \gets dim-1$
+                    \State \Call{minHeapRestore}{$H$, $1$, $dim$}
+                    \State \Return $H[dim+1].value$
+                \end{algorithmic}
+            \end{algorithm}
+            \begin{algorithm}[H]
+                \caption{\textsc{Item} min()}
+                \begin{algorithmic}
+                    \State \textbf{precondition} $dim > 0$
+                    \State \Return $H[1].value$
+                \end{algorithmic}
+            \end{algorithm}
+        \subsubsection{Decremento della priorità}
+            \begin{algorithm}[H]
+                \caption{decrease(\textsc{PriorityItem} $x$, \Int $p$)}
+                \begin{algorithmic}
+                    \State \textbf{precondition} $p < x.priority$
+                    \State $x.priority \gets p$
+                    \State \Int $i \gets x.pos$
+                    \While{$i > 1 \And H[i].priority < H[p(i)].priority$}
+                        \State \Call{swap}{$H$, $i$, $p(i)$}
+                        \State $i \gets p(i)$
+                    \EndWhile
+                \end{algorithmic}
+            \end{algorithm}
+        \subsubsection{Complessità}
+            Da notare come tutte le operazioni che modificano gli \textit{heap} lasciano inalterata la correttezza della struttura dati, questo o lungo un cammino radice-foglia nel caso della funzione \texttt{deleteMin}() o lungo un cammino foglia-radice nel caso delle funzioni \texttt{insert}() e \texttt{decrease}(). In quanto l'altezza è $\lfloor\log n\rfloor$ la complessità di "sistemare" l'\textit{heap} è $O(\log n)$. Da questo possiamo dire che le operazioni sul \textit{heap} seguono la seguente complessità:
+            \begin{table}[H]
+                \begin{tabular}{|l|l|}
+                    \hline
+                    \textbf{Operazione} & \textbf{Complessità} \\
+                    \hline
+                    \texttt{insert}() & $O(\log n)$ \\
+                    \hline
+                    \texttt{deleteMin}() & $O(\log n)$ \\
+                    \hline
+                    \texttt{min}() & $\Omega(1)$ \\
+                    \hline
+                    \texttt{decrease}() & $O(\log n)$ \\
+                    \hline
+                \end{tabular}
+            \end{table}
