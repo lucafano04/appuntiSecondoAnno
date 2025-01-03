@@ -15,7 +15,7 @@
 \section{Servizi a livello di trasporto}
     \paragraph{Introduzione} I \textbf{protocolli di trasporto} forniscono la comunicazione logica tra processi applicativi di host diversi. I protocolli di trasporto vengono eseguiti negli host "terminali" ovvero quelli che generano o consumano i dati. Dal lato di inviante il protocollo di trasporto divide in diversi segmenti i dati ricevuti dal livello di applicazione e li invia al livello di rete. Dal lato di ricevente il protocollo di trasporto riassembla i segmenti ricevuti e li invia al livello di applicazione.
     \paragraph{\Acrshort*{TCP}} Il \acrfull*{TCP} è un protocollo di trasporto orientato alla connessione. Il \Acrshort*{TCP} fornisce un trasferimento affidabile dei dati, controllo di flusso e controllo di congestione.
-    \paragraph{\Acrshort*{UDP}} L'\Acrfull*{UDP} è un protocollo di trasporto non orientato alla connessione. L'\Acrshort*{UDP} non fornisce trasferimento affidabile dei dati, controllo di flusso e controllo di congestione.
+    \paragraph{\Acrshort*{UDP}} L'\acrfull*{UDP} è un protocollo di trasporto non orientato alla connessione. L'\Acrshort*{UDP} non fornisce trasferimento affidabile dei dati, controllo di flusso e controllo di congestione.
     \paragraph{Servizi non disponibili} Al momento in internet non è disponibile un servizio di garanzia su ritardi (latenza), e non è disponibile un servizio di garanzia sulla banda (velocità di trasferimento).
 \section{\textit{Multiplexing e De-multiplexing}}
     \paragraph{Introduzione} Il \textit{\textbf{multiplexing}} è il processo di invio di dati da più \textit{socket} a un'unica connessione, per identificare il \textit{socket} di destinazione si utilizza un \textit{\textbf{port number}}. Il \textit{\textbf{de-multiplexing}} è il processo di invio dei dati ricevuti al socket corretto in base al port number.
@@ -45,7 +45,7 @@
             \end{description}
             Inoltre è importante dire che le porte di sorgente e di destinazione non sono le stesse in quanto la porta di sorgente è una porta dinamica assegnata dal sistema operativo.
 \section[Trasporto senza connessione: \texttt{UDP}]{Trasporto senza connessione: \Acrshort*{UDP}}
-    \paragraph{Caratteristiche} L'\Acrfull*{UDP} è un protocollo di trasporto senza connessione, offre un servizio \textit{best effort} e non fornisce garanzie di consegna, ordine o duplicazione dei dati. Questo in quanto non ha \textit{handshake} iniziale e non mantiene alcuno stato di connessione. 
+    \paragraph{Caratteristiche} L'\acrfull*{UDP} è un protocollo di trasporto senza connessione, offre un servizio \textit{best effort} e non fornisce garanzie di consegna, ordine o duplicazione dei dati. Questo in quanto non ha \textit{handshake} iniziale e non mantiene alcuno stato di connessione. 
     \paragraph{Perché esiste \Acrshort*{UDP}} Non richiede di stabilire una connessione, è semplice e veloce, Header di segmento corti, senza controllo di congestione.
     \subsection{Header}
         \begin{figure}[H]
@@ -81,13 +81,13 @@
             Assumiamo la stessa situazione precedente ed un \textit{pipelining} di $ N = 3 $ allora il \textit{throughput} sarà: $$ \frac{3L}{T_{trans}+RTT} = \frac{24000}{8\mu s + 30ms} = 100 Kbps $$questo è un miglioramento del $ 300\% $ rispetto allo \textit{Stop-and-Wait}. In generale il \textit{throughput} rispetto al \textit{pipelining} con $ N $ segmenti in parallelo è: $ \frac{N \cdot L}{RTT + T_{trans}} $. Il parametro $ N $ è detto \textit{window size} o "dimensione della finestra".
         \subsubsection{Definizioni}
             \begin{description}
-                \item[\Acrfull*{W_T}] Insieme di \Acrshort*{PDU} che il mittente può inviare senza attendere un \Acrshort*{ACK} del ricevente.
+                \item[\acrfull*{W_T}] Insieme di \Acrshort*{PDU} che il mittente può inviare senza attendere un \Acrshort*{ACK} del ricevente.
                     \subitem Grande al massimo come la memoria allocata dal sistema operativo.
                     \subitem \Acrshort*{W_T_d} indica la dimensione della finestra.
-                \item[\Acrfull*{W_R}] Insieme di \Acrshort*{PDU} che il ricevente può ricevere può accettare e memorizzare.
+                \item[\acrfull*{W_R}] Insieme di \Acrshort*{PDU} che il ricevente può ricevere può accettare e memorizzare.
                     \subitem Grande al massimo come la memoria allocata dal sistema operativo.
-                \item[\Acrfull*{W_LOW}] Puntatore al primo segmento trasmesso ma non ancora confermato.
-                \item[\Acrfull*{W_HIGH}] Indica l'ultimo segmento già trasmesso della finestra di trasmissione \Acrshort*{W_T}.
+                \item[\acrfull*{W_LOW}] Puntatore al primo segmento trasmesso ma non ancora confermato.
+                \item[\acrfull*{W_HIGH}] Indica l'ultimo segmento già trasmesso della finestra di trasmissione \Acrshort*{W_T}.
             \end{description}
         
         \begin{figure}[H]
@@ -95,7 +95,7 @@
             \includegraphics[width=0.5\textwidth]{03/finestrePipelining.png}
             \caption{Finestre di trasmissione e di ricezione}
         \end{figure}
-        \subsubsection[ACKnowledgment (\Acrshort*{ACK})]{\Acrfull*{ACK}}
+        \subsubsection[ACKnowledgment (\Acrshort*{ACK})]{\acrfull*{ACK}}
             Esistono vari tipi di \Acrshort*{ACK} a seconda del protocollo utilizzato, abbiamo dunque:
             \begin{itemize}
                 \item \Acrshort*{ACK} individuale il cui compito è quello di indicare la corretta ricezione di uno specifico pacchetto - \texttt{ACK($n$)} vuol dire ho ricevuto il pacchetto $n$.
@@ -138,10 +138,10 @@
             \item[\textit{Padding}] Padding per allineare il segmento a 32 bit.
             \item[\textit{Data}] Dati del segmento.
         \end{description}
-        \paragraph{\Acrfull*{RWND}} La finestra di ricezione è un campo a $16$ bit che indica la dimensione della finestra di ricezione del ricevente. Questo campo è utilizzato per il controllo di flusso, infatti il mittente non può inviare dati se la finestra di ricezione del ricevente è piena. La finestra di ricezione è un campo a $16$ bit, quindi la dimensione massima della finestra di ricezione è di $ 2^{16} - 1 = 65535 $ byte. In base alla velocità della banda questo campo può essere modificato per evitare che il mittente non sfrutti tutta la banda disponibile.
+        \paragraph{\acrfull*{RWND}} La finestra di ricezione è un campo a $16$ bit che indica la dimensione della finestra di ricezione del ricevente. Questo campo è utilizzato per il controllo di flusso, infatti il mittente non può inviare dati se la finestra di ricezione del ricevente è piena. La finestra di ricezione è un campo a $16$ bit, quindi la dimensione massima della finestra di ricezione è di $ 2^{16} - 1 = 65535 $ byte. In base alla velocità della banda questo campo può essere modificato per evitare che il mittente non sfrutti tutta la banda disponibile.
         \paragraph{Numeri di sequenza \Acrshort*{ACK} di \Acrshort*{TCP}} I numeri di sequenza di \Acrshort*{TCP} sono a $32$ bit, questo significa che il numero di sequenza può variare tra $ 0 $ e $ 2^{32} - 1 = 4294967295 $. Il numero di sequenza nella direzione mittente-ricevente può essere diverso da quello nella direzione ricevente-mittente, questo perché i numeri di sequenza sono indipendenti nelle due direzioni, inoltre non è detto che i numeri di sequenza inizino da $ 0 $, infatti possono iniziano solitamente da un numero casuale. Durante la trasmissione di un pacchetto mittente-ricevente può essere allegato anche un campo \Acrshort*{ACK} per la conferma della ricezione del pacchetto precedente tra ricevente-mittente (stessa cosa per la direzione opposta).
         \subsubsection{Lunghezza massima segmento \Acrshort*{MSS} e \Acrshort*{MTU}}
-            In quanto il \Acrshort*{TCP} lavora per byte cerca sempre di non inviare un singolo byte solo in quanto sarebbe uno spreco di risorse e di banda. Allo stesso tempo non si può inviare un segmento troppo grande in quanto potrebbe essere frammentato a livello di rete. Viene dunque introdotta una "lunghezza massima" detta \acrfull*{MSS} che indica la lunghezza massima di un segmento \Acrshort*{TCP}. La \Acrshort*{MSS} è calcolata come la \Acrfull*{MTU} che è la lunghezza massima di un pacchetto che può essere inviato su una rete a livello di collegamento. A sua volta la \Acrshort*{MTU} viene calcolata da passati al livello \textit{data-link} e può variare da rete a rete. La \Acrshort*{MSS} si riferisce non alla lunghezza di tutto il segmento \Acrshort*{TCP} ma solo al \textit{payload}, ovvero il campo dati del segmento \Acrshort*{TCP}.
+            In quanto il \Acrshort*{TCP} lavora per byte cerca sempre di non inviare un singolo byte solo in quanto sarebbe uno spreco di risorse e di banda. Allo stesso tempo non si può inviare un segmento troppo grande in quanto potrebbe essere frammentato a livello di rete. Viene dunque introdotta una "lunghezza massima" detta \acrfull*{MSS} che indica la lunghezza massima di un segmento \Acrshort*{TCP}. La \Acrshort*{MSS} è calcolata come la \acrfull*{MTU} che è la lunghezza massima di un pacchetto che può essere inviato su una rete a livello di collegamento. A sua volta la \Acrshort*{MTU} viene calcolata da passati al livello \textit{data-link} e può variare da rete a rete. La \Acrshort*{MSS} si riferisce non alla lunghezza di tutto il segmento \Acrshort*{TCP} ma solo al \textit{payload}, ovvero il campo dati del segmento \Acrshort*{TCP}.
             \paragraph{Come si sceglie \Acrshort*{MSS}?} Non esistono meccanismi per comunicarlo, viene dunque adottato un modello del tipo \textit{trial\& error}, ovvero il mittente invia un segmento con una \Acrshort*{MSS} di dimensione $ X $ se si nota che i livelli inferiori sopportano la dimensione $ X $ allora si aumenta la dimensione della \Acrshort*{MSS}, altrimenti se si nota che qualche messaggio inizia ad essere perso si riduce la dimensione della \Acrshort*{MSS}.
                 \subparagraph{Valodi di default}: \begin{itemize}
                     \item \Acrshort*{MTU} di ethernet: $ 1500 $ byte (payload inseribile al livello 2)
@@ -171,7 +171,7 @@
         \end{enumerate}
         \paragraph{Chiusura con \Acrshort*{RST}} Se un host invia un segmento \Acrshort*{TCP} con il flag \Acrshort*{RST} (reset) impostato a \texttt{1} allora la connessione viene chiusa immediatamente senza attendere risposta dall'altra parte. Questo meccanismo è utilizzato per chiudere una connessione in modo ``brusco'' in caso di problemi.
     \subsection[Tempi \texttt{RTT} e \texttt{RTO}]{Tempi \Acrshort*{RTT} e \Acrshort*{RTO}}
-        Il \Acrshort*{TCP} deve ``impostare'' un \textit{timeout} per l'invio e per la ricezione dei segmenti, questo \textit{timeout} è detto \Acrfull*{RTO}, deve essere dunque un valore superiore al \Acrfull*{RTT} ovvero il tempo che impiega un pacchetto per andare dal mittente al ricevente e ritornare indietro. Il \Acrshort*{RTT} può variare nel tempo, quindi il \Acrshort*{RTO} deve essere impostato in modo dinamico, se è troppo basso si rischia di re-inviare prematuramente un segmento, se è troppo alto si rischia di ``aspettare'' per troppo tempo. Quindi in sostanza và prima stimato il \Acrshort*{RTT} e poi impostato il \Acrshort*{RTO}, stimiamo il \Acrshort*{RTT} prendendone un campione: $\operatorname{sampleRTT}$ dove prendiamo in considerazione il tempo tra l'invio del pacchetto e la ricezione dell'\Acrshort*{ACK}. Per mantenere il tempo aggiornato ma non troppo sensibile ai ``picchi'' che si possono verificare sulla rete viene utilizzata la seguente formula:
+        Il \Acrshort*{TCP} deve ``impostare'' un \textit{timeout} per l'invio e per la ricezione dei segmenti, questo \textit{timeout} è detto \acrfull*{RTO}, deve essere dunque un valore superiore al \acrfull*{RTT} ovvero il tempo che impiega un pacchetto per andare dal mittente al ricevente e ritornare indietro. Il \Acrshort*{RTT} può variare nel tempo, quindi il \Acrshort*{RTO} deve essere impostato in modo dinamico, se è troppo basso si rischia di re-inviare prematuramente un segmento, se è troppo alto si rischia di ``aspettare'' per troppo tempo. Quindi in sostanza và prima stimato il \Acrshort*{RTT} e poi impostato il \Acrshort*{RTO}, stimiamo il \Acrshort*{RTT} prendendone un campione: $\operatorname{sampleRTT}$ dove prendiamo in considerazione il tempo tra l'invio del pacchetto e la ricezione dell'\Acrshort*{ACK}. Per mantenere il tempo aggiornato ma non troppo sensibile ai ``picchi'' che si possono verificare sulla rete viene utilizzata la seguente formula:
         \[ \operatorname{EstimatedRTT} = (1-\alpha) \cdot \operatorname{EstimatedRTT} + \alpha \cdot \operatorname{SampleRTT} \]
         Dove $ \alpha $ è un parametro che indica la "sensibilità" del tempo, se $ \alpha $ è basso allora il tempo sarà poco sensibile ai picchi, se $ \alpha $ è alto allora il tempo sarà molto sensibile ai picchi, questa è una media mobile esponenziale ponderata. Solitamente $ \alpha = 0.125 $.\newline
         Per impostare \Acrshort*{RTO} non ci avvaliamo solamente di questo dato appena ricavato ma anche della deviazione standard del \Acrshort*{RTT} ovvero 
@@ -205,7 +205,7 @@
             \subitem I router forniscono feedback ai trasmettitori
             \subitem Un singolo bit per indicare la congestione
     \end{itemize}
-    \subsection[\texttt{TCP} \textit{congestion control: additive increase multiplicative decrease} (\texttt{AIMD})]{\Acrshort*{TCP} \textit{congestion control} \Acrfull*{AIMD}}
+    \subsection[\texttt{TCP CC}: \textit{additive increase multiplicative decrease} (\texttt{AIMD})]{\Acrshort*{TCPCC}: \acrfull*{AIMD}}
         \subsubsection{Approccio}
             Il mittente aumenta il tasso di trasmissione cercando di occupare la banda disponibile e diminuisce il tasso di trasmissione quando rileva una perdita. Questo algoritmo segue due passi fondamentali: \begin{itemize}
                 \item \textbf{Additive Increase} Aumenta il tasso di trasmissione di 1 \Acrshort*{MSS} ogni \Acrshort*{RTT} finché non si rileva una perdita.
@@ -232,7 +232,7 @@
         \end{itemize}
         \textbf{In ogni caso}: $\Acrshort*{W_T} = \min(\Acrshort*{CWND}, \Acrshort*{RWND}) = \min(\Acrshort*{CWND}, \Acrshort*{W_R}) $.
         \subsubsection{Slow Start}
-            Il \Acrlong*{SS} è un algoritmo che prevede che per ogni \Acrshort*{ACK} ricevuto aumento di 1 \Acrshort*{MSS} la finestra di congestione, in questo modo la finestra aumenta esponenzialmente. Questo algoritmo è utilizzato quando la connessione è appena stata aperta e non si conosce la banda disponibile. Lo \Acrlong*{SS} termina quando la finestra di congestione raggiunge una soglia detta \Acrfull*{SSThresh} e si passa al \textit{Congestion Avoidance}.
+            Il \Acrlong*{SS} è un algoritmo che prevede che per ogni \Acrshort*{ACK} ricevuto aumento di 1 \Acrshort*{MSS} la finestra di congestione, in questo modo la finestra aumenta esponenzialmente. Questo algoritmo è utilizzato quando la connessione è appena stata aperta e non si conosce la banda disponibile. Lo \Acrlong*{SS} termina quando la finestra di congestione raggiunge una soglia detta \acrfull*{SSThresh} e si passa al \textit{Congestion Avoidance}.
             \paragraph{Algoritmo della fase \Acrlong*{SS}}
             \begin{enumerate}
                 \item \textbf{Inizializzazione} \begin{itemize}
@@ -272,14 +272,14 @@
             \end{itemize}
         \subsubsection{Parametri i quali possono essere modificati}
             \begin{itemize}
-                \item \Acrfull*{CWND} -  Dimensione della finestra di congestione.
+                \item \acrfull*{CWND} -  Dimensione della finestra di congestione.
                 \item \acrfull*{SSThresh} - Soglia di \Acrlong*{SS}.
-                \item \Acrfull*{RTO} - Tempo di ritrasmissione.
+                \item \acrfull*{RTO} - Tempo di ritrasmissione.
                 \item \textbf{$\Acrshort*{W_LOW}\ \&\ \Acrshort*{W_HIGH}$} - Puntatori alla finestra di trasmissione.
             \end{itemize}
-        \subsubsection{\Acrfull*{FRet}}
+        \subsubsection{\acrfull*{FRet}}
             Il \Acrlong*{FRet} è un algoritmo facente parte della fase di \Acrlong*{CA} che prescrive la seguente condizione: se il mittente riceve tre \Acrshort*{ACK} duplicati allora ritrasmette il segmento richiesto dal \Acrshort*{ACK} duplicato, inoltre il fatto che il mittente riceva tre \Acrshort*{ACK} duplicati indica che c'è una congestione sulla rete si passa dunque alla fase di \textit{Fast Recovery}. Inoltre prendo in considerazione il valore di \texttt{RECOVER}$=\Acrshort*{W_HIGH}$ per determinare quanti segmenti sono stati trasmessi nella rete, in questo modo posso capire, una volta ricevuto un \Acrshort*{ACK} differente, quando e se il processo di \textit{Fast Retransmit} è terminato con successo.
-        \subsubsection{\Acrfull*{FRec}}
+        \subsubsection{\acrfull*{FRec}}
             Quando ricevo il 3° \Acrshort*{ACK} duplicato entro in \Acrlong*{FRec}, in questa fase avvengono diversi passaggi per evitare di saturare la rete: \begin{itemize}
                 \item \textbf{Al 3° \Acrshort*{ACK} duplicato}:\begin{itemize}
                     \item \Acrshort*{SSThresh} = \Acrshort*{CWND}/2
@@ -312,18 +312,18 @@
             Se invece abbiamo due \textit{host} che usano \Acrshort*{TCP} e uno apre (ad es.) $ 9 $ connessioni mentre l'altro ne apre $ 1 $ allora il primo avrà un \textit{throughput} di $ \frac{R}2 $ mentre il secondo avrà un \textit{throughput} di $ \frac{R} {10} $.
     \subsection{Altri algoritmi più recenti per il controllo di congestione}
         Negli algoritmi visti fino ad ora il processo di "rallentamento" della trasmissione avveniva solo in caso di perdita di pacchetti, questo però permette di regolare la banda solo quando è troppo tardi, in quanto deve avvenire una perdita prima che il mittente si renda conto che c'è una congestione. Per ovviare a questo problema sono stati introdotti nuovi algoritmi che permettono di regolare la banda. Questi algoritmi sono: \begin{itemize}
-            \item \Acrfull*{CUBIC}
-            \item \Acrfull*{BBR}
-            \item \Acrfull*{QUIC}
+            \item \acrfull*{CUBIC}
+            \item \acrfull*{BBR}
+            \item \acrfull*{QUIC}
         \end{itemize}
-        \subsubsection{\Acrfull*{CUBIC}}
+        \subsubsection{\acrfull*{CUBIC}}
             L'algoritmo \Acrshort*{CUBIC} fa variare la lunghezza della finestra di congestione secondo una funzione cubica nel tempo, questo ne migliora la scalabilità e la stabilità. Questo algoritmo è stato introdotto nel kernel di \texttt{Linux} a partire dalla versione 2.6.19, mentre in \texttt{Windows} è stato introdotto a partire dal 2017.
             \paragraph{Principi del funzionamento} Per un migliore utilizzo e stabilità della rete \Acrshort*{CUBIC} usa sia sia la parte concava che quella convessa della funzione cubica per regolare la finestra di congestione. 
             $$
                 \Acrshort*{CWND}_{cubic}(t) = C(t-K)^3 + \Acrshort*{CWND}_{max}
             $$
             Dove $ C $ è una costante, $ K = \sqrt[3]{\frac{\Acrshort*{CWND}_{max}(1-\beta)}{C}} $ e $ \Acrshort*{CWND}_{max} $ è la dimensione massima della finestra di congestione. Per lo standard \texttt{\Acrshort*{RFC} 8312} $ C = 0.4 $ e $ \beta = 0.7 $, ma dopo che è stata rilevata una congestione allora $ \beta = 0.5 $. Inoltre questo algoritmo è "\Acrshort*{TCP}\textit{-friendly}" ovvero non penalizza i flussi \Acrshort*{TCP} legacy che condividono la stessa rete.
-        \subsubsection{\Acrfull*{BBR}}
+        \subsubsection{\acrfull*{BBR}}
             L'algoritmo \Acrshort*{BBR} è un algoritmo di controllo di congestione che cerca di massimizzare il \textit{throughput} e minimizzare il ritardo. Questo algoritmo è stato introdotto da \texttt{Google} nel 2016 e si basa non sul rilevamento di perdite ma su due parametri: \begin{itemize}
                 \item \textbf{Bottleneck Bandwidth} La banda disponibile sul \textit{bottleneck}.
                 \item \textbf{Round-trip propagation time} Il tempo di propagazione del pacchetto.
@@ -331,7 +331,7 @@
             Il funzionamento a grandi linee prevede la trasmissione di pacchetti ad una velocità che non \textit{dovrebbe} saturare la rete. Questo infatti è progettato per ridurre la finestra di congestione prima che si verifichi una perdita, in questo modo si dovrebbe riuscire a limitare ritrasmissioni inutili. Un vantaggio di \Acrshort*{BBR} è quello che solo il \textit{server} lo deve implementare e non anche il \textit{client}. Il concetto usato è quello di \textit{pacing} ovvero inserisco nuovi pacchetti nella \Acrshort*{CWND} solo quando il nodo più lento della rete è pronto a riceverli.
             \paragraph{Migliore produttività} Secondo \textit{Google} \Acrshort*{BBR} con un \textit{link} a $10$ Gbps che invia dati lungo un percorso con \Acrshort*{RTT} di $100$ms con tasso di perdita dell'$1\%$ riesce a raggiungere un \textit{throughput} di $3,3$Mbit/s con \Acrshort*{CUBIC} e di $9100$Mbit/s con \texttt{BBR}. Questo è ideale nel caso di connessioni \texttt{\Acrshort*{HTTP}/2} che sfruttano una singola connessione per trasmettere dati.
             \paragraph{Latenza inferiore} \Acrshort*{BBR} riesce a mantenere una latenza inferiore rispetto a \Acrshort*{CUBIC} in quanto riesce a mantenere la banda costante e non satura la rete. Vari studi (sempre di \textit{Google}) hanno dimostrato che su un collegamento di $10$ Mbps con \Acrshort*{RTT} di $40$ ms ed un \textit{bottleneck} di $1000$ pacchetti la latenza di \Acrshort*{BBR} è di soli $43$ ms contro i $1090$ ms di \Acrshort*{CUBIC}.
-        \subsubsection{\Acrfull*{QUIC}}
+        \subsubsection{\acrfull*{QUIC}}
             \Acrshort*{QUIC} è un protocollo di trasporto sviluppato da \texttt{Google} nel 2012 e si prefissa il raggiungimento di due obbiettivi:\begin{itemize}
                 \item Evitare fenomeni di \textit{head-of-line blocking}
                 \item Ridurre la latenza di \Acrshort*{TCP}
