@@ -152,8 +152,8 @@
                 \item[GET] Il client richiede un oggetto al server 
                 \item[POST] Il client invia dati al server
                 \item[HEAD] Il client richiede solo l'intestazione dell'oggetto
-                \item[PUT] Il client invia un oggetto al server (da \texttt{HTTP/1.1})
-                \item[DELETE] Il client cancella un oggetto dal server (da \texttt{HTTP/1.1})
+                \item[PUT] Il client invia un oggetto al server (da \texttt{\Acrshort*{HTTP}/1.1})
+                \item[DELETE] Il client cancella un oggetto dal server (da \texttt{\Acrshort*{HTTP}/1.1})
             \end{description}
         \subsubsection{Messaggio di risposta HTTP}
             \texttt{HTTP/1.1 200 OK $\Rightarrow$ Versione del protocollo, codice di stato, frase di stato\\
@@ -206,16 +206,16 @@
         \paragraph{Vantaggi} Riduzione del tempo di risposta, riduzione del traffico di rete, riduzione del carico sui server d'origine
         \paragraph{Perchè viene usata} Viene usata per ridurre il tempo di risposta e il traffico di rete, in certe situazioni delle istituzioni si possono dotare di un cache interna per ridurre il traffico di rete verso l'esterno e per ridurre il tempo di risposta.
         \paragraph{\texttt{GET} condizionale} Il client può chiedere al server proxy di inviare l'oggetto solo se è stato modificato, in caso contrario il server proxy invia un messaggio di risposta con codice 304 (Not Modified) e l'oggetto non viene inviato. Il controllo viene eseguito tramite un \textbf{header} \texttt{If-Modified-Since} che contiene la data dell'ultima modifica dell'oggetto.
-    \subsection{\texttt{HTTP/1.0} e \texttt{HTTP/1.1}}
-        Di seguito vengono elencate le principali caratteristiche delle versioni \texttt{HTTP/1.0} e \texttt{HTTP/1.1} di \Acrshort*{HTTP}.
-        \subsubsection{\texttt{HTTP/1.0}}
+    \subsection[\texttt{HTTP/1.0} e \texttt{HTTP/1.1}]{\texttt{\Acrshort*{HTTP}/1.0} e \texttt{\Acrshort*{HTTP}/1.1}}
+        Di seguito vengono elencate le principali caratteristiche delle versioni \texttt{\Acrshort*{HTTP}/1.0} e \texttt{\Acrshort*{HTTP}/1.1} di \Acrshort*{HTTP}.
+        \subsubsection{\texttt{\Acrshort*{HTTP}/1.0}}
             \begin{itemize}
                 \item Connessioni non persistenti
                 \item Ogni oggetto richiede una connessione TCP separata
                 \item Non supporta proxy
                 \item Non supporta cache
             \end{itemize}
-        \subsubsection{\texttt{HTTP/1.1}}
+        \subsubsection{\texttt{\Acrshort*{HTTP}/1.1}}
             \begin{itemize}
                 \item Connessioni persistenti
                 \item Pipelining
@@ -228,15 +228,15 @@
                 \item Cache
                 \item Cookies
             \end{itemize}
-    \subsection{\texttt{HTTP/2.0}}
-        \texttt{HTTP/2} rappresenta una evoluzione di \texttt{HTTP/1.1}, il protocollo è focalizzato sulle prestazioni, specificatamente sulla latenza percepita. Obbiettivo di \texttt{HTTP/2} è di avere una unica connessione per browser.
+    \subsection[\texttt{HTTP/2.0}]{\texttt{\Acrshort*{HTTP}/2.0}}
+        \texttt{\Acrshort*{HTTP}/2} rappresenta una evoluzione di \texttt{\Acrshort*{HTTP}/1.1}, il protocollo è focalizzato sulle prestazioni, specificatamente sulla latenza percepita. Obbiettivo di \texttt{\Acrshort*{HTTP}/2} è di avere una unica connessione per browser.
         \subsubsection{Framing binario}
-            Nuovo livello di framing binario per incapsulare i messaggi \Acrshort*{HTTP}, in questo modo la semantica \Acrshort*{HTTP} rimane invariata ma la codifica in transito è differente. Tutte le comunicazioni \texttt{HTTP/2} sono suddivise in messaggi più piccoli, ognuno dei quali codificano un formato binario, inoltre sia il client che il server possono inviare messaggi in qualsiasi momento.
+            Nuovo livello di framing binario per incapsulare i messaggi \Acrshort*{HTTP}, in questo modo la semantica \Acrshort*{HTTP} rimane invariata ma la codifica in transito è differente. Tutte le comunicazioni \texttt{\Acrshort*{HTTP}/2} sono suddivise in messaggi più piccoli, ognuno dei quali codificano un formato binario, inoltre sia il client che il server possono inviare messaggi in qualsiasi momento.
         \subsubsection{Stream, messaggi e \textit{frame}}
             Tutte le comunicazioni vengono eseguite all'interno di una connessione \Acrshort*{TCP} bidirezionale, ogni \textbf{stream} ha un identificativo univoco con priorità. Ogni messaggio è un messaggio \Acrshort*{HTTP} logico (richiesta/risposta). Il \textit{frame} è la più piccola unità di comunicazione di un certo tipo specifico di dati.
             \paragraph{Multiplexing di richieste e risposte}
-                In \texttt{HTTP/1.x} se il client esegue più richieste in parallelo per migliorare le prestazioni deve usate \Acrshort*{TCP} multiple (\texttt{HTTP/1.1 o HTTP/1.2}) oppure aprire una nuova connessione (\texttt{HTTP/1.0}), tutto ciò non è necessario grazie al \textbf{framing binario} di \texttt{HTTP/2} è possibile rimuovere queste limitazioni consentendo il \textit{\textbf{multiplexing}} di richieste e risposte.
-                \subparagraph{Priorità degli stream} L'ordine nel quale i frame vengono inviati dal client o dal server influenza le prestazioni, per questo motivo \texttt{HTTP/2} supporta di associare a ciascun \textit{stream} una priorità e delle dipendenze. Infatti ogni stream può avere un peso tra $ 1 $ ovvero il peso minimo e $ 256 $ ovvero il peso massimo, inoltre uno stream può avere un elenco di dipendenza su altri stream. Grazie a questa funzionalità il client costruisce un "\textbf{albero di priorità}" in modo da ottimizzare il caricamento della pagina.
+                In \texttt{\Acrshort*{HTTP}/1.x} se il client esegue più richieste in parallelo per migliorare le prestazioni deve usate \Acrshort*{TCP} multiple (\texttt{\Acrshort*{HTTP}/1.1 o \Acrshort*{HTTP}/1.2}) oppure aprire una nuova connessione (\texttt{\Acrshort*{HTTP}/1.0}), tutto ciò non è necessario grazie al \textbf{framing binario} di \texttt{\Acrshort*{HTTP}/2} è possibile rimuovere queste limitazioni consentendo il \textit{\textbf{multiplexing}} di richieste e risposte.
+                \subparagraph{Priorità degli stream} L'ordine nel quale i frame vengono inviati dal client o dal server influenza le prestazioni, per questo motivo \texttt{\Acrshort*{HTTP}/2} supporta di associare a ciascun \textit{stream} una priorità e delle dipendenze. Infatti ogni stream può avere un peso tra $ 1 $ ovvero il peso minimo e $ 256 $ ovvero il peso massimo, inoltre uno stream può avere un elenco di dipendenza su altri stream. Grazie a questa funzionalità il client costruisce un "\textbf{albero di priorità}" in modo da ottimizzare il caricamento della pagina.
             \paragraph{Server Push} Il server può inviare più risposte per una singola richiesta (se ad esempio è necessaria una dipendenza per il caricamento della pagina) in modo da ridurre il tempo di caricamento della pagina senza dover attendere la richiesta del client.
     \subsection[Transport Layer Security (TLS)]{Transport Layer Security (\Acrshort*{TLS})}
         Il \acrfull*{TLS} è un protocollo crittografico che permette una comunicazione sicura da sorgente a destinatario fornendo: \textbf{Autenticazione}, \textbf{Integrità dei dati} e \textbf{Confidenzialità}. \footnote{Più sulla sicurezza di computer e reti in: "Appunti di Introduction to Computer and Network Security" di Luca Facchini}\newline
