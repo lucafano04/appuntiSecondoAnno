@@ -86,7 +86,7 @@
         \item \textit{ServerHello} - Il server risponde con un messaggio \textit{ServerHello} contenente i parametri di sicurezza scelti dal server (la versione più recente di \texttt{TLS} supportata, gli algoritmi di cifratura supportati e i parametri di sicurezza). Inoltre contiene la \textit{cipher suite} scelta dal server per la comunicazione, oltre ad un identificativo di sessione.
         \item \textit{Server Certificate} - Il \textit{server} \textit{invia} al client il suo certificato digitale, lo scambio di chiavi \textit{server} e la richiesta del certificato \textit{client}. A questo punto l'\textit{handshake} lato \textit{server} è completato. (Comunicazione protetta da \texttt{RSA} o \textit{Diffie-Hellman})
         \item \textit{Client Certificate} - Il \textit{client} invia al \textit{server} il suo certificato digitale, lo scambio di chiavi \textit{client} (Comunicazione protetta da \texttt{RSA} o \textit{Diffie-Hellman}). Verifica infine il certificato ottenuto dal \textit{server} verificando che il server è colui che ha richiesto il certificato. A questo punto l'\textit{handshake} da entrambe le parti è completato, ora è possibile iniziare a scambiare dati cifrati tramite il protocollo stabilito.
-        \item 
+        \item \textit{Application Data} - I dati scambiati tra \textit{client} e \textit{server} sono cifrati e autenticati tramite la chiave di sessione generata durante l'\textit{handshake}.
     \end{enumerate}
     \subsection{\texttt{TLS} \textit{cipher suites}}
         \label{subsec:TLSciphersuites}
