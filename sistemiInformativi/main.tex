@@ -1,4 +1,4 @@
-\documentclass[twoside]{report}
+\documentclass[twoside,a4paper]{report}
 \usepackage[italian]{babel}
 \usepackage[utf8]{inputenc}
 \usepackage{amsmath}
@@ -53,8 +53,8 @@
 }
 \fancypagestyle{stdPage}{
     \fancyhead{}
-    \fancyhead[RO,LE]{\leftmark}
-    \fancyhead[LO,RE]{\rightmark}
+    \fancyhead[LE]{\leftmark}
+    \fancyhead[RO]{\rightmark}
     \setlength{\headheight}{15pt}
     \fancyfoot{}
     \fancyfoot[LE,RO]{\thepage}
@@ -62,6 +62,7 @@
     \renewcommand{\footrulewidth}{0.4pt}
 }
 
+\newtheorem{definition}{Definizione}[chapter]
 
 
 \title{Appunti di Sistemi Informativi}
@@ -106,4 +107,5 @@
     \include{chapters/04-scelteOrganizzative}
     \include{chapters/05-iSistemiOperazionali}
     \include{chapters/06-sistemiInformazionali}
+    
 \end{document}
