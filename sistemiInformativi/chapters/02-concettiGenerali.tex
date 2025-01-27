@@ -1,6 +1,9 @@
 \chapter[Concetti Generali]{Concetti Generali sull'Informatica Aziendale}
 \thispagestyle{chapterInit}
+Nel presente capitolo verranno trattati i concetti generali dell'informatica aziendale, in particolare verranno trattati i seguenti argomenti: definizioni di informatica aziendale, di sistema informativo aziendale ed altro, verrà inoltre trattato l'impatto dell'informatica nelle aziende e come le aziende italiane si stanno adattando a queste nuove tecnologie.
+
 \section{Introduzione e definizioni}
+    Definiamo innanzitutto alcuni concetti chiave per la comprensione del corso.
     \paragraph{Informatica Aziendale} L'\textbf{informatica aziendale} è la disciplina che studia l'applicazione dell'informatica nelle aziende, studia inoltre l'influenza di questa nelle diverse categorie di un sistema aziendale. Esistono diversi settori di applicazione trai quali:
         \begin{itemize}
             \item \textbf{Aiuto e guida operativa} - Assistenza agli operatori a seguire le corrette procedure di lavoro con un costante controllo iterativo sui dati. Facilitazione di ricerca e recupero di informazioni.
@@ -9,11 +12,10 @@
             \item \textbf{Strategia} - Supporto ai processi di trasformazione e innovazione, supporto alle decisioni strategiche. 
         \end{itemize}
     \paragraph{Sistemi Informativi aziendali} I \textbf{sistemi informativi aziendali} sono l'insieme delle procedure e delle infrastrutture che definiscono e supportano l'elaborazione, la distribuzione e l'utilizzo delle informazioni all'interno di una azienda. Molto spesso ci si basa su una infrastruttura elettronica. È importante non confondere i sistemi informativi con i sistemi informatici, infatti è vero che ogni sistema informatico è un sistema informativo, ma non è vero il contrario.
-    \paragraph{Risorse e processi}
-        \subparagraph{Risorsa } Una \textbf{risorsa} "è tutto ciò con cui l'organizzazione opera" sia che questo possa essere un bene fisico o che questo sia un bene immateriale
-        \subparagraph{Processo } Un \textbf{processo} è un insieme di attività atte a gestire una risorsa nel suo ciclo di vita.
+    \paragraph{Risorsa} Una \textbf{risorsa} ``è tutto ciò con cui l'organizzazione opera'' sia che questo possa essere un bene fisico o che questo sia un bene immateriale
+    \paragraph{Processo} Un \textbf{processo} è un insieme di attività atte a gestire una risorsa nel suo ciclo di vita.
 \section{Sistema informativo aziendale}
-    \paragraph{Definizione} Un \textbf{sistema informativo aziendale} è un sistema che permette di raccogliere, elaborare, memorizzare e distribuire informazioni all'interno di un'organizzazione. Questo sistema si compone di:
+    Un \textbf{sistema informativo aziendale} è un sistema che permette di raccogliere, elaborare, memorizzare e distribuire informazioni all'interno di un'organizzazione. Questo sistema si compone di:
     \begin{itemize}
         \item \textbf{Dati}: \begin{itemize}
             \item di Configurazione - Dati che descrivono la struttura dell'organizzazione
@@ -32,13 +34,15 @@
             \item \dots
         \end{itemize}
     \end{itemize}
+    Da notare come in questa definizione non si parli di software, ma di mezzi e strumenti, questo perché il sistema informatico può essere o meno una parte del sistema informativo aziendale, questo perché il sistema informativo aziendale può consistere in un sistema informatico, ma non è detto che debba essere così. Questo rende di fatto il sistema informatico un ``sottoinsieme'' del sistema informativo aziendale.
 \section{Impatto dell'informatica nelle azienda}
-    \subsection{Questioni da rispettare} 
-        Il sistema \textbf{informatico} aziendale deve rispettare alcuni criteri per essere considerato adeguato:
+    L'informatica ha avuto un impatto molto forte nelle aziende, infatti ha portato a una serie di cambiamenti che hanno rivoluzionato il modo di lavorare delle aziende.
+    \subsection{Conoscenza dei fenomeni aziendali}
+        Ogni sistema \textbf{informativo} aziendale è lo strumento per diffondere la conoscenza all'interno dell'azienda. Per adempiere al suo compito questo deve rispettare alcuni criteri, che sono poi gli stessi che permettono di dividere i fenomeni aziendali:
         \begin{description}
-            \item[Livello di astrazione] Il sistema deve essere in grado di rappresentare la realtà aziendale in modo corretto, sintetico ma completo.
-            \item[Tempestività] Il sistema deve essere in grado di fornire le informazioni in tempo utile ed appropriato al contesto dell'operazione e della mole di dati.
-            \item[Livello di copertura] Il sistema deve essere in grado di coprire tutte le aree aziendali e tutti i processi aziendali nei vari livelli di dettaglio.
+            \item[Livello di astrazione] Il sistema deve essere in grado di rappresentare la realtà aziendale in modo corretto, sintetico ma completo. In alcuni livelli più ``alti'' si devono avere informazioni più sintetiche, mentre in livelli più ``bassi'' si devono avere informazioni più dettagliate\footnote{Più avanti nel capitolo ?? si approfondirà questo concetto}. % TODO: inserire riferimento al capitolo/sezione/paragrafo...
+            \item[Tempestività] Il sistema deve essere in grado di fornire le informazioni in tempo utile ed appropriato al contesto dell'operazione e della mole di dati. Anche in questo caso si ha una differenziazione tra i vari livelli, difatti in livelli più ``alti'' le informazioni possono essere meno tempestive con attese più lunghe, mentre in livelli più ``bassi'' le informazioni devono disponibili immediatamente.
+            \item[Livello di copertura] Il sistema deve essere in grado di coprire tutte le aree aziendali e tutti i processi aziendali nei vari livelli di dettaglio. Questo racchiude entrambi i concetti di \textbf{orizzontalità} e \textbf{verticalità} del flusso informativo.
         \end{description}
         Allo stesso tempo il sistema informativo deve \textbf{garantire}: Accessibilità dei dati e Correttezza del flusso, flusso che si divide in:
         \begin{description}
@@ -46,18 +50,29 @@
             \item[Verticale] tra i vari livelli gerarchici
         \end{description}
     \subsection{Processi classi di un sistema informativo}
-        Esistono tre classici processi informatizzati comuni a tutte le aziende che adottano un sistema informativo informatico:
+        Tra tutte le attività di una azienda possiamo distinguere tre processi i quali sono solitamente i primi ad essere informatizzati per la loro elevata ``attrattiva informatica''. Questi processi sono:
         \begin{description}
-            \item[Sviluppo funzioni operative] - Processo che si occupa di automatizzare dei processi che sono già presenti andando a ridurre i tempi e la mano d'opera necessaria.
-            \item[Pianificazione] - Processo che prende i dati inseriti nel \texttt{SI} e li elabora per automatizzare processi di pianificazione.
-            \item[Controllo] - Processo che renda automatico il controllo dei dati i inseriti nel \texttt{SI} e li confronta con criteri e dati di riferimento segnalando eventuali anomalie.
+            \item[Sviluppo funzioni operative] Processo che si occupa di automatizzare dei processi che sono già presenti andando a ridurre i tempi e la mano d'opera necessaria.
+            \item[Pianificazione] Processo che prende i dati inseriti nel \texttt{SI} e li elabora per automatizzare processi di pianificazione.
+            \item[Controllo] Processo che renda automatico il controllo dei dati i inseriti nel \texttt{SI} e li confronta con criteri e dati di riferimento segnalando eventuali anomalie.
         \end{description}
-    \label{subsec:nuoviProcessi}
     \subsection{Nuovi processi}
-        \paragraph{Introduzione dell'informatica} L'introduzione dell'informatica in azienda non si occupa semplicemente di supporto a processi già esistenti, ma col tempo si aprono nuovi processi, innovativi, che prima non erano possibili.
-        \paragraph{BRP} Nasce da questa idea il concetto di \textbf{Business Process Re-engineering} o \textbf{Reingegnerizzazione dei processi aziendali} che consiste nel ripensare e ridisegnare i processi aziendali per sfruttare al meglio le nuove tecnologie informatiche. La spinta verso il processo è generata dalla vasta adozione delle reti informatiche.
-        \paragraph{Contatto col cliente al tempo di internet} Con l'avvento di internet e delle reti informatiche, il contatto con il cliente assume delle modalità completamente nuove, si passa da un contatto diretto a un contatto mediato da un sistema informatico, che per certi versi può essere più efficiente e più efficace.
-\section{I sistemi informativi nelle aziende Italiane}
-    \paragraph{Le aziende in italia} Le aziende in Italia assumono una conformazione molto differente rispetto al panorama europeo, infatti il 99,9\% delle aziende italiane sono \textbf{PMI} (Piccole e Medie Imprese) e solo lo 0,1\% sono grandi aziende.
-    \paragraph{PMI e \texttt{SI}} Le PMI sono aziende che hanno una struttura molto semplice e che spesso l'investire in un sistema informativo non è una priorità visto che i processi sono molto semplici e non richiedono un sistema informativo complesso. \newline
-    Spesso quindi un \texttt{SI} potrebbe essere visto come un costo inutile, ma con l'avvento di internet e delle nuove tecnologie, anche le PMI stanno iniziando ad adottare un sistema informativo in piccola misura, ovviamente non adotteranno \texttt{SI} di grandi dimensioni, ma sistemi informativi, spesso italiani in quanto più vicini alla realtà delle PMI, più piccoli e adeguati alle loro esigenze.
+        \label{subsec:nuoviProcessi}
+        
+        \paragraph{Introduzione dell'informatica} L'introduzione dell'informatica in azienda non si occupa semplicemente di supporto a processi già esistenti, come nel caso dei processi classici, ma introduce nuovi processi e ne modifica altri. Questi processi particolarmente informatizzati sono impossibili o molto difficili da realizzare senza l'ausilio di un sistema informatico.
+        \paragraph{BRP} Nasce da questa idea il concetto di \textbf{Business Process Re-engineering} o \textbf{Reingegnerizzazione dei processi aziendali} che consiste nel ripensare e ridisegnare i processi aziendali per sfruttare al meglio le nuove tecnologie informatiche. 
+        \paragraph{Contatto col cliente al tempo di internet} La spinta verso il processo è generata dalla vasta adozione delle reti informatiche come supporto alla comunicazione e alla collaborazione tra le persone. Con l'avvento di internet, infatti, il contatto con il cliente assume delle modalità completamente nuove, si passa da un contatto diretto a un contatto mediato da un sistema informatico, che per certi versi può essere più efficiente e più efficace. Questa trasformazione ha portato ad una enorme riduzione delle tempistiche di contatto e di risposta, ma ha anche portato ad una interazione diretta tra cliente e sistema informativo, il quale é in grado di fornire al cliente informazioni in tempo reale e di rispondere alle sue richieste in modo automatico.
+\section{I \texttt{SI} nelle aziende Italiane e relazione \texttt{ICT} - azienda}
+    Analizziamo ora come i sistemi informativi si sono evoluti per adattarsi alle esigenze delle aziende italiane ed in che modo i servizi \texttt{ICT} hanno influenzato l'organizzazione interna ed esterna delle aziende.
+    \subsection{Le aziende in italia}
+        \paragraph{Le aziende in italia} Le aziende in Italia assumono una conformazione molto differente rispetto al panorama europeo, infatti il 99,9\% delle aziende italiane sono \textbf{PMI} (Piccole e Medie Imprese) e solo lo 0,1\% sono grandi aziende.
+        \paragraph{\texttt{PMI} e \texttt{SI}} 
+            Le \texttt{PMI} sono aziende che hanno una struttura molto semplice e che spesso l'investire in un sistema informativo non è una priorità visto che i processi sono molto semplici e non richiedono un sistema informativo complesso. \newline
+            Spesso quindi un \texttt{SI} potrebbe essere visto come un costo inutile, ma con l'avvento di internet e delle nuove tecnologie, anche le \texttt{PMI} stanno iniziando ad adottare un sistema informativo in piccola misura, ovviamente non adotteranno \texttt{SI} di grandi dimensioni, ma sistemi informativi, spesso italiani in quanto più vicini alla realtà delle \texttt{PMI}, più piccoli e adeguati alle loro esigenze.
+        \paragraph{Evoluzione dei \texttt{SI}}
+            I sistemi informativi delle grandi aziende che in un primo luogo, come già discusso, erano molto distati dalle \texttt{PMI}, si sono evoluti e si sono adattati alle esigenze delle \texttt{PMI} creando linee di \texttt{SI} adattati alla struttura flessibile e semplice delle \texttt{PMI}. Questo ha portato ad una maggiore diffusione dei sistemi informativi anche nelle \texttt{PMI} e ad una maggiore diffusione delle nuove tecnologie informatiche.
+    \subsection{Cambiamenti dei \texttt{SI}}
+        I sistemi informativi aziendali stanno entrando molto più facilmente all'interno delle aziende, questo è dovuto ad una evoluzione del mondo \texttt{ICT} il quale ha favorito lo sviluppo di sistemi informativi più flessibili e adattabili alle esigenze delle aziende.\newline
+        Oltre a questo lo sviluppo dei servizi \texttt{ICT} hanno portato a cambiamenti nell'organizzazione interna ed esterna delle aziende.
+        \paragraph{Organizzazione Interna} L'evoluzione dei servizi \texttt{ICT} ha portato alla riduzione dei ruoli impiegatizi, ovvero ruoli che non sono direttamente legati alla produzione, ma che sono necessari per il funzionamento dell'azienda. Oltre alla necessaria riqualificazione dei ruoli aziendali ed alla riduzione dei ruoli di supporto alla produzione (controllo, amministrazione, ecc\dots). Il processo di \textit{front-office}, quali la vendita e il marketing, sono stati completamente rivoluzionati. Tutto ciò ha scaturito una revisione del modello organizzativo aziendale passando da una organizzazione ``per funzioni'' ad una organizzazione ``per processi''. 
+        \paragraph{Organizzazione Esterna} L'evoluzione dei servizi \texttt{ICT} ha portato ad una maggiore collaborazione tra aziende, infatti la rete ha permesso di creare nuove forme di collaborazione tra aziende, come ad esempio la semplificazione del processo di \textit{outsourcing} e la creazione di nuove forme di collaborazione tra aziende. Questo accade al discapito della dimensione dell'azienda che non è più un fattore determinante per il successo dell'azienda stessa.

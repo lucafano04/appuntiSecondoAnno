@@ -19,8 +19,30 @@
         "Reingegnerizzazione",
         "Tempificazione"
     ],
+    "cSpell.ignorePaths": [
+        "package-lock.json",
+        "node_modules",
+        "vscode-extension",
+        ".git/{info,lfs,logs,refs,objects}/**",
+        ".git/{index,*refs,*HEAD}",
+        ".vscode",
+        ".vscode-insiders",
+        "*.aux",
+        "*.log",
+        "*.out",
+        "*.pdf",
+        "*.synctex.gz",
+        "*.toc",
+        "*.fls",
+        "*.fdb_latexmk",
+        "*.bbl",
+        "*.blg",
+        "*.bcf",
+        "*.run.xml",
+        "*.synctex.gz(busy)",
+    ],
     "editor.wordWrap": "on",
     "conventionalCommits.scopes": [
         "SI"
-    ]
+    ],
 }
