@@ -57,6 +57,15 @@
     \renewcommand{\footrulewidth}{0.4pt}
 }
 
+\let\oldquote\quote
+\let\endoldquote\endquote
+
+\RenewDocumentEnvironment{quote}{om}
+    {\oldquote}
+    {\par\nobreak\smallskip
+        \hfill(#2\IfValueT{#1}{~---~#1})\endoldquote 
+        \addvspace{\bigskipamount}}
+
 \addtocontents{toc}{\protect\thispagestyle{stdPageS}}
 
 \lstdefinestyle{mystyle}{

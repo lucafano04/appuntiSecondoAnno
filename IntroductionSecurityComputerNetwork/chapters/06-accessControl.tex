@@ -50,9 +50,9 @@
         % Durante il corso è stato tralasciato la sezione "What can go wrong" 
 \section{\textit{Access Control Models}}
     Il significato delle \textit{policy} si basa nella forma:
-    \begin{quote}
-        "Un soggetto $s$ può eseguire un'azione $x$ su un oggetto $o$
-    \end{quote}
+    \begin{oldquote}{}
+        ``Un soggetto $s$ può eseguire un'azione $x$ su un oggetto $o$''
+    \end{oldquote}
     una serie di queste affermazioni possono essere espresse nella forma di una matrice di controllo degli accessi (\textit{Access Control Matrix} \texttt{ACM}). Questa matrice è composta da righe e colonne, dove le righe rappresentano i soggetti (utenti) e le colonne rappresentano gli oggetti (risorse/files) e le celle contengono informazioni su chi è il proprietario dell'oggetto, chi può leggere o scrivere su di esso, ecc\dots
     \begin{table}[H]
         \centering
@@ -100,7 +100,7 @@
     \subsection{\texttt{AC} \textit{Models}}
         Esistono molti modelli di controllo degli accessi, i principali sono però:
         \begin{itemize}
-            \item \texttt{DAC} (\textit{Discretionary Access Control}) I soggetti possono dare autorizzazione ad altri soggetti (\texttt{DISCRETIONARY})
+            \item \texttt{DAC} (\textit{Discretionary Access Control}) I soggetti possono dare autorizzazione ad altri soggetti\newline (\texttt{DISCRETIONARY})
             \item \texttt{MAC} (\textit{Mandatory Access Control}) Il sistema forza le regole di accesso (\texttt{MANDATORY})
         \end{itemize}
         \paragraph{\texttt{DAC}} I vantaggi in un modello \texttt{DAC} consistono principalmente nella flessibilità rispetto ad ogni singolo utente, inoltre la possibilità di delegare l'autorizzazione ad altri utenti rende questo sistema molto discrezionale, infatti il principale svantaggio è la difficoltà di gestire le autorizzazioni in un sistema con molti utenti da parte di un organo centrale, ciò significa che se ad esempio un utente non-it si dimentica di rimuovere un utente da una lista di controllo degli accessi, questo potrebbe avere accesso a risorse che non dovrebbe avere. Inoltre, se un utente è compromesso, allora tutte le risorse a cui ha accesso sono compromesse.
@@ -131,8 +131,8 @@
     \subsection{Ruolo / Gruppo / Utenti / Soggetti / Permessi / Sessioni - Definizioni}
         \subsubsection{Ruoli e Gruppi}
             Anche se i concetti di ruolo e gruppo possono sembrare simili, in realtà nella loro applicazione assumono un significato diverso. Formalmente:
-            \begin{quote}
-                Un \textit{ruolo} è un tipo di lavoro nel contesto di un'organizzazione, con della semantica associata, questa relativa le autorità e le responsibilità conferite al soggetto il quale ricopre quel ruolo.\texttt{[ANSI RBAC Standard]}
+            \begin{quote}{\texttt{ANSI RBAC Standard}}
+                Un \textit{ruolo} è un tipo di lavoro nel contesto di un'organizzazione, con della semantica associata, questa relativa le autorità e le responsibilità conferite al soggetto il quale ricopre quel ruolo.
             \end{quote}
             Dunque i ruoli permettono di gestire i premessi in modo indiretto rispetto agli utenti, si può associare uno o più ruoli ad un utente e poi associare i permessi per eseguire una certa operazione a quel ruolo.\newline
             Un gruppo, molto più semplicemente, è un insieme di utenti.\newline
