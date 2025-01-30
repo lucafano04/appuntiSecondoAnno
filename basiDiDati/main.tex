@@ -15,7 +15,9 @@
 \usepackage{adjustbox}
 \usepackage{float}
 \usepackage{listings}
+\usepackage{graphicx}
 
+\graphicspath{{./images/}}
 
 \setlength{\parskip}{0pt}
 \titlespacing*{\subparagraph}{1em}{0em}{0em} 
@@ -53,6 +55,7 @@
     \renewcommand{\footrulewidth}{0.4pt}
     \fancyhead{}
     \fancyhead[RO,LE]{\leftmark}
+    \fancyhead[RE,LO]{\rightmark}
     \fancyfoot{}
     \fancyfoot[LE,RO]{\thepage}
     \fancyfoot[LO,RE]{"Appunti di Basi di Dati" di Luca Facchini}
@@ -102,4 +105,5 @@
     \include{chapters/01-IlModelloRelazionale}
     \include{chapters/02-AlgebraRelazionale}
     \include{chapters/03-SQL}
+    \include{chapters/04-IlModelloER}
 \end{document}
