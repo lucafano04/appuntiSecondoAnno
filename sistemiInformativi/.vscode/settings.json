@@ -4,10 +4,14 @@
         "attrattiva",
         "ciclare",
         "esternalizzazione",
+        "FASMI",
+        "HOLAP",
         "informazionale",
         "informazionali",
         "Interrompibilità",
         "Mazona",
+        "MOLAP",
+        "OLAM",
         "OLAP",
         "OLTP",
         "pdfcreator",
@@ -19,6 +23,7 @@
         "Pighin",
         "Proceduralità",
         "Reingegnerizzazione",
+        "ROLAP",
         "Tempificazione"
     ],
     "cSpell.ignorePaths": [

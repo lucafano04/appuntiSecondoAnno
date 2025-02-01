@@ -1,0 +1,40 @@
+\chapter{Introduzione al \textit{Data Mining}}
+\thispagestyle{stdPage}
+
+{\footnotesize \textbf{Nota dell'autore}: Questo capitolo è stato tagliato in quanto durante il corso dell'anno accademico 2024/2025 il prof. Bouquet per mancanza di tempo non ha potuto trattare interamente l'argomento, si riporta dunque solo la parte che è stata trattata.}
+
+\par
+
+In questo capitolo verranno introdotti i concetti fondamentali del Data Mining, ovvero l'insieme di tecniche e metodologie che permettono di estrarre informazioni utili da grandi quantità di dati in modo automatico. 
+
+\section{Limiti analisi \texttt{OLAP}}
+    I sistemi di \textit{data warehouse} con analisi \texttt{OLAP} permettono di analizzare i dati in modo interattivo, tuttavia presentano queste analisi sono basate su supposizioni che l'utente fà sui dati, e non permettono di trovare informazioni che l'umano non è in grado di trovare. Inoltre, l'analisi di grandi quantità di dati può essere molto dispendiosa in termini di tempo e risorse. Questo accade perché i sistemi \texttt{OLAP} per la loro natura sono progettati per essera a supporto delle decisioni umane e non si basa sui dati oggettivi per trovare correlazioni e \textit{pattern}.
+    \paragraph{Il \textit{Data mining}}
+        Il \textit{Data Mining} è stato introdotto per rispondere alle problematiche dei sistemi \texttt{OLAP}, permettendo di trovare informazioni riguardanti correlazioni nascoste e supporta modelli descrittivi e predittivi. \newline
+        Il \textit{data mining} permette dopo aver pulito, integrato, selezionato e trasformato i dati viene applicato un algoritmo di \textit{data mining} che permette di trovare \textit{pattern} e relazioni nascoste nei dati. A questo punto i risultati vengono valutati ed presentati a chi deve prendere decisioni.
+        Possiamo notare come i primi due passaggi combacino con quelli del popolamento del \textit{data warehouse}, infatti il \textit{data mining} può essere visto come un ampliamento del \textit{data warehouse} ed in alcuni casi un suo completamento.
+
+    \paragraph{Da \texttt{OLAP} a \texttt{OLAM}} 
+        Partendo da un \textit{data warehouse} possiamo estrarre i dati da sottoporre a \textit{data mining} anche se il processo di \textit{data mining} non deve essere completamente automatico in quanto potremmo incorrere in \textit{pattern} non significativi. Lavorando con uno strumento iterativo possiamo ottenere risultati migliori.
+\section{Architettura e tipi di analisi con \textit{data mining}}
+    \subsubsection{Architettura}
+        L'architettura di un sistema di \textit{data mining} è composta da:
+        \begin{description}
+            \item[\textit{data warehouse} - sorgente dati] 
+                Il \textit{data warehouse} è la sorgente dei dati da analizzare, i dati vengono estratti e trasformati in modo da essere pronti per l'analisi.
+            \item[\textit{Knowledge Base} - base di conoscenza] 
+                La base di conoscenza contiene i modelli e le regole che vengono utilizzate sia per l'analisi dei dati che per la valutazione dei risultati.
+            \item[\textit{Data Mining Engine} - motore di \textit{data mining}] 
+                Il motore di \textit{data mining} è il cuore del sistema, contiene gli algoritmi che permettono di trovare i \textit{pattern} nei dati.
+            \item[\textit{pattern evaluation} - valutazione delle condizioni] 
+                Questo modulo interagisce coi moduli di \textit{mining} per focalizzare la ricerca sui \textit{pattern} più interessanti.
+            \item[\textit{User Interface} - sistema di presentazione] 
+                Questo modulo permette all'utente di interagire con il sistema, visualizzando i risultati e permettendo di modificare i parametri di ricerca.
+        \end{description}
+    \subsubsection{Tipi di analisi}
+        Le attività che possono essere eseguite sono molteplici, troviamo due macro-categorie:
+        \begin{description}
+            \item[\textit{Mining} descrittivo] estrae informazioni che descrivono le proprietà dei dati.
+            \item[\textit{Mining} predittivo] determina regole che permettono di fare previsioni sui dati. 
+        \end{description}
+        Oltre a questi due tipi di analisi possiamo avere anche analisi diagnostiche ovvero che permettono di capire le cause di un determinato fenomeno, ma anche prescrittiva che permette di suggerire azioni da intraprendere per ottenere un determinato risultato.
