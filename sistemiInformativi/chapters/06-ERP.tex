@@ -1,0 +1,32 @@
+\chapter{\texttt{ERP}}
+\thispagestyle{chapterInit}
+In questo capitolo affrontiamo le varee aree di un \texttt{ERP} e le funzionalità che queste offrono.
+\section{Area Amministrativa}
+    In questo capitolo si analizzeranno le funzionalità dell'area amministrativa di un sistema \texttt{ERP}. Questa area è fondamentale per la gestione delle risorse finanziarie e contabili dell'azienda. In particolare, si analizzeranno le seguenti funzionalità: Piano dei conti, gestione di anagrafiche e movimenti contabili, finanziari ed IVA.
+
+    La parte amministrativa di un \texttt{SI} si basa su delle strutture base, queste possono essere o per la gestione dell'anagrafica, o per la gestione dei movimenti contabili. In particolare nella parte anagrafica ritroviamo: \begin{itemize}
+        \item Piano dei conti
+        \item Clienti
+        \item Fornitori
+        \item Istituti bancari
+    \end{itemize}
+    Nella parte contabile invece troviamo: \begin{itemize}
+        \item Movimenti contabili
+        \item Movimenti finanziari
+        \item Movimenti IVA
+    \end{itemize}
+    Questa separazione di vari aspetti ci permette di avere una visione più chiara e ordinata delle informazioni.
+    \paragraph{Piano dei conti} Il piano dei conti è una struttura gerarchica che permette di classificare i conti contabili in modo ordinato. In questa struttura troviamo sia conti di attivo che di passivo, e conti di costo e ricavo. Solitamente questa è organizzata in tre livelli ma in moduli più avanzati si possono trovare anche più (o meno) livelli. Questa struttura permette di avere una visione chiara e ordinata delle informazioni contabili andando a raggruppare i conti in base alla loro natura. Il piano dei conti è rappresentato Solitamente tramite una tabella, i cui campi principali sono: Codice, Descrizione, Livello, Classe e Tipo. Il codice, anche questo organizzato in modo gerarchico permette di identificare in modo univoco il conto, es: 1.1.001 significa il conto 001 di livello 3, sotto il conto 1.1 di livello 2, sotto il conto 1 di livello 1. La descrizione è il nome del conto come ``Crediti'', ``Acquisto merci'', ``Vendita merci'' ecc\dots Il livello indica il livello gerarchico del conto, la classe indica se il conto è un mastro, un conto o un sotto/conto, infine il tipo indica se il conto è patrimoniale o economico.
+    \paragraph{Anagrafiche} Le anagrafiche sono una raccolta delle informazioni riguardanti i clienti, i fornitori, ecc\dots Queste informazioni sono fondamentali per la gestione delle attività dell'azienda. In particolare possiamo raccogliere informazioni proprie del cliente quali il nome, la ragione sociale, il codice fiscale, la partita IVA, ecc\dots queste non riguardano dei flussi in particolare ma sono proprie del cliente e difficilmente subiranno modifiche. Inoltre possiamo raccogliere informazioni di natura contabile e/o finanziaria che riguardano a pieno i flussi di denaro, come il limite di credito, la valuta, il pagamento, ecc\dots oltre ai dati in se per sè possono essere presenti informazioni riguardo ad accordi commerciali e/o sospensione del servizio.
+    \paragraph{Movimentazione contabile} La movimentazione contabile è la parte più importante dell'area amministrativa di un \texttt{ERP}. Mentre la parte di anagrafiche permette di raccogliere informazioni riguardanti i clienti, i fornitori, ecc\dots la movimentazione contabile permette di raccogliere informazioni riguardanti i flussi di denaro. La struttura dei movimenti contabili si divide in: voce contabile (quale azienda, l'erario IVA, la cassa, ecc\dots), il Dare (uscite), l'avere (entrate) il Saldo ed il Segno (positivo o negativo). In questa struttura andiamo a registrare tutte le operazioni che vengono eseguite dall'azienda, in modo da avere un quadro chiaro e preciso della situazione finanziaria dell'azienda. Questa struttura è fondamentale per la gestione delle risorse finanziarie dell'azienda, in quanto permette di avere un quadro chiaro e preciso della situazione finanziaria dell'azienda. 
+    \paragraph{Movimentazione finanziaria} La movimentazione finanziaria traccia i debiti e i crediti rateizzati, i pagamenti e le scadenze. In generale quando si deve ricevere/effettuare un pagamento si crea un movimento finanziario, questo rimane con stato ``Aperto'' fino a quando non viene saldato e/o viene emessa una nota di credito o di debito da parte della stessa controparte che vada a saldare tutta o parte della somma dovuta. In sostanza la parte di movimentazione finanziaria deve tenere traccia del debito/credito di un'azienda nei confronti di un'altra e aggiustare di conseguenza i saldi contabili.
+    \paragraph{Movimentazione \texttt{IVA}} La movimentazione \texttt{IVA} è una parte molto complessa ed in continuo aggiornamento in quanto deve tenere traccia della attuale normativa fiscale. In generale la movimentazione \texttt{IVA} deve tenere conto dell'imponibile e dell'aliquota \texttt{IVA} applicata, la quale varia in base alla natura del prodotto e se il cliente rientra nella categoria di ``non soggetto'' o ``esente''. Inoltre la movimentazione \texttt{IVA} deve tenere conto delle fatture emesse e ricevute, e delle note di credito e debito emesse e ricevute. In generale la movimentazione \texttt{IVA} deve tenere traccia di tutte le operazioni che riguardano l'IVA, in modo da poter calcolare in modo corretto l'IVA da versare all'erario. Tutte le righe di movimentazione \texttt{IVA} devono essere collegate ad una riga di movimentazione contabile.
+\section{L'area logistica}
+
+\section{L'area vendite}
+
+\section{L'area acquisti}
+
+\section{L'area produttiva}
+
+\section{Sistemi Operazionali complementari}

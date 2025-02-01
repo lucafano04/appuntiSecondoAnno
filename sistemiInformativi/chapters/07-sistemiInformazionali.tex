@@ -1,0 +1,85 @@
+\chapter{I sistemi Informazionali}
+\thispagestyle{chapterInit}
+In questo capitolo si affrontano i sistemi informazionali, ovvero quei sistemi che permettono di estrarre informazioni utili dai dati aziendali. Questi sistemi sono fondamentali per la gestione delle risorse aziendali e per la pianificazione delle attività aziendali.
+\section{Gli Obbiettivi}
+    L'obbiettivo generale che un buon sistema informazionale dovrebbe avere è quello di poter sfruttare tutti i dati raccolti tramite i flussi operazionali per poterli usare a supporto delle attività operative e per identificare informazioni utili per la gestione dell'azienda. In particolare un sistema informazionale segue i seguenti obbiettivi:
+    \begin{itemize}
+        \item Il sistema informazionale come strumento a supporto delle decisioni superando sistemi di reporting e fogli di calcolo
+        \item Interrogazione dei dati in maniera puntuale e complessa 
+        \item Base di dati 
+        \item Strumenti di analisi dei dati
+    \end{itemize}
+    \paragraph{Sistema informazionale come supporto alle decisioni} Il sistema informazionale deve essere uno strumento al supporto delle decisioni tramite l'elaborazione di dati, prima dei sistemi informazionali questi venivano forniti tramite \textit{report} i quali però presentano \textit{bias} basati sulla persona che lo prepara (come dati omessi o punti di enfasi), inoltre risultano statici e difficili nella loro creazione. Altri strumenti superati grazie ai sistemi informazionali sono i fogli di calcolo, i quali sono soggetti a errori, è difficile collaborare e sono difficili da mantenere in quanto se si vuole modificare una formula bisogna modificarla in tutti i fogli di calcolo distribuiti.
+    \paragraph{Sistema informazionale come strumento di interrogazione dei dati} Le interrogazioni si suddividono principalmente in: interrogazioni puntuali e interrogazioni complesse. Esempio di interrogazione puntuale è la ricerca della modalità di pagamento di un dato cliente, mentre un esempio di interrogazione complessa è l'analisi dell'aumento del margine operativo per una serie di prodotti rispetto all'anno precedente.
+    \paragraph{Sistema informazionale come strumento di accesso alla base di dati} Il sistema informazionale deve offrire agli utenti finali un modello intuitivo ed efficiente per l'analisi, inoltre deve garantire la possibilità di integrare da fonti diverse i dati ed offrire processi di aggiornamento di questi.
+    \paragraph{Sistema informazionale come strumento di analisi dei dati} In questo caso il sistema informazionale deve offrire strumenti di analisi dei dati, come \textit{reporting} di dati, oppure offre dei sistemi per l'analisi interattiva da una ipotesi iniziale oppure offre sistemi di \textit{Data Mining}
+\section{Concetti Generali}
+    \subsection{Terminologia}
+        \paragraph{\textit{Data Warehouse}} Il \textit{Data Warehouse} è quell'insieme di tecniche per definire, costruire e mantenere un \textit{Data Base} che sia orientato all'analisi dei dati. Questo \textit{Data Base} deve essere molto strutturato e i dati organizzati in maniera efficiente per permettere l'analisi dei dati.
+        \paragraph{\textit{Decision Support System} - \texttt{DSS}} Il \texttt{DSS} è una parte del sistema informazionale che integrato nel processo decisionale dell'azienda, permette di visualizzare ed estrarre le informazioni da basi di dati ben organizzate
+        \paragraph{\textit{Data mining}} Il \textit{Data Mining} è una tecnica che permette di estrarre informazioni utili da un grande insieme di dati, questa tecnica è utilizzata per scoprire relazioni tra i dati e per fare previsioni.
+        \paragraph{\textit{Buisness Intelligence}} Ovvero tutte le attività di estrazione di informazioni dai dati di \textit{business} generati dai processi operativi aziendali.
+        \paragraph{\textit{Knowledge Management}} Ovvero l'insieme della conoscenze che ogni individuo possiede i quali dovrebbero essere distribuiti in maniera efficiente all'interno del sistema informazionale. Spesso questa conoscenza è derivata da esperienze passate, da informazioni acquisite e da competenze acquisite, alcune volte questa conoscenza è difficile da trasferire ed è difficile da codificare.
+        \paragraph{\textit{Big Data}} Estensione del concetto di \textit{Data Warehouse} in cui si considerano anche dati provenienti da flussi continui e dati non strutturati. Vengono considerati, sotto il concetto di \textit{Big Data}, anche tutti quei dati la quale produzione non ha costi aggiuntivi (stringhe di un motore di ricerca, tempo medio di visita ad una pagina web, ecc\dots). 
+    \subsection{Le caratteristiche}
+        \paragraph{Finalità} Il sistema informazionale deve essere in grado di fornire un substrato informativo per la conoscenza dell'azienda, inoltre deve essere in grado di descrivere il passato ed aiutare ad identificare i problemi e le loro cause. Inoltre deve poter suggerire i cambiamenti da apportare e fornire anticipazioni sui scenari futuri. 
+        \paragraph{Struttura} I dati devono essere articolati intorno ai soggetti di cui si vuol conoscere l'apporto alla vita aziendale. Si organizzano dunque le informazioni per ``tema'' e non per ``funzione'' come nei sistemi operazionali.
+        \paragraph{Utenza} I principali utenti del sistema informazionale sono i manager e i decisori che devono avere una visione e conoscenza ampia dell'azienda
+        \paragraph{Storicità} Il sistema deve mantenere e fornire uno storico dei dati con un arco temporale adeguato e molto più esteso rispetto a quello dei sistemi operazionale, inoltre deve fornire l'evoluzione storia dei soggetti di interesse.
+        \paragraph{Dettaglio} I dati sono quasi esclusivamente in forma aggregata e devono essere disponibili a diversi livelli di aggregazione.
+        \paragraph{Accesso} L'accesso ai dati è principalmente solo in lettura, eventuali aggiornamenti sono solo periodici e in momenti nei quali l'attività aziendale è ferma.
+\section{Modello multidimensionale}
+    Il modello multidimensionale è un modello di rappresentazione dei dati che permette di rappresentare i dati in maniera più intuitiva rispetto al modello relazionale. In questo modello il processo di analisi viene posto al centro del sistema e non più il processo di inserimento dei dati (i quali vengono inseriti non in maniera diretta ma vengono estratti da un \texttt{SI} Operazionale\footnote{Si rimanda al capitolo \ref{ch:operazionali}: \nameref{ch:operazionali} per ulteriori informazioni sui sistemi operazionali}).
+
+    In questo modello lo spazio delle informazioni viene rappresentato come insieme di matrici multidimensionali, dove ogni matrice rappresenta un tipo di evento (quale ad esempio l'immatricolazioni degli studenti), ogni elemento della matrice rappresenta un singolo evento (la singola immatricolazione) e ogni coordinata della matrice rappresenta una dimensione dell'evento (come ad esempio il corso di laurea, l'anno di immatricolazione, ecc\dots).
+    \subsection{Caratteristiche}
+        \paragraph{Ipercubo} Il modello multidimensionale è rappresentato da un ipercubo, ovvero una matrice multidimensionale con $n$ dimensioni, dove ogni cella rappresenta un singolo \textbf{fatto elementare}, ogni \textbf{dimensione} costituisce una coordinata del fatto e ogni \textbf{misura} è il valore numerico del fatto.
+        \paragraph{Fatti} Un fatto è un evento che si vuole analizzare e misurare, quale una vendita, un acquisto, ecc\dots. I fatto sono caratterizzati da un insieme di dimensioni che lo collocano nel tempo (quando è avvenuto), nello spazio aziendale (dove è avvenuto) e inoltre sono presenti altre dimensioni che lo \underline{quantificano} e altre informazioni descrittive. 
+        \paragraph{Misure} La misura è una caratteristica (e non dimensione) del fatto che si vuole analizzare, e ne descrive un aspetto \underline{quantitativo}. Ogni fatto può contenere una o più misure, le quali possono essere: \textbf{effettive} se memorizzate in maniera diretta, \textbf{calcolate a \textit{run-time}} usando i valori delle misure effettive o \textbf{implicite} ovvero che indicano la presenza o meno di un fatto.
+    \subsection{Aggregabilità} 
+        A partire dai \textbf{fatti} elementari si possono ricavare dei \textbf{fatti} sintetici quando si procede all'eliminazione di una o più dimensioni, in questo caso si parla di \textbf{aggregazione} dei dati. Questo processo di aggregazione viene fatto tramite opportuni operatori sui dati, in base a cosa rappresenta la dimensione aggregata, ad esempio se aggreghiamo per mese non ha "senso" avere a fine anno la somma del totale dei prodotti in magazzino a fine mese, ma ha senso avere la media mensile.
+        \paragraph{Operatori di aggregazione} Per ogni coppia costituita da (misura, aggregazione) possono essere definiti operatori e regole di aggregazione, ad esempio può essere presente una misura non aggregabile lungo una dimensione (vedi esempio precedente), oppure un operatore può essere utilizzato per aggregare lungo determinate dimensioni ma non in altre. Definiamo quindi con il termine \textbf{aggregabilità} \begin{definition}[Aggregabilità]
+            La possibilità di usare un operatore di aggregazione su una misura o su una coppia (misura, dimensione).
+        \end{definition}
+        Nel caso più specifico definiamo anche il termine \textbf{additività} ovvero \begin{definition}[Additività]
+            La possibilità di usare l'operatore di aggregazione ``somma'' su una misura o su una coppia (misura, dimensione).
+        \end{definition}.
+        \paragraph{Tipi di misura} Le misure possono essere di diversi tipi, tra i quali troviamo:
+        \begin{description}
+            \item[di Livello] si prende in considerazione il valore proprio del fatto, ed il momento nel quale è stato registrato. Non viene mai usata l'aggregazione additiva sulla dimensione temporale.
+            \item[Unitaria] si prende in considerazione il valore di uno dei soggetti della misura, e non è mai aggregabile con l'additività.
+            \item[di Flusso] si prende in considerazione il valore proprio del fatto ed un intervallo di riferimento, questa misura è aggregabile con l'additività lungo una qualunque dimensione.
+        \end{description}
+        \paragraph{Esempio}
+        \begin{table}[H]
+            \begin{tabular}{|c|c|c|c|c|}
+                \hline
+            \multicolumn{2}{|c|}{\textbf{Articolo}} & \textbf{Deposito} & \textbf{Data} & \textbf{Misura (quantità)} \\ \hline
+            PP1007015 & Pannello di polistirolo 100x70x15 & 1 & 01/01/2019 & 100 \\ \hline
+            PP1007015 & Pannello di polistirolo 100x70x15 & 2 & 01/01/2019 & 200 \\ \hline
+            VA1010 & Vite autofilettante 10x10 & 1 & 01/01/2019 & 1000 \\ \hline
+            &\dots&\dots&\dots&\dots\\ \hline
+            PP1007015 & Pannello di polistirolo 100x70x15 & 1 & 01/02/2019 & 150 \\ \hline
+            PP1007015 & Pannello di polistirolo 100x70x15 & 2 & 01/02/2019 & 250 \\ \hline
+            VA1010 & Vite autofilettante 10x10 & 1 & 01/02/2019 & 1100 \\ \hline
+            \end{tabular}
+            \caption{Esempio di tabella di fatti}
+        \end{table}
+        In questo esempio abbiamo una tabella di fatti, dove ogni riga rappresenta un singolo fatto, ogni colonna rappresenta una dimensione del fatto e l'ultima colonna rappresenta la misura del fatto. In questo caso la misura è la quantità di prodotto in magazzino. Questa è additiva rispetto alla dimensione "Deposito" ma non lo è rispetto alla dimensione "Data", inoltre non è aggregabile rispetto alla dimensione "Articolo".
+\section{Caratteristiche strutturali e funzionali}
+    Andiamo ad analizzare come sono strutturati i dati all'interno di un sistema informazionale, in particolare analizziamo le caratteristiche strutturali e funzionali di un sistema informazionale.
+    \subsection{Caratteristiche strutturali}
+        Le caratteristiche appena descritte sono le fondamenta dell'organizzazione dei dati in un sistema informazionale. Esistono però altre caratteristiche che sono fondamentali per la corretta organizzazione dei dati in un sistema informazionale.
+        \paragraph{Multidimensionalità} Per dimensionalità, in generale, si intente il numero di dimensioni necessarie per identificare un fatto, mentre nei sistemi operazionali abbiamo una dimensionalità puntuale (ad esempio il codice fiscale di un cliente), nei sistemi informazionali, vista la loro natura, per identificare un fatto servono tutte le dimensioni che lo caratterizzano.
+        \paragraph{Granularità} La granularità misura quanto l'informazione proposta è sintetica rispetto agli eventi sulla quale si basa, nel caso dell'ipercubo questa è una granularità minima in quanto ogni fatto corrisponde alla cella di origine dell'ipercubo. Avere diversi gradi di granularità permette di stilare analisi più efficiente ed avere una visione più chiara dei dati.
+        \paragraph{Arco temporale} L'arco temporale rappresenta il periodo di tempo che si vuole analizzare, in generale questo arco temporale è molto più ampio rispetto a quello dei sistemi operazionali, inoltre deve essere possibile analizzare i dati in maniera retrospettiva. Deve essere possibile avere almeno uno storico di 10-15 anni.
+        \paragraph{Profondità storica} Mentre i sistemi operazionali non tengono traccia solitamente di come un particolare dato e/o anagrafica si è evoluto nel tempo. Questa caratteristica è fondamentale nei sistemi informazionali in quanto anche l'evoluzione del fatto nel tempo è una dimensione del fatto stesso.
+    \subsection{Caratteristiche funzionali}
+        Oltre ad avere una struttura ben definita i sistemi informazionali devono avere delle caratteristiche funzionali ben definite, queste sono fondamentali per avere una analisi complete e coerente dei dati rilevati.
+        \paragraph{Integrazione dei dati} I dati proposti al \texttt{SI} informazionale spesso provengono da fonti diverse con diverse strutture e formati, è quindi fondamentale avere un sistema che permetta di integrare questi dati in maniera efficiente e coerente in modo da evitare errori, duplicazioni, ecc\dots
+        \paragraph{Accessibilità} In quanto i sistemi a supporto delle decisioni spesso vengono usati da persone con poca esperienza informatica è fondamentale che l'accesso ai dati sia il più semplice ed intuitivo possibile. Inoltre è fondamentale che il tempo di accesso ai dati sian in tempo utile per l'attività decisionale.
+        \paragraph{Flessibilità} Nel contesto dei sistemi informazionali intendiamo con flessibilità la capacità del sistema di adattarsi alle diverse interrogazioni possibili sui dati. Quindi il sistema deve essere in grado di articolare le richieste, aggregare dati a più livelli e con criteri non predefiniti, dare la possibilità di mettere in relazione misure diverse, ecc\dots Questo è fondamentale perché ogni azienda ha esigenze e dati diversi, e visto che è compito dell'\texttt{SI} informazionale supportare le decisioni ed suggerire cambiamenti è fondamentale che questo possa rappresentare i dati come richiesto dall'utente.
+        \paragraph{Correttezza} I dati proposti dal sistema informazionale devono essere necessariamente corretti, ciò visto lo scopo del sistema informazionale è fondamentale in quanto decisioni prese su dati errati possono portare a conseguenze disastrose. I dati necessari all'analisi non sono spesso di utilità operativa, quindi non sono controllati come i dati operativi, inoltre i dati necessari all'analisi provengono da più fonti ed è quindi possibile che la stessa entità sia memorizzata in maniera diversa in due fonti diverse.
+        \paragraph{Completezza} I dati proposti dal sistema informazionale devono essere completi, ovvero non devono mancare dati utili al processo decisionale, per garantire questo la \textit{data warehouse} deve essere popolata con tutti i dati necessari all'analisi.
+    \subsection{\textit{Data warehouse} e \textit{Data mart}}
+        Come già affrontato la \textit{data warehouse} è un insieme di dati raccolti su decenni di informazioni aziendali, organizzati in maniera efficiente all'analisi. Questi dati provengono da fonti relazionali diverse (\texttt{SI} operazionali, fonti esterne, ecc\dots) e vengono integrati in un unico sistema. Dato che la \textit{data warehouse} può raggiungere dimensioni molto grandi quando si deve andare ad analizzare un particolare aspetto dell'azienda l'utente può creare un \textit{data mart}, ovvero una porzione della \textit{data warehouse} che contiene solo i dati necessari all'analisi. Le \textit{data mart} possono essere "telematiche" ovvero possono essere create in tempo reale selezionando aspetti specifici della \textit{data warehouse} oppure possono essere "fisiche" ovvero possono essere create in maniera fisica e mantenute in maniera separata dalla \textit{data warehouse}.
