@@ -1,6 +1,7 @@
 \documentclass[twoside,a4paper]{report}
 \usepackage[italian]{babel}
 \usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
 \usepackage{amsmath}
 \usepackage{amsthm}
 \usepackage{amsfonts}
@@ -15,6 +16,7 @@
 \usepackage{adjustbox}
 \usepackage{float}
 \usepackage{graphicx}
+\usepackage{afterpage}
 
 \graphicspath{{./images/}}
 
@@ -49,7 +51,7 @@
     \renewcommand{\headrulewidth}{0pt}
     \fancyfoot{}
     \fancyfoot[LE,RO]{\thepage}
-    \fancyfoot[LO,RE]{"Appunti di Sistemi Informativi" di Luca Facchini}
+    \fancyfoot[LO,RE]{``Appunti di Sistemi Informativi'' di Luca Facchini}
 }
 \fancypagestyle{stdPage}{
     \fancyhead{}
@@ -58,7 +60,7 @@
     \setlength{\headheight}{15pt}
     \fancyfoot{}
     \fancyfoot[LE,RO]{\thepage}
-    \fancyfoot[LO,RE]{"Appunti di Sistemi Informativi" di Luca Facchini}
+    \fancyfoot[LO,RE]{``Appunti di Sistemi Informativi'' di Luca Facchini}
     \renewcommand{\footrulewidth}{0.4pt}
 }
 
@@ -73,32 +75,62 @@
         \hfill(#2\IfValueT{#1}{~---~#1})\endoldquote 
         \addvspace{\bigskipamount}}
 
+
+\newcommand\blankpage{%
+    \null
+    \thispagestyle{empty}%
+    \newpage}
+
 \title{Appunti di Sistemi Informativi}
 \author{Luca Facchini (mat. 245965)}
 \date{A.A. 2024/2025}
 
 \begin{document}
+    \pagenumbering{Roman}
+
     \begin{titlepage}
         \centering  % Center everything on the title page
         {\Huge\textbf{Appunti di Sistemi Informativi}} \\[1cm] % Title
-        \vspace{0.5cm}
+        \vspace{1.5cm}
         
+        {\normalsize di: } \\[.3cm]
         {\Large Luca Facchini} \\ % Author name
-        \vspace{0.3cm}
-        {\large Matricola: 245965} \\[2cm] % Additional author info
+        \vspace{1.5cm}
         
-        {\large Corso tenuto dal prof. Casari Paolo} \\[0.3cm] % Course information
+        {\large Corso tenuto dal prof. Bouquet Paolo} \\[0.3cm] % Course information
         {\large Università degli Studi di Trento} \\[1.5cm]
         
         {\large A.A. 2024/2025} \\[3cm] % Academic year
         
-        % Abstract section with spacing control
+        \vfill
+
+        \begin{minipage}[t]{0.4\textwidth}
+            \begin{flushleft} \normalsize
+                \emph{Autore:}\\
+                \textsc{Facchini} Luca \\ % Author name
+                Mat. 245965 \\
+                \vspace{-\baselineskip}
+                \begin{tabbing}
+                    Email:\= \href{mailto:luca.facchini-1@studenti.unitn.it}{luca.facchini-1@studenti.unitn.it} \\
+                        \>  \href{mailto:luca@fc-software.it}{luca@fc-software.it}
+                \end{tabbing}
+            \end{flushleft}
+        \end{minipage}
+        \hfill
+        \begin{minipage}[t]{0.4\textwidth}
+            \begin{flushleft} \normalsize
+                \emph{Corso:}\\
+                Sistemi Informativi [145024]
+                \textsc{CdL}: Laurea Triennale in Informatica \\
+                Prof. \textsc{Bouquet} Paolo \\
+                Email: \href{mailto:paolo.boquet@unitn.it}{paolo.boquet@unitn.it}
+            \end{flushleft}
+        \end{minipage}
         \vfill
         \begin{abstract}
-            Questo documento contiene gli appunti del corso di Sistemi Informativi, tenuto dal prof. Casari Paolo presso l'Università degli Studi di Trento. Il corso è stato seguito nell'anno accademico 2024/2025.\footnote{Dove non specificato diversamente eventuali immagini provengono dalle slide del corso (o da materiale didattico fornito dal docente) le quali sono fornite e tratte dal libro: "Sistemi Informativi Aziendali" di Pighin M. e Mazona A. solo per le immagini possono essere soggette a copyright e comunque usabili solo per fini didattici e in base alla legge italiana sul diritto d'autore (al massimo 15\%).}
+            Questo documento contiene gli appunti del corso di Sistemi Informativi, tenuto dal prof. Bouquet Paolo presso l'Università degli Studi di Trento. Il corso è stato seguito nell'anno accademico 2024/2025.\footnote{Dove non specificato diversamente eventuali immagini provengono dalle slide del corso (o da materiale didattico fornito dal docente) le quali sono fornite e tratte dal libro: ``Sistemi Informativi Aziendali'' di Pighin M. e Mazona A. solo per le immagini possono essere soggette a copyright e comunque usabili solo per fini didattici e in base alla legge italiana sul diritto d'autore (al massimo 15\%).}
         \end{abstract}
-        
-        \vfill  % Pushes the content to the center vertically
+
     \end{titlepage}
 
     \pagestyle{stdPage}
@@ -108,6 +140,10 @@
         \tableofcontents
         \thispagestyle{stdPage}
     \endgroup
+
+    \clearpage
+    \pagenumbering{arabic}
+    \afterpage{\blankpage}
     
     \include{chapters/01-laSocietàDellaConoscenza}
     \include{chapters/02-concettiGenerali}
@@ -118,4 +154,8 @@
     \include{chapters/07-sistemiInformazionali}
     \include{chapters/08-dataWarehousing}
     \include{chapters/09-DataMining}
+    \include{chapters/10-progetti}
+
+    \include{chapters/Conclusioni-ringraziamenti}
+    \afterpage{\blankpage}
 \end{document}
