@@ -1,8 +1,8 @@
 # Appunti secondo anno laurea triennale in Informatica (L-31)
-Da notare, al momento gli unici appunti "completi" sono quelli di [`Introduction to Computer and Network Security`](https://raw.githubusercontent.com/lucafano04/appuntiSecondoAnno/main/IntroductionSecurityComputerNetwork/main.pdf) e [`Reti`](https://raw.githubusercontent.com/lucafano04/appuntiSecondoAnno/main/Reti/main.pdf) gli altri o non sono mai stati portati avanti per inutilità degli stessi visto il materiale già disponibile (Ingenieria del software, Sistemi Informativi), sono completi fino ad un determinato punto (basiDiDati) o sono in fase di scrittura (Algoritmi e strutture Dati - esame annuale)
+Da notare, al momento gli unici appunti "completi" sono quelli di [`Introduction to Computer and Network Security`](https://raw.githubusercontent.com/lucafano04/appuntiSecondoAnno/main/IntroductionSecurityComputerNetwork/main.pdf), [`Reti`](https://raw.githubusercontent.com/lucafano04/appuntiSecondoAnno/main/Reti/main.pdf), [`Sistemi Informativi`](https://raw.githubusercontent.cim/lucafano04/appuntiSecondoAnno/main/sistemiInformativi/main.pdf)gli altri o non sono mai stati portati avanti per inutilità degli stessi visto il materiale già disponibile (Ingenieria del software), sono completi fino ad un determinato punto (basiDiDati) o sono in fase di scrittura (Algoritmi e strutture Dati - esame annuale)
 
 
-## Boaring stuff...
+## Boring stuff...
 Allora cosa puoi fare con questi appunti: prenderli, studiare, suggerire cambiamenti/correzioni tramite github e pull request, l'unica cosa che ti chiedo è di non far firnta che siano i tuoi ;-)
 
 se vuoi aggiungerli ad una altra repository contattami [luca@fc-software.it](mailto:luca@fc-software.it) e non dimenticare di citare le fonti
