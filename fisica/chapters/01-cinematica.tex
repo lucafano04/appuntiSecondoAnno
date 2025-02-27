@@ -1,0 +1,263 @@
+\chapter{Cinematica}
+Nel seguente capitolo andremo ad analizzare la cinematica, ovvero la branca della fisica che si occupa di descrivere il moto di un punto nello spazio. Per fare ciò andremo ad analizzare le grandezze fisiche che descrivono il moto di un punto nello spazio e come queste siano collegate tra loro.
+
+\section{Nozioni Preliminari}
+
+    \paragraph{Sistema di riferimento} Un sistema di riferimento è un insieme di regole che permettono di determinare la posizione di un punto nello spazio. Un sistema di riferimento è composto da un'origine, da un insieme di assi e da un'unità di misura. Definiamo un sistema di riferimento in quattro assi: $x$, $y$, $z$ e $t$ dove $t$ rappresenta il tempo.
+    \begin{definition}[Spazio-Tempo Euclideo]
+        Lo spazio-tempo euclideo ($S$) è un sistema di riferimento in quattro assi, $x$, $y$, $z$ e $t$, dove $t$ rappresenta il tempo. Lo spazio-tempo euclideo è definito come:
+        $$
+            S(O_z, x, y, z; O_t, t)
+        $$
+        dove $O_z$ è l'origine degli assi spaziali e $O_t$ è l'origine dell'asse temporale.
+    \end{definition}
+
+\section{Moti in una dimensione e grafico orario}
+    Per descrivere i moti in una dimensione possiamo utilizzare un grafico non affine, quindi non lineare, che rappresenta la posizione di un punto in funzione del tempo. Questo grafico è detto \textit{grafico orario}.
+    \begin{definition}[Grafico Orario]
+        Il grafico orario è un grafico cartesiano che esprime la posizione di un punto che si muove in una dimensione in funzione del tempo.
+    \end{definition}
+    \begin{tikzpicture}
+        \begin{axis}
+            [axis lines = left, xlabel = $t$, ylabel = $x$, xmin = 0, xmax = 11, ymin = 0, ymax = 11, xtick = {0, 2, 10}, ytick = {0, 2, 10}, xticklabels = {$0$, $t_i$, $t_f$}, yticklabels = {$0$, $x_i\ P_i$, $x_f\ P_f$}, legend pos = north west]
+            \addplot[mark = *, color = red] coordinates {(2, 2)} node[above] {$E_i$};
+            \addplot[mark = *, color = blue] coordinates {(10, 10)} node[above] {$E_f$};
+        \end{axis}
+    \end{tikzpicture}
+    Vediamo come al momento $t_i$ il punto sia in posizione $P_i$ e di verifica come l'evento $E_i$ sia in posizione $x_i$. Al momento $t_f$ il punto è in posizione $P_f$ e l'evento $E_f$ è in posizione $x_f$. Ora possiamo definite lo spostamento:
+    \begin{definition}[Spostamento]
+        Lo spostamento è la variazione di posizione di un punto in un intervallo di tempo. Lo spostamento è definito come:
+        $$
+            \begin{aligned}
+                S_{i \to f} &= x_f - x_i\\
+                \Delta x_{i \to f} &= x_f - x_i
+            \end{aligned}
+        $$
+    \end{definition}
+    Da notare come lo spostamento non descrive ne' la traiettoria ne' la distanza percorsa dal punto ma solo la variazione di posizione, infatti il punto potrebbe aver compiuto un percorso "non diretto". Inoltre nello spostamento ha un verso definito e come conseguenza scrivere $S_{i \to f} \neq S_{f \to i}$.
+    \begin{definition}[Distanza Percorsa]
+        La distanza percorsa è la lunghezza della traiettoria percorsa da un punto in un intervallo di tempo. La distanza percorsa è definita come:
+        $$
+            d(P_i, P_f) = \left| x_f - x_i \right|
+        $$
+    \end{definition}
+    Notiamo come la distanza percorsa sia sempre positiva in quanto è la lunghezza della traiettoria percorsa dal punto. Inoltre la distanza percorsa non ha un verso definito, infatti $d(P_i, P_f) = d(P_f, P_i)$.\newline
+    Ora per descrivere il moto di un punto possiamo definire la velocità media:
+    \begin{definition}[Velocità media]
+        La velocità media è la variazione di posizione di un punto in funzione del tempo. La velocità media è definita come:
+        $$
+            \begin{aligned}
+                v_m &= \frac{\Delta x}{\Delta t} = \frac{\Delta x_{i \to f}}{\Delta t_{i \to f}}\\
+            \end{aligned}
+        $$
+    \end{definition}
+    Da notare come la velocità media non tiene conto del moto del punto in un intervallo di tempo, ma solo della variazione di posizione. Inoltre la velocità media ha un verso definito in quanto trattiamo lo spostamento (il quale ha un verso definito).\newline
+    Per descrivere il moto di un punto in un instante $t$ di tempo possiamo definire la velocità istantanea:
+    \begin{definition}[Velocità istantanea]
+        La velocità istantanea è la variazione di posizione di un punto in un istante di tempo. La velocità istantanea è definita come:
+        $$
+            v_i(t)=\lim\limits_{\Delta t \to 0} \frac{\Delta x}{\Delta t} = \frac{dx}{dt}
+        $$
+    \end{definition}
+    Dal punto di vista matematico la velocità istantanea è la derivata della posizione rispetto al tempo. Dunque i punti dove si passa da un movimento ``in avanti'' ad un movimento ``all'indietro'' sono i punti in cui la velocità istantanea è nulla ovvero i punti di massimo e minimo della funzione posizione, inoltre il punto in cui la velocità istantanea è nulla è detto punto di inversione. Inoltre la velocità istantanea è una funzione continua in quanto la derivata di una funzione continua è anch'essa continua.\newline
+    È vero che in un determinato periodo di tempo io possa aumentare o diminuire la velocità, per questo motivo definiamo la funzione di accelerazione:
+    \begin{definition}[Accelerazione]
+        L'accelerazione è la variazione di velocità di un punto in funzione del tempo. L'accelerazione è definita come:
+        $$
+            \begin{aligned}
+                a &= \frac{\Delta v}{\Delta t} = \frac{\Delta v_{i \to f}}{\Delta t_{i \to f}}\\
+            \end{aligned}
+        $$
+    \end{definition}
+    Da notare come l'accelerazione non tiene conto del moto del punto in un intervallo di tempo, ma solo della variazione di velocità. Inoltre l'accelerazione ha un verso definito in quanto trattiamo la variazione di velocità (la quale ha un verso definito).
+    \paragraph{Relazione tra posizione, velocità e accelerazione}
+        Come già detto la velocità è la derivata della posizione rispetto al tempo e l'accelerazione è la derivata della velocità rispetto al tempo, è vero inoltre che la posizione è l'integrale della velocità rispetto al tempo e questa è l'integrale dell'accelerazione rispetto al tempo. Dunque possiamo scrivere:
+        \begin{align}
+            x(t) &\text{ posizione} \\
+            v(t) = \frac{dx}{dt} &\text{ velocità} \\
+            a(t) = \frac{dv}{dt} = \frac{d^2x}{dt^2} &\text{ accelerazione}
+        \end{align} 
+        Al contrario possiamo scrivere:
+        \begin{align}
+            v(t) &= v_0 + \int_{t_0}^{t} a(T) dT\\
+            x(t) &= x_0 + \int_{t_0}^{t} v(T) dT = x_0 + \int_{t_0}^{t} dT \left[v_0+\int_{t_0}^{T} a(\tau) d\tau\right]
+        \end{align}
+        Ora le dimensioni fisiche (e non le unità di misura) di queste grandezze sono:
+        $$
+            \begin{aligned}
+                \left[x\right] &= \left[L\right]\\
+                [v] &= \left[\frac{L}{T}\right]\\
+                [a] &= \left[\frac{L}{T^2}\right]
+            \end{aligned}
+        $$
+        ed le rispettive unità di misura sono:
+        $$
+            \begin{aligned}
+                \left[x\right] &= \left[m\right]\\
+                [v] &= \left[\frac{m}{s}\right]\\
+                [a] &= \left[\frac{m}{s^2}\right]
+            \end{aligned}
+        $$
+    \subsection{Esercizio sulle grandezze fisiche}
+        Andiamo ora ad analizzare uno strumento importante per la risoluzione di esercizi fisici, ovvero l'analisi dimensionale. L'analisi dimensionale è uno strumento che ci permette di capire se un'equazione è corretta o meno e ci può suggerire come risolvere un problema. Vediamo un esempio:
+        \begin{problem}
+            Sia un punto che si muove lungo un asse $x$ in funzione del tempo $t$, questo al momento $t_0=0$ si trova al punto $x(t_0)=x(0)=x_0=0$ e la sua velocità in questo punto è $v(t_0)=v(0)=v_0>0$. La sua accelerazione è descritta dalla funzione $a(x)=-Ax-B$ con $A,B>0$.\newline
+            Determinare il momento in cui il punto si ferma($x_{\text{stop}}$)
+        \end{problem}
+        Analizziamo l'equazione dell'accelerazione:
+        $$
+            a(x) = -Ax-B
+        $$
+        notiamo come questa abbia come dimensioni fisiche:
+        $$
+            \begin{aligned}
+                a(x) &= -Ax&-B\\
+                \left[\frac{L}{T^2}\right] &= \left[?\right]\left[L\right]&-\left[?\right]
+            \end{aligned}
+        $$
+        da queste possiamo dedurre che $A$ ha dimensioni fisiche $\left[\frac{1}{T^2}\right]$ e $B$ ha dimensioni fisiche $\left[\frac{L}{T^2}\right]$. Ora l'equazione dello spazio in funzione del tempo è: $$
+            \frac{d^2x}{dt^2}=-Ax-B
+        $$
+        dunque dobbiamo trovare una funzione $x(t)$ tale che soddisfi questa equazione differenziale, in quanto dobbiamo mantenere mantenere una funzione sullo spazio ed ottenere il parametro $A$ all'esterno ipotizziamo che la funzione sia:
+        $$  
+            \begin{aligned}
+                x(t)=&X_0\sin(\sqrt{A}t + \varphi) = \\
+                =& \mathcal{A}\sin(\sqrt{A}t + \varphi)
+            \end{aligned}
+        $$
+        Prima di calcolare le derivate di questa funzione verifichiamo che effettivamente questa funzione soddisfi la dimensionalità:
+        $$
+            \begin{aligned}
+                \left[x\right] &= \left[L\right]\\
+                \left[\mathcal{A}\right] &= \left[L\right]\\
+                \left[\sqrt{A}\right] &= \left[\frac{1}{T}\right]\\
+                \left[t\right] &= \left[T\right]\\
+                \left[\varphi\right] &= \left[1\right]\\
+                \left[\sqrt{A}t + \varphi\right] &= \left[1\right]\checkmark\\
+                \left[\mathcal{A}\right]\left[\sin(\left[1\right])\right]&=\left[L\right]\checkmark
+            \end{aligned}
+        $$
+        ora verifichiamo che questa funzione soddisfi l'equazione differenziale, calcoliamo la derivata prima e la derivata seconda:
+        $$
+            \begin{aligned}
+                \frac{dx}{dt} &= \mathcal{A}\sqrt{A}\cos(\sqrt{A}t + \varphi)\\
+                \frac{d^2x}{dt^2} &= -A\underbrace{\mathcal{A}\sin(\sqrt{A}t + \varphi)}_{x(t)}
+            \end{aligned}
+        $$
+        verifichiamo come anche queste derivate soddisfino la dimensionalità:
+        $$
+            \begin{aligned}
+                \left[\frac{dx}{dt}\right] &\stackrel?= \left[\frac{L}{T}\right] \\
+                \left[\frac{L}{T}\right] &= \left[\mathcal{A}\right]\left[\sqrt{A}\right]\left[\cos(\left[1\right])\right]\\
+                \left[\frac{L}{T}\right] &= \left[L\right]\left[\frac{1}{T}\right]\left[1\right]\checkmark\\
+                \\ 
+                \left[\frac{d^2x}{dt^2}\right] &\stackrel?= \left[\frac{L}{T^2}\right] \\
+                \left[\frac{L}{T^2}\right] &= \left[A\right]\left[\mathcal{A}\right]\left[\sin(\left[1\right])\right]\\
+                \left[\frac{L}{T^2}\right] &= \left[\frac{1}{T^2}\right]\left[L\right]\left[1\right]\checkmark
+            \end{aligned}
+        $$
+        Dunque queste derivate soddisfano la dimensionalità, ma manca ancora il parametro $-B$ nell'equazione dell'accelerazione, dunque dobbiamo modificare la funzione $x(t)$ in modo che soddisfi anche questa condizione, partiamo dal fatto nella prima funzione possiamo aggiungere/sottrarre solo una quantità di dimensionalità $\left[L\right]$ e notiamo come in quanto $\left[B\right]=\left[\frac{L}{T^2}\right]$ ed $\left[A\right]=\left[\frac{1}{T^2}\right]$ allora: 
+        $$
+            \left[\frac{B}{A}\right] = \left[\frac{\frac{L}{\cancel{T^2}}}{\frac{1}{\cancel{T^2}}}\right] = \left[L\right]
+        $$
+        Dunque $\frac{B}{A}$ può essere aggiunto alla funzione $x(t)$ in quanto ha le stesse dimensioni fisiche di $x(t)$, dunque la funzione $x(t)$ diventa:
+        $$
+            x(t) = \mathcal{A}\sin(\sqrt{A}t + \varphi) - \frac{B}{A}
+        $$
+        questo non comporta alcun cambiamento alle derivate in quanto queste sono in funzione di $t$ ed $A$ e $B$ sono delle costanti. Possiamo però notare come la derivata seconda di questa può essere riscritta come:
+        $$
+            \begin{aligned}
+                \frac{d^2x}{dt^2} =& -A\left(\mathcal{A}\sin(\sqrt{A}t + \varphi)\right)\\
+                =&-A\left(x(t)+\frac{B}{A}\right)\\
+                =&-Ax(t)-B
+            \end{aligned}
+        $$
+        Abbiamo quindi trovato la funzione $x(t)$ che soddisfa l'equazione differenziale, verifichiamo che nel punto $x_0$ questa soddisfi le condizioni iniziali per la posizione e la velocità:
+        \begin{align}
+            x(0) &= \mathcal{A}\sin(\varphi) - \frac{B}{A} = 0 \label{eq:P1pos}\\
+            \frac{dx}{dt}(0) = v(0) &= \mathcal{A}\sqrt{A}\cos(\varphi) > 0 \label{eq:P1vel}
+        \end{align}
+        Per $\mathcal{A}>0$ allora per \ref{eq:P1pos} $\sin(\varphi) = \frac{B}{A\mathcal{A}}$ e per \ref{eq:P1vel} $\cos(\varphi) > 0$ queste condizioni in aggiunta a quelle di $ A,B>0 $ ci permettono di dire che $$
+            \begin{cases}
+                \mathcal{A}>0\\
+                0<\varphi<\frac{\pi}{2}
+            \end{cases}
+        $$
+        ora dobbiamo trovare il momento in cui il punto si ferma ($x_{\text{stop}}$), ovvero il momento in cui la velocità è nulla ($v(t_{\text{stop}})=v_{\text{stop}}=0$). 
+        $$
+            \begin{aligned}
+                v(t_{\text{stop}}) =&\sqrt{A}\mathcal{A}\cos(\sqrt{A}t_{\text{stop}} + \varphi) = 0\\
+                \sqrt{A}\mathcal{A}\neq 0\Rightarrow & \cos(\sqrt{A}t_{\text{stop}} + \varphi) = 0\\
+                \sqrt{A}t_{\text{stop}} + \varphi &= \frac{\pi}{2}\\
+                t_{\text{stop}} &= \left(\frac{\pi}{2}-\varphi\right)\frac{1}{\sqrt{A}}\\
+            \end{aligned}
+        $$
+        ed al momento $t_{\text{stop}}$ la posizione del punto è:
+        $$
+            \begin{aligned}
+                x_{\text{stop}} &= \mathcal{A}\sin\left[\cancel{\sqrt{A}}\frac{1}{\cancel{\sqrt{A}}}\left(\frac{pi}2-\cancel\varphi\right) + \cancel\varphi\right] - \frac{B}{A} \\
+                &= \mathcal{A}\sin\left(\frac{\pi}{2}\right) - \frac{B}{A}\\
+                &= \mathcal{A} - \frac{B}{A}
+            \end{aligned}
+        $$
+        {\footnotesize Vedi \ref{lez:26-02-2025}}
+    \subsection{Problema de ``Il lancio del sasso'' (M.R.U.A e M.R.U)}
+        Questo classico problema viene usato per definire il Moto Rettilineo Uniformemente Accelerato ed il Moto Rettilineo Uniforme
+        \begin{problem}
+            Una coppia di amici vuole misurare l'altezza di un precipizio. Decidono di farlo lanciando un sasso verso il basso e misurando il tempo che impiega a raggiungere il fondo. Sappiamo che il tempo tra il rilascio del sasso grave\footnote{Soggetto alla gravità} ed il rumore dell'impatto è di $t_a$ secondi.\newline
+            Calcolare l'altezza del precipizio.
+        \end{problem}
+        Avendo definito il sistema di riferimento con origine la cima del precipizio (dove sono gli amici) ed un verso ``puntante'' il fondo.\\
+        Il problema può essere diviso in due parti:
+        \begin{enumerate}
+            \item[I] Il moto del masso grave
+            \item[II] Il moto del suono
+        \end{enumerate}
+        Mentre la prima parte è descritta da una accelerazione costante $a(t)=g$, una velocità iniziale nulla $v(0)=0$, una posizione iniziale $x(0)=0$ e una posizione finale $x(t_f)=x_f$. La seconda parte è descritta da una velocità costante $v(t)=v_s$ e una posizione iniziale $x(t)=x_f$ e una posizione finale $x(t)=0$. Allora possiamo scrivere la posizione del masso grave come:
+        $$
+            \begin{aligned}
+                a&=g\\
+                v(t)&=v_0+\int_0^t a(T)dT \\
+                &= v_0 + gt\\
+                z(t)&=z_0+\int_0^t v(T)dT\\ 
+                &= z_0 + \int_0^t(v_0 + gT )dT \\ 
+                &= \underbrace{z_0}_0 + \underbrace{v_0}_0t + \frac{1}{2}gt^2\\
+                &= \frac{1}{2}gt^2
+            \end{aligned}
+        $$
+        Da notare come tutto ciò può essere scritto solo se $t<t_f$ in quanto il masso non può andare oltre il fondo del precipizio.\\
+        Assumendo che il sasso venga lasciato perpendicolarmente al suolo allora possiamo scrivere la posizione del suono come:
+        $$
+            \begin{aligned}
+                v(t)&=v_s\\
+                z(t)|_{t>t_f}&=z_f + \int_{t_f}^t v_s dT\\
+                &= z_f + v_s(t-t_f)
+            \end{aligned}
+        $$
+        A questo punto definendo come $t_a$ il tempo tra il rilascio del sasso e l'impatto (amico), $t_f$ come il tempo del fondo del precipizio e $t_0$ come il tempo di rilascio del sasso, e dunque definito che $\Delta t_a = \Delta t_{mg} + \Delta t_{ms} $ possiamo scrivere:
+        $$
+            \begin{cases}
+                Z_f = \frac{1}{2}gt_f^2\\
+                \frac{1}{2}gt_f^2 - v_s(t_s-t_f) = 0\\
+            \end{cases} = 
+            \begin{cases}
+                /\\
+                t_f^2+2\frac{v_s}{g}t_f - 2\frac{Z_f}{g} = 0
+            \end{cases}
+        $$
+        Questa equazione di secondo grado ha come soluzione:
+        $$
+            t_f = -\frac{v_s}{g} \pm \sqrt{\left(\frac{v_s}{g}\right)^2 + 2\frac{Z_f}{g}}
+        $$
+        la cui unica soluzione valida è:
+        $$
+            t_f = -\frac{v_s}{g} + \sqrt{\left(\frac{v_s}{g}\right)^2 + 2\frac{Z_f}{g}}
+        $$
+        Questo è il tempo che impiega il sasso a raggiungere il fondo del precipizio, ora possiamo calcolare l'altezza del precipizio:
+        $$
+            \begin{aligned}
+                Z_f &= \frac{1}{2}g\left(-\frac{v_s}{g} + \sqrt{\left(\frac{v_s}{g}\right)^2 + 2\frac{Z_f}{g}}\right)^2\\
+                &= \frac{1}{2}g\left(\frac{v_s}{g} - \sqrt{\left(\frac{v_s}{g}\right)^2 + 2\frac{Z_f}{g}}\right)^2\\
+                &= \frac{1}{2}g\left({\frac{v_s}{g}}^2 - 2\frac{v_s}{g}\sqrt{\left(\frac{v_s}{g}\right)^2 + 2\frac{Z_f}{g}} + \left(\left(\frac{v_s}{g}\right)^2 + 2\frac{Z_f}{g}\right)\right) \\
+            \end{aligned}
+        $$
