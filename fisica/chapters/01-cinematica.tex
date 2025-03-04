@@ -261,3 +261,180 @@ Nel seguente capitolo andremo ad analizzare la cinematica, ovvero la branca dell
                 &= \frac{1}{2}g\left({\frac{v_s}{g}}^2 - 2\frac{v_s}{g}\sqrt{\left(\frac{v_s}{g}\right)^2 + 2\frac{Z_f}{g}} + \left(\left(\frac{v_s}{g}\right)^2 + 2\frac{Z_f}{g}\right)\right) \\
             \end{aligned}
         $$
+    \subsection{Moto armonico}
+        Il moto armonico è descritto dalla seguente funzione di posizione:
+        $$
+            x(t) = A\sin(\omega t + \varphi)
+        $$
+        dove:
+        \begin{itemize}
+            \item $A$ è l'ampiezza del moto
+            \item $\omega$ è la pulsazione del moto
+            \item $\varphi$ è la fase iniziale del moto
+        \end{itemize}
+        come conseguenza possiamo ricavare la posizione in funzione del tempo:
+        \begin{table}[H]
+            \centering
+            \begin{tabular}{c|c}
+                $L$ & $X$\\
+                \hline
+                $0$ & $A\sin(\varphi)$\\
+                $-\frac{\varphi}{\omega}$ & $A\sin(\frac{\varphi}{\cancel{\omega}}\cancel{\omega}-\varphi) = 0$\\
+                $-\frac{\varphi}{\omega}+\frac{\pi}{2\omega}$ & $A$\\
+                $-\frac{\varphi}{\omega}+\frac{\pi}{\omega}$ & $0$\\
+                $-\frac{\varphi}{\omega}+\frac{3\pi}{2\omega}$ & $-A$\\
+            \end{tabular}
+            \caption{Posizione in funzione del tempo del moto armonico}
+        \end{table}
+        come possiamo notare dall'equazione di posizione in funzione del tempo il moto armonico è periodico con periodo $T=\frac{2\pi}{\omega}$ e frequenza $f=\frac{1}{T}=\frac{\omega}{2\pi}$.\newline
+        Al variare del parametro $\varphi$ (fase) il moto armonico può essere traslato lungo l'asse $t$, se invece è il parametro $A$ (ampiezza) a variare il moto armonico può essere ``allargato'' o ``restringo'' lungo l'asse $x$, ovvero i massimi saranno $A$ e i minimi $-A$. Infine se è il parametro $\omega$ (pulsazione) a variare il moto armonico può essere ``allungato'' o ``accorciato'' lungo l'asse $t$, ovvero la distanza (temporale) tra due massimi consecutivi sarà $T=\frac{2\pi}{\omega}$.
+        \paragraph{Derivate}
+            Come accennato la velocità è la derivata della posizione rispetto al tempo:
+            $$
+                v(t) = \frac{dx}{dt} = A\omega\cos(\omega t + \varphi)
+            $$
+            e l'accelerazione è la derivata della velocità rispetto al tempo:
+            $$
+                a(t) = \frac{dv}{dt} = \frac{d^2x}{dt^2} = -A\omega^2\sin(\omega t + \varphi)
+            $$
+        \paragraph{Analisi dimensionale} 
+            Possiamo notare come la funzione di posizione del moto armonico soddisfi la dimensionalità:
+            $$
+                \begin{aligned}
+                    \left[A\right]=\left[x(t)\right]=\left[L\right]\\
+                    \left[\omega t\right]=\left[1\right]\Rightarrow \left[w\right] = \left[\frac{1}{T}\right]\\
+                    \left[\omega\right] = \left[\frac{1 \text{ radiante}}{\text{sec}}\right]
+                \end{aligned}
+            $$
+        \begin{problem}[1.26]
+            In un moto armonico semplice, con pulsazione $\omega=1.55\ \frac{\texttt{rad}}{\texttt{s}}$ e ampiezza $A=7\ \texttt{cm}$, si osserva che al tempo $t=0$ il punto si trova in posizione $x(0)=2.72\ \texttt{cm}$.\newline
+            Calcolare:\begin{enumerate}
+                \item[a.] la fase iniziale $\varphi$ 
+                \item[b.] il periodo d'oscillazione $T$
+                \item[c.] la velocità iniziale $v(0)$
+            \end{enumerate}
+        \end{problem}
+        Per prima calcoliamo la fase iniziale $\varphi$ andando a sfruttare la posizione iniziale ed la legge di posizione del moto armonico:
+        $$
+            \begin{aligned}
+                x(0) &= A\sin(\varphi)\\
+                \frac{x(0)}{A} &= \sin(\varphi)\\
+                \arcsin\left(\frac{x(0)}{A}\right) &= \varphi\\
+                \arcsin\left(\frac{2.72}{7}\right) &= \varphi\\
+                \varphi &\approx 0.39
+            \end{aligned}
+        $$
+        Ora possiamo calcolare il periodo d'oscillazione $T$ andando a sfruttare la definizione di periodo:
+        $$
+            \begin{aligned}
+                T &= \frac{2\pi}{\omega}\\
+                \frac{2\pi}{\omega} &= \frac{2\pi}{1.55}\\
+                T &\approx 4.07\ \text{4 secondi e spicci \textasciitilde prof. Iuppa}
+            \end{aligned}
+        $$
+        Infine avendo calcolato la fase iniziale $\varphi$ possiamo calcolare la velocità iniziale $v(0)$ andando ad utilizzare la derivata prima della posizione:
+        $$
+            \begin{aligned}
+                v(0) &= \frac{dx}{dt}(0)\\
+                &= A\omega\cos(\omega t + \varphi)\\
+                &= 7\cdot1.55\cos(0.39)\\
+                v(0) &\approx 10.5\ \text{cm/s}
+            \end{aligned}
+        $$
+\section{Moti in due dimensioni}
+    Andiamo ora ad analizzare i moti in due dimensioni, ovvero i moti di un punto nello spazio.
+    \subsection{Vettori e definizioni}
+        Per descrivere i moti in due dimensioni possiamo utilizzare i vettori, in particolare per descrivere come un punto si muove nello spazio in funzione del tempo usiamo il \textbf{vettore posizione}:
+        $$
+            \vec{r}(t) = \begin{bmatrix} x(t)\\ y(t) \end{bmatrix}
+        $$
+        \begin{definition}[Vettore Posizione]
+            Il vettore posizione ($\vec{r}$) è un vettore che descrive la posizione di un punto nello spazio in funzione del tempo, questo è un vettore di due dimensioni.
+        \end{definition}
+        Definiamo ora il \textbf{modulo} di un vettore:
+        \begin{definition}[Modulo di un vettore]
+            Il modulo di un vettore ($\left|\vec{v}\right|$) è la lunghezza del vettore, ovvero la distanza tra l'origine e la coda del vettore. Questa è definita come:
+            $$
+                \left|\vec{v}\right|^2 = \sum_{i=1}^n v_i^2
+            $$
+            dove $v_i$ è la componente $i$ del vettore ed $n$ è la dimensione del vettore.
+        \end{definition}
+        Molto spesso sarà necessario avere un vettore di lunghezza unitaria, ovvero un vettore che ha modulo $1$, ma che mantenga la direzione ed il verso del vettore originale, questo vettore è detto \textbf{versore}:
+        \begin{definition}[Versore]
+            Il versore ($\hat{v}$) è un vettore di lunghezza unitaria che mantiene la direzione e il verso del vettore originale. Il versore è definito come:
+            $$
+                \hat{v} = \frac{\vec{v}}{\left|\vec{v}\right|}
+            $$
+        \end{definition}
+        Ora possiamo definire le operazioni tra vettori:
+        \begin{definition}[Somma di vettori]
+            La somma di due vettori ($\vec{v}+\vec{u}$) è un vettore che ha come componenti la somma delle componenti dei due vettori. La somma di due vettori è definita come:
+            $$
+                \vec{v}+\vec{u} = \begin{bmatrix} v_x\\ v_y \end{bmatrix} + \begin{bmatrix} u_x\\ u_y \end{bmatrix} = \begin{bmatrix} v_x+u_x\\ v_y+u_y \end{bmatrix}
+            $$
+        \end{definition}
+        Graficamente la somma di due vettori è la costruzione di un parallelogramma con i due vettori come lati, il vettore somma è la diagonale del parallelogramma. Questo lo possiamo fare grazie alla \textbf{regola de trasporto} ovvero la regola che ci permette di trasportare un vettore in un altro punto dello spazio mantenendo direzione e verso per poi sommarlo ad un altro vettore.
+        \begin{definition}[Prodotto scalare]
+            Il prodotto scalare tra un vettore e uno scalare ($\vec{v}\cdot\alpha$) è un vettore che ha come componenti il prodotto delle componenti del vettore per lo scalare. Il prodotto scalare è definito come:
+            $$
+                \vec{v}\cdot\alpha = \begin{bmatrix} v_x\\ v_y \end{bmatrix}\cdot\alpha = \begin{bmatrix} v_x\alpha\\ v_y\alpha \end{bmatrix}
+            $$
+            Questa operazione è usata per il calcolo del versore.
+        \end{definition}
+        \begin{definition}[Angolo tra due vettori]
+            L'angolo tra due vettori ($\vec{v}$ e $\vec{u}$) è l'angolo tra i due vettori, ovvero l'angolo tra i due versori. L'angolo tra due vettori è definito come:
+            $$
+                \cos(\theta) = \frac{\vec{v}\cdot\vec{u}}{\left|\vec{v}\right|\left|\vec{u}\right|} \Rightarrow \theta = \arccos\left(\frac{\vec{v}\cdot\vec{u}}{\left|\vec{v}\right|\left|\vec{u}\right|}\right)
+            $$
+        \end{definition}
+        In questa definizione usiamo il prodotto scalare tra due vettori, questo prodotto è definito come:
+        \begin{definition}[Prodotto scalare]
+            Il prodotto scalare tra due vettori ($\vec{v}\cdot\vec{u}$) è uno scalare che ha come valore la somma dei prodotti delle componenti dei due vettori. Il prodotto scalare è definito come:
+            $$
+                \vec{v}\cdot\vec{u} = \sum_{i=1}^n v_iu_i
+            $$
+            dove $v_i$ e $u_i$ sono le componenti $i$ dei due vettori ed $n$ è la dimensione dei vettori.
+        \end{definition}
+        Quando descriviamo il movimento del punto nello spazio possiamo descrivere il moto con il \textbf{raggio vettore}:
+        \begin{definition}[Raggio vettore]
+            Il raggio vettore ($\vec{r}$) è un vettore che descrive la posizione di un punto nello spazio in funzione del tempo. Il raggio vettore è definito come:
+            $$
+                \vec{v}(t) = \begin{bmatrix} x(t)\\ y(t) \end{bmatrix}=x\hat{v}_x+y\hat{v}_y
+            $$
+        \end{definition}
+        Di conseguenza possiamo definire la velocità e l'accelerazione come:
+        \begin{definition}[Velocità]
+            La velocità ($\vec{v}$) è la derivata del raggio vettore rispetto al tempo. La velocità è definita come:
+            $$
+                \vec{v}(t) = \frac{d\vec{r}}{dt} = \begin{bmatrix} \frac{dx}{dt}\\ \frac{dy}{dt} \end{bmatrix} = \begin{bmatrix} v_x\\ v_y \end{bmatrix} = v_x\hat{v}_x+v_y\hat{v}_y
+            $$
+        \end{definition}
+        \begin{definition}[Accelerazione]
+            L'accelerazione ($\vec{a}$) è la derivata della velocità rispetto al tempo. L'accelerazione è definita come:
+            $$
+                \vec{a}(t) = \frac{d\vec{v}}{dt} = \frac{d^2\vec{r}}{dt^2} = \begin{bmatrix} \frac{dv_x}{dt}\\ \frac{dv_y}{dt} \end{bmatrix} = \begin{bmatrix} a_x\\ a_y \end{bmatrix} = a_x\hat{v}_x+a_y\hat{v}_y
+            $$
+        \end{definition}
+        Anche per i vettori la posizione in funzione del tempo può essere scritta come l'integrale della velocità rispetto al tempo:
+        $$
+            \rho(t) = \vec{\rho}_0 + \int_{t_0}^{t} \vec{v}(T)dT
+        $$
+        e la velocità in funzione del tempo può essere scritta come l'integrale dell'accelerazione rispetto al tempo:
+        $$
+            \vec{v}(t) = \vec{v}_0 + \int_{t_0}^{t} \vec{a}(T)dT
+        $$
+        \paragraph{Coordinate Polari}
+            Le coordinate polari sono un sistema di coordinate che permette di descrivere un punto nello spazio con due coordinate: il raggio ($\rho$) e l'angolo ($\theta$). Queste coordinate sono collegate alle coordinate cartesiane tramite le relazioni:
+            $$
+                \begin{aligned}
+                    x &= \rho\cos(\theta)\\
+                    y &= \rho\sin(\theta)
+                \end{aligned}
+            $$
+            e le coordinate cartesiane sono collegate alle coordinate polari tramite le relazioni:
+            $$
+                \begin{aligned}
+                    \rho &= \sqrt{x^2+y^2}\\
+                    \theta &= \arctan\left(\frac{y}{x}\right)
+                \end{aligned}
+            $$
