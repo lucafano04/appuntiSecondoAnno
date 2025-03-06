@@ -34,11 +34,15 @@
     {\if@twocolumn\else\end{quotation}\fi}
 \makeatother
 
-% Definizione di nuovi comandi per definizioni, caso base e passo induttivo
+% Definizione di nuovi comandi per definizioni, caso base e passo induttivo e teoremi
 \theoremstyle{definition}
 \newtheorem{definition}{Definizione}[chapter]
 \newtheorem*{basecase}{Caso Base}
 \newtheorem*{inductivecase}{Passo Induttivo}
+\newtheorem*{inductiveipothesis}{Ipotesi Induttiva}
+\newtheorem{theorem}{Teorema}[chapter]
+\newtheorem{example}{Esempio}[chapter]
+
 
 % Definizione per il package algorithm
 \algnewcommand\New{\textbf{new}\ }
@@ -61,16 +65,15 @@
 % Grafi
 \algnewcommand\Graph{\textsc{Graph}\ }
 \algnewcommand\Node{\textsc{Node}\ }
+% SET
+\algnewcommand\Set{\textsc{Set}\ }
+\algnewcommand\List{\textsc{List}\ }
 % Altro utile
 \algnewcommand\algorithmicforeach{\textbf{foreach}}
 \algdef{S}[FOR]{ForEach}[1]{\algorithmicforeach\ #1\ \algorithmicdo}
 \algnewcommand\Stack{\textsc{Stack}\ }
 \algnewcommand\Deleted{\textsc{deleted}\ }
 % Definizione di header e footer
-
-% Definizione dei teoremi
-\newtheorem{theorem}{Teorema}[chapter]
-\newtheorem{example}{Esempio}[chapter]
 
 \title{Appunti di Algoritmi e Strutture Dati}
 \author{Luca Facchini (mat. 245965)}
@@ -85,7 +88,7 @@
     \fancyfoot{}
     \renewcommand{\footrulewidth}{0.4pt}
     \fancyfoot[LE,RO]{\thepage}
-    \fancyfoot[LO,RE]{"Appunti di Algoritmi e Strutture Dati" di Luca Facchini}
+    \fancyfoot[LO,RE]{``Appunti di Algoritmi e Strutture Dati" di Luca Facchini}
 }
 \fancypagestyle{stdPage}{
     \fancyhead{}
@@ -94,7 +97,10 @@
     \fancyfoot{}
     \renewcommand{\footrulewidth}{0.4pt}
     \fancyfoot[LE,RO]{\thepage}
-    \fancyfoot[LO,RE]{"Appunti di Algoritmi e Strutture Dati" di Luca Facchini}
+    \fancyfoot[LO,RE]{``Appunti di Algoritmi e Strutture Dati" di Luca Facchini}
+}
+\fancypagestyle{plain}{
+    \thispagestyle{chapterInit}
 }
 
 \begin{document}
@@ -128,6 +134,7 @@
         \thispagestyle{stdPage}
     \endgroup
     
+    \part{Primo Semestre}
     \include{chapters/01-AnalisiAlgoritmi}
     \include{chapters/02-AnalisiFunzioni}
     \include{chapters/03-Alberi}
@@ -137,4 +144,6 @@
     \include{chapters/07-divideEtImpera}
     \include{chapters/08-AnalisiAmmortizzata}
     \include{chapters/09-struttureDatiSpeciali}
+    \part{Secondo Semestre}
+    \include{chapters/10-programmazioneDinamica}
 \end{document}
