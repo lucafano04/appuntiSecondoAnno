@@ -355,7 +355,7 @@ La tecnica della programmazione dinamica, come per la tecnica \textit{divide-et-
                 \end{algorithm}
                 Questa lista può contenere un \textbf{multi-insieme} di indici, il che significa che un indice può essere ripetuto più volte, nel caso di capacità $C=0$ allora la lista sarà vuota in quanto la sacca non può contenere oggetti.
                 Se invece $pos[c]<0$ allora la capacità $c$ non è stata raggiunta (sacca con capacità pari e pesi dispari) e quindi la lista sarà vuota.
-\section{}
+\section{Problemi più complessi su stringhe}
     \subsection{Sotto-sequenza comune massimale}
         Il problema consiste nel trovare quanto due stringe sono simili tra di loro, questo può essere valutato o verificando che una sia sotto-stringa dell'altra oppure tramite delle la ``distanza di \textit{edit}'' tra le due stringhe. In questo caso vediamo come calcolare la lunghezza della sotto-sequenza comune massimale tra due stringhe.
         \subsubsection{Definizione}
@@ -487,4 +487,133 @@ La tecnica della programmazione dinamica, come per la tecnica \textit{divide-et-
             \end{algorithm}
             Questo algoritmo ripercorre la tabella $DP$ ``all'indietro'' e ricostruisce la sotto-sequenza comune massimale tra $T$ e $U$.\newline
             Il costo della funzione per la ricostruire la soluzione è $O(n+m)$ in quanto la lunghezza della sotto-sequenza comune massimale è $O(n+m)$.\footnote{Esiste un algoritmo più efficiente per il calcolo della lunghezza \texttt{LCS} ma senza la ricostruzione della soluzione andando a conservare nella tabella $DP$ la sola riga precedente, l'algoritmo non è stato riportato}
-            % TODO: Dimostrazione + Ricorrenza  + Ricostruzione della soluzione
+    \subsection{\textit{String matching} approssimato}
+        Il problema dello \textit{string matching} approssimato consiste nel trovare una occorrenza $k$-approssimata di una stringa $P=p_1\dots p_m$ in una stringa $T=t_1\dots p_n$ \footnote{Eventualmente con $n\leq m$}, ovvero una sotto-sequenza $S$ di $T$ tale che $S$ sia una sotto-sequenza di $P$ con al più $k$ errori, i quali possono essere del tipo \textit{mismatch} (un carattere è stato sostituito con un altro), \textit{insertion} (un carattere è stato inserito) e \textit{deletion} (un carattere è stato rimosso).
+        \subsubsection{Sottostruttura ottima}
+            Sia $DP[0\dots m][0\dots n]$ una tabella di programmazione dinamica tale che $DP[i][j]$ sia il minimo valore $k$ per i quali esiste un'occorrenza $k$-approssimata di $P(i)$ in $T(j)$ che termina in posizione $j$.
+            $$
+                DP[i][j]=\begin{cases}
+                    0 & i=0\land j>0\\
+                    i & i\geq0\land j=0\\
+                    \min\begin{cases}
+                        DP[i-1][j-1] & P[i]=T[j]\\
+                        DP[i-1][j-1]+1 & P[i]\neq T[j]\\
+                        DP[i][j-1]+1 & \text{inserimento}\\
+                        DP[i-1][j]+1 & \text{cancellazione}
+                    \end{cases} & i>0\land j>0
+                \end{cases}
+            $$
+            Una volta popolata la tabella $DP$ la soluzione sarà il minimo valore di $DP[m][j]$ per $0\leq j\leq n$. Esempio della ricerca \textit{BAB} in \textit{ABABA}:
+            \begin{table}[H]
+                \centering
+                \begin{tabular}{c |c c c c c c}
+                    & A & B & A & B & A & \\
+                    \hline
+                    $\emptyset$ & 0 & 1 & 2 & 3 & 4 & 5 \\
+                    B & 1 & 0 & 1 & 2 & 3 & 4 \\
+                    A & 2 & 1 & 0 & 1 & 2 & 3 \\
+                    B & 3 & 2 & 1 & 0 & 1 & 2
+                \end{tabular}
+            \end{table}
+            Passando all'algoritmo:
+            \begin{algorithm}[H]
+                \caption{\Int stringMatching(\Item[] $T$, \Item[] $P$, \Int m, \Int n)}
+                \begin{algorithmic}
+                    \State \Int[][] $DP = \New \Int[0\dots m][0\dots n]$
+                    \For{$j=0$ \To $n$}
+                        \State $DP[0][j]=0$
+                    \EndFor
+                    \For{$i=1$ \To $m$}
+                        \State $DP[i][0]=i$
+                    \EndFor
+                    \For{$i=1$ \To $m$}
+                        \For{$j=1$ \To $n$}
+                            \State $DP[i][j] = \min\left( DP[i-1][j-1] + \texttt{iff}(P[i]\neq T[j], 1, 0), DP[i][j-1]+1, DP[i-1][j]+1\right)$
+                        \EndFor
+                    \EndFor
+                    \State \Int $pos = 0$
+                    \For{$j=0$ \To $n$}
+                        \If{$DP[m][j]<DP[m][pos]$}
+                            \State $pos=j$
+                        \EndIf
+                    \EndFor
+                    \State \Return $pos$
+                \end{algorithmic}
+            \end{algorithm}
+            \subsection{Prodotto di catena di matrici}
+                Il problema del prodotto di catena di matrici consiste nel trovare il modo più efficiente per calcolare il prodotto di $n$ a due a due compatibili matrici. Ricordando che il prodotto di matrici non è commutativo, ovvero $A\cdot B\neq B\cdot A$, ma è associativo, ovvero $(A\cdot B)\cdot C=A\cdot(B\cdot C)$.\newline
+                A livello algoritmico vogliamo trovare il modo più efficiente per calcolare il prodotto di $n$ matrici, ovvero vogliamo trovare il modo più efficiente per calcolare il prodotto di $A_1\cdot A_2\cdot A_3\cdot\dots\cdot A_n$ andando ad associare le matrici in modo da minimizzare il numero di moltiplicazioni scalari.
+                \subsubsection{Parentesizzazione}
+                Una parentesizzazione di $P_{i,j}$ del prodotto $A_i\cdot A_{i+1}\dots A_j$ consiste nella matrice $A_i$ se $i=j$ nel prodotto $A_i\cdot A_{i+1}\dots A_j$ se $i<j$ e in una parentesizzazione di $P_{i,k}$ e di $P_{k+1,j}$ se $i<j$.
+                La parentesizzazione ottima di $P_{i,j}$ è la parentesizzazione che minimizza il numero di moltiplicazioni scalari necessarie per calcolare $P_{i,j}$.
+                \paragraph{Numero possibile di parentesizzazione} Nel caso $P(n)$ abbiamo $n$ posizioni per \underline{l'ultimo prodotto}. Una volta fissato $k$ abbiamo $P(k)$ parentesizzazioni per $P_{i,k}$ e $P(n-k)$ parentesizzazioni per $P_{k+1,n}$, dunque il numero totale di parentesizzazioni è $P(k)\cdot P(n-k)$, tutto questo và ripetuto per ogni $k$ compreso tra $1$ e $n-1$. Dunque:
+                $$
+                    P(n)=\begin{cases}
+                        1 & n=1\\
+                        \sum_{k=1}^{n-1}P(k)\cdot P(n-k) & n>1
+                    \end{cases}
+                $$
+                Dunque provarne tutte le possibili parentesizzazioni ha complessità $\Omega\left(\frac{4^n}{\sqrt{n}}\right)$ il che rende improponibile l'approccio \textit{brute-force}.
+            \subsubsection{Parentesizzazione ottima}
+                In una parentesizzazione ottima ($A[i\dots j]$) allora esiste un $k$ tale che $A[i\dots j]=A[i\dots k]\cdot A[k+1\dots j]$ e $A[i\dots k]$ e $A[k+1\dots j]$ sono parentesizzazioni ottime di $A[i\dots k]$ e $A[k+1\dots j]$.
+                \begin{theorem}
+                    Se $P[i\dots j]=P[i\dots k]P[k+1\dots j]$ è una parentesizzazione ottima di $A[i\dots j]$ allora:
+                    \begin{itemize}
+                        \item $P[i\dots k]$ è una parentesizzazione ottima di $A[i\dots k]$
+                        \item $P[k+1\dots j]$ è una parentesizzazione ottima di $A[k+1\dots j]$
+                    \end{itemize}
+                \end{theorem}
+                \begin{proof}
+                    Per assurdo se $P[i\dots k]$ non fosse una parentesizzazione ottima di $A[i\dots k]$ allora esisterebbe una parentesizzazione $P'[i\dots k]$ tale che $P'[i\dots k]$ richiede meno moltiplicazioni scalari di $P[i\dots k]$, ma allora $P'[i\dots k]P[k+1\dots j]$ richiederebbe meno moltiplicazioni scalari di $P[i\dots k]P[k+1\dots j]$ il che è in contraddizione con l'ipotesi che $P[i\dots j]$ sia una parentesizzazione ottima di $A[i\dots j]$.
+                \end{proof}
+            \subsubsection{Valore della soluzione ottima}
+                Sia $DP[i][j]$ il minimo numero di moltiplicazioni scalari necessarie per calcolare il prodotto $A_i\cdot A_{i+1}\dots A_j$ allora:
+                \paragraph{Caso Base} Se $i=j$ allora $DP[i][j]=0$ in quanto non vi è alcuna moltiplicazione da fare.
+                \paragraph{Caso Ricorsivo} Se $i<j$ allora esiste una parentesizzazione ottima $P[i\dots j]$ tale che $P[i\dots j]=P[i\dots k]\cdot P[k+1\dots j]$ allora $DP[i][j] = DP[i][k]+DP[k+1][j]+c_{i-1}\cdot c_k \cdot c_j$ dove $c_i$ è il numero di righe della matrice $A[i]$ e $c_{i-1}$ è il numero di colonne della matrice $A[i-1]$ ed $c_j$ è il numero di colonne della matrice $A[j]$.\newline
+                Quindi: $$
+                    DP[i][j]=\begin{cases}
+                        0 & i=j\\
+                        \min_{i\leq k<j}\{DP[i][k]+DP[k+1][j]+c_{i-1}\cdot c_k \cdot c_j\} & i<j
+                    \end{cases}
+                $$
+            \subsubsection{Dalla formula all'algoritmo}
+            innanzitutto memorizziamo in un vettore $c[0\dots n]$ la dimensione delle matrici dove $c[0]$ è il numero di righe della prima matrice e $c[i]$ è il numero di colonne della matrice $A[i]$ ed $c[i-1]$ è il numero di righe della matrice $A[i]$. E due indici $i,j$ che partono da $1$ e $n$ rispettivamente.
+            \begin{algorithm}[H]
+                \caption{\Int recPair(\Int c, \Int i, \Int j)}
+                \begin{algorithmic}
+                    \If{$i==j$}
+                        \State \Return $0$
+                    \Else
+                        \State $minSoFar = +\infty$
+                        \For{\Int $k=i$ \To $j-1$}
+                            \State $val = \Call{recPair}{c, i, k}+\Call{recPair}{c, k+1, j}+c[i-1]\cdot c[k]\cdot c[j]$
+                            \State $minSoFar = \min(minSoFar, val)$
+                        \EndFor
+                        \State \Return $minSoFar$
+                    \EndIf
+                \end{algorithmic}
+            \end{algorithm}
+            \paragraph{Versione bottom-up} La versione bottom-up dell'algoritmo è la seguente:
+            \begin{algorithm}
+                \caption{computePair(\Int[] $c$, \Int $n$)}
+                \begin{algorithmic}
+                    \State \Int[][] $DP = \New \Int[1\dots n][1\dots n]$
+                    \For{\Int $i=1$ \To $n$}
+                        \State $DP[i][i]=0$
+                    \EndFor
+                    \State \Int[][] $last = \New \Int[1\dots n][1\dots n]$
+                    \For{\Int $h=2$ \To $n$}
+                        \For{\Int $i=1$ \To $n-h+1$}
+                            \State \Int $j=i+h-1$
+                            \State $DP[i][j]=+\infty$
+                            \For{\Int $k=i$ \To $j-1$}
+                                \State $temp = DP[i][k]+DP[k+1][j]+c[i-1]\cdot c[k]\cdot c[j]$
+                                \If{$temp<DP[i][j]$}
+                                    \State $DP[i][j]=temp$
+                                    \State $last[i][j]=k$
+                                \EndIf
+                            \EndFor
+                        \EndFor
+                    \EndFor
+                \end{algorithmic}
+            \end{algorithm}
