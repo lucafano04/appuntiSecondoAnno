@@ -438,3 +438,201 @@ Nel seguente capitolo andremo ad analizzare la cinematica, ovvero la branca dell
                     \theta &= \arctan\left(\frac{y}{x}\right)
                 \end{aligned}
             $$
+            Per passare dalle coordinate polari alle coordinate cartesiane usiamo le seguenti relazioni:
+            $$
+                \begin{aligned}
+                    \vec{r}(x,y) & \rightarrow\left(\rho,\varphi)=(\sqrt{x^2+y^2},\arctan\left(\frac{y}{x}\right)\right)\\
+                    \vec{r}(x,y)=(\rho\cos{\varphi},\rho\sin{\varphi}) & \leftarrow(\rho,\varphi)
+                \end{aligned}
+            $$
+            Il vettore velocità può anche questo essere espresso in coordinate polari: $$
+                \begin{aligned}
+                    \frac{d}{dt}(\rho\cos(\varphi)) &= \left(\frac{d}{dt}\rho\right)\cos(\varphi) + \rho\left(\frac{d}{dt}\cos(\varphi)\right) \\
+                    &= \rho\cos(\varphi)-\rho(\sin\varphi)\varphi\\
+                    \frac{d}{dt}(\rho\sin(\varphi)) &= \left(\frac{d}{dt}\rho\right)\sin(\varphi) + \rho\left(\frac{d}{dt}\sin(\varphi)\right) \\
+                    &= \rho\sin(\varphi)+\rho(\cos\varphi)\varphi
+                \end{aligned}
+                $$
+            $$
+                \vec{v}=\left(\rho\cos(\varphi)-\rho\varphi\sin(\varphi), \rho\sin(\varphi)+\rho\varphi\cos(\varphi)\right)
+            $$
+            A partire da questa possiamo calcolare l'accelerazione in coordinate polari:
+            $$
+                \begin{aligned}
+                    \frac{d}{dt}(\rho\cos(\varphi)-\rho\varphi\sin(\varphi)) &= \left(\frac{d}{dt}\rho\right)\cos(\varphi)-\rho\varphi\sin(\varphi)+\rho\left(\frac{d}{dt}\cos(\varphi)\right)-\rho\left(\frac{d}{dt}\varphi\right)\sin(\varphi)-\rho\varphi\cos(\varphi)\\
+                    &= \rho\cos(\varphi)-\rho\varphi\sin(\varphi)-\rho\varphi\sin(\varphi)-\rho\varphi\cos(\varphi)-\rho\varphi\cos(\varphi)\\
+                    &= \rho\cos(\varphi)-2\rho\varphi\sin(\varphi)-2\rho\varphi\cos(\varphi)\\
+                    \frac{d}{dt}(\rho\sin(\varphi)+\rho\varphi\cos(\varphi)) &= \left(\frac{d}{dt}\rho\right)\sin(\varphi)+\rho\varphi\cos(\varphi)+\rho\left(\frac{d}{dt}\sin(\varphi)\right)+\rho\left(\frac{d}{dt}\varphi\right)\cos(\varphi)-\rho\varphi\sin(\varphi)\\
+                    &= \rho\sin(\varphi)+\rho\varphi\cos(\varphi)+\rho\varphi\cos(\varphi)-\rho\varphi\sin(\varphi)+\rho\varphi\cos(\varphi)\\
+                    &= \rho\sin(\varphi)+2\rho\varphi\cos(\varphi)-\rho\varphi\sin(\varphi)
+                \end{aligned}
+            $$
+            $$
+                \vec{a}=\left(\rho\cos(\varphi)-2\rho\varphi\sin(\varphi)-2\rho\varphi\cos(\varphi), \rho\sin(\varphi)+2\rho\varphi\cos(\varphi)-\rho\varphi\sin(\varphi)\right)
+            $$
+        \subsubsection{Tangente alla traiettoria}
+            La tangente alla traiettoria è un vettore che ha come direzione la direzione della velocità in un punto della traiettoria, la quale è \textbf{sempre} tangente alla traiettoria in quel punto. Questo vettore è definito come:
+            $$
+                \begin{aligned}
+                    \frac{V_y}{V_x} &= \frac{\frac{dy}{\cancel{dt}}}{\frac{dx}{\cancel{dt}}} = y'(x)
+                \end{aligned}
+            $$
+            La direzione viene espressa tramite il versore: $ \hat{v_t}=\vec{v}=\left|\vec{v}\right|\cdot\hat{v_t}$
+    \subsection{Accelerazione nel piano e ascissa curvilinea}
+        Come per il moto in una dimensione l'accelerazione è definita come la derivata della velocità rispetto al tempo, nel caso delle $n$ dimensioni si verifica la seguente relazione:
+        $$
+            \begin{aligned}
+                \vec{a}=&\frac{d\vec{v}}{dt}=\frac{d}{dt}\left(\left|\vec{v}\right|\cdot\hat{v_t}\right)\\ 
+                =&\frac{d\left|\vec{v}\right|}{dt}\cdot\hat{v_t}+\left|\vec{v}\right|\cdot\frac{d\hat{v_t}}{dt}
+            \end{aligned}
+        $$
+        L'ultima parte di questa equazione, la quale corrisponde all'accelerazione, ci fà notare come nei moti su $n$ dimensioni l'accelerazione non sia solo puramente correlata alla variazione della velocità: $ \frac{d|\vec{v}|}{dt}\cdot\hat{v_t} $ ma anche alla variazione della direzione della velocità: $ \left|\vec{v}\right|\cdot\frac{d\hat{v_t}}{dt} $. Questa seconda parte dell'accelerazione è detta \textbf{accelerazione centripeta} che dipende dalla \textbf{velocità normale} e dalla \textbf{curvatura} della traiettoria.
+        Definiamo quindi alcuni concetti che ci permettono di descrivere meglio il moto in due dimensioni:
+        \begin{definition}[Velocità radiale]
+            La velocità radiale ($\vec{v_r}$) è la componente della velocità che è parallela al raggio vettore. La velocità radiale è definita come:
+            $$
+                \vec{v_r} = \vec{v}\cdot\hat{r}
+            $$
+            {\footnotesize Vettore rosso}
+        \end{definition}
+        \begin{definition}[Versore radiale]
+            Il versore radiale ($\hat{r}$) è il versore che ha come direzione il raggio vettore. Il versore radiale è definito come:
+            $$
+                \hat{r} = \frac{\vec{r}}{\left|\vec{r}\right|}
+            $$
+            {\footnotesize Vettore verde}
+        \end{definition}
+        \begin{definition}[Versore tangente alla traiettoria]
+            Il versore tangente alla traiettoria ($\hat{v_t}$) è il versore che ha come direzione la tangente alla traiettoria. Il versore tangente alla traiettoria è definito come:
+            $$
+                \hat{v_t} = \frac{d\vec{r}}{dt} = \frac{d\vec{r}}{ds}\frac{ds}{dt} = \frac{d\vec{r}}{ds}\left|\vec{v}\right|
+            $$
+            Questo descrive la direzione della \textbf{velocità tangenziale} in un punto della traiettoria.
+            {\footnotesize Vettore blu}
+        \end{definition}
+        \begin{definition}[Versore tangente al versore radiale]
+            Il versore tangente al versore radiale ($\hat{v_n}$) è il versore che ha come direzione la tangente al versore radiale. Il versore tangente al versore radiale è definito come:
+            $$
+                \hat{v_n} = \frac{d\hat{r}}{dt}
+            $$
+            Questo descrive la direzione della \textbf{velocità normale} in un punto della traiettoria.
+            {\footnotesize Vettore viola}
+        \end{definition}
+        \begin{definition}[Versore perpendicolare alla tangente della traiettoria]
+            Il versore perpendicolare alla tangente della traiettoria ($\hat{v_b}$) è il versore che ha come direzione la perpendicolare alla tangente della traiettoria. Il versore perpendicolare alla tangente della traiettoria è definito come:
+            $$
+                \hat{v_b} = \hat{v_t}\times\hat{r}
+            $$
+            Questo descrive la direzione della \textbf{velocità perpendicolare} in un punto della traiettoria.
+            {\footnotesize Vettore giallo}
+        \end{definition}
+        \begin{tikzpicture}
+            % Assi 
+            \draw[->] (0,0) -- (0,5) node[anchor=south]{$y$};
+            \draw[->] (0,0) -- (5,0) node[anchor=west]{$x$};
+            % Traiettoria
+            \draw[red, thick] (0,0) to [out=30,in=180] (4,4) to [out=0,in=180] (6,2) to [out=0,in=180] (8,4);
+            % Punti
+            \draw[fill] (0,0) circle (0.05) node[anchor=north east]{$O$};
+            \draw[fill] (2,2.6) circle (0.05) node[anchor=north]{$P$};
+            % Vettori
+            \draw[->, red] (0,0) -- (2,2.6) node[anchor=south]{$\vec{r}$};
+            \draw[->, green] (0,0) -- (1,1.3) node[anchor=south]{$\hat{r}$};
+            \draw[->, blue] (2,2.6) -- (3,4.25) node[anchor=south]{$\hat{v_t}$};
+            \draw[->, purple] (2,2.6) -- (1.2,3.25) node[anchor=south]{$\hat{v_n}$};
+            \draw[->, yellow] (2,2.6) -- (3,1.85) node[anchor=south]{$\hat{v_b}$};
+        \end{tikzpicture}
+        Dunque la \textbf{accelerazione tangenziale} in un punto è descritta dalla componente $ \frac{d|\vec{v}|}{dt}\cdot\hat{v_t} = \vec{a_t} $ mentre la \textbf{accelerazione normale} in un punto è descritta dalla componente $ \left|\vec{v}\right|\cdot\frac{d\hat{v_t}}{dt} = \vec{a_n} $.
+        \subsubsection{Ascissa curvilinea}
+            L'ascissa curvilinea ($s$) è la derivata dello spazio sul tempo, ovvero approssimando per tratti infinitesimi la traiettoria come una circonferenza allora:
+            $$
+                \frac{d\varphi}{dt}= \frac{d\varphi}{ds}\frac{ds}{dt} = \frac{1}{R}\left|\vec{v}\right|
+            $$
+            dove $R$ è il \textbf{raggio di curvatura} il quale è definito come il raggio della circonferenza che meglio approssima la traiettoria in un punto.\footnote{Viene usata la lettera maiuscola $R$ in quanto questo non può essere stabilito da noi ma dipende direttamente dalla traiettoria e dunque dal problema, si dice infatti che il centro della circonferenza è \underline{IMPOSTO} dalla traiettoria.}
+            Dunque in un punto da un punto della traiettoria possiamo ricavare l'accelerazione normale ed la velocità tangenziale.\newline
+            Analizziamo la situazione nella quale l'accelerazione tangenziale è nulla, ovvero il modulo della velocità è costante ma la direzione cambia costantemente, in questo caso $$
+            \frac{dv}{dt} = 0 \Rightarrow \vec{a} = \frac{v^2}{R}\hat{V_n}
+            $$
+            Dunque $v$ è costante, $|\vec{a}| = \frac{v^2}{R}$ è costante e quindi $R$ è costante, ovvero la traiettoria è una circonferenza.
+    \subsection{Moto Circolare Uniforme (M.C.U.)}
+        Nel moto circolare uniforme la velocità è costante, la direzione cambia costantemente e l'accelerazione è costante e diretta verso il centro della circonferenza. In questo moto viene definito il concetto di \textbf{velocità angolare}:
+        \begin{definition}[Velocità angolare]
+            La velocità angolare ($\omega$) è la velocità con la quale un punto si muove lungo la circonferenza. La velocità angolare è definita come:
+            $$
+                \omega = \frac{d\varphi}{dt}
+            $$
+        \end{definition}
+        ne consegue che $ds=Rd\varphi$ e dunque $\omega=\frac{v}{R}$.
+        \begin{proof}
+            Dimostriamo che $\omega=\frac{v}{R}$:
+            $$
+                \begin{aligned}
+                    \omega &= \frac{d\varphi}{dt} = \frac{d\varphi}{ds}\frac{ds}{dt} = \frac{1}{R}v = \frac{v}{R} \Rightarrow v = R\omega
+                \end{aligned}
+            $$
+        \end{proof}
+        Il moto è descritto dalle seguenti equazioni che compongono il vettore posizione:
+        $$
+            \begin{cases}
+                x=R\cos(\varphi)= R\cos(\omega t)\\
+                y=R\sin(\varphi)= R\sin(\omega t)
+            \end{cases}
+        $$
+        e dunque la velocità in quanto derivata della posizione rispetto al tempo è:
+        $$
+            \begin{cases}
+                v_x = -R\sin(\omega t)\cdot \omega = -R\omega\sin(\omega t)\\
+                v_y = R\cos(\omega t)\cdot \omega = R\omega\cos(\omega t)
+            \end{cases}
+        $$
+        e l'accelerazione in quanto derivata della velocità rispetto al tempo è:
+        $$
+            \begin{cases}
+                a_x = -R\omega\cos(\omega t)\cdot \omega = -R\omega^2\cos(\omega)\\
+                a_y = -R\omega\sin(\omega t)\cdot \omega = -R\omega^2\sin(\omega t)
+            \end{cases}
+        $$
+        Notiamo come le somme dei quadrati delle velocità $v_x^2+v_y^2$ siano uguali al prodotto dei quadrati del raggio e della velocità angolare $R^2\omega^2$.\newline
+        \subsubsection{Moto circolare uniforme come somma di moti armonici}
+            Il moto circolare uniforme può essere descritto come la somma di due moti armonici ortogonali della stessa ampiezza e della stessa frequenza, infatti se:
+            $$
+                \begin{cases}
+                    \varphi = \omega t\\
+                    \rho = R
+                \end{cases} \Rightarrow \vec{r} = R\begin{bmatrix} \cos(\omega t)\\ \sin(\omega t) \end{bmatrix}
+            $$\footnote{Dimostrazione omessa}
+    \subsection{Moto Parabolico}
+        Anche il moto parabolico può essere descritto come la somma di due moti, in questo caso però viene sommato il moto rettilineo uniforme parallelo all'asse delle $x$ con il moto uniformemente accelerato lungo l'asse delle $y$. Questo moto è descritto dalle seguenti equazioni:
+        $$
+            \vec{v}=\begin{cases}
+                x=v_{0x}t\\
+                y=v_{0y}t-\frac{1}{2}gt^2
+            \end{cases}
+        $$
+        entrambe dipendono dalla velocità iniziale la quale può essere divisa nelle sue componenti come:
+        $$
+            \begin{cases}
+                v_{0x} = |v_0|\cos(\alpha)\\
+                v_{0y} = |v_0|\sin(\alpha)
+            \end{cases}
+        $$
+        dove $\alpha$ è l'angolo che la velocità iniziale forma con l'asse delle $x$, ci redimo conto che ci basta conoscere la velocità iniziale e l'angolo per descrivere il moto parabolico.\footnote{Anche se nella realtà dovremmo considerare la resistenza dell'aria e la rotazione terrestre per la componente $v_{0x}$}.\newline
+        Scrivendo le equazioni del moto parabolico con la $y$ in funzione del tempo possiamo ottenere la seguente equazione:
+        $$
+            \begin{aligned}
+                y=&v_{oy}\frac{x}{v_{ox}}-\frac12g\left(\frac{x}{v_{ox}}\right)^2\\
+                =&\underbrace{-\frac{g}{2v_{ox}^2}}_{a}x^2+\underbrace{\frac{v_{oy}}{v_{ox}}}_{b}x+\underbrace{0}_{c}
+            \end{aligned}
+        $$
+        Questa è proprio l'equazione di una parabola, ora $a$ sarà sempre minore di $0$ a meno di un cambio del sistema di riferimento e dunque la parabola sarà sempre concava verso il basso [1].\newline
+        Inoltre il $\lim_{ a\to \frac{\pi}2}y\rightarrow Indef$, ma il $\lim_{ g\to 0}y\rightarrow \text{M.R.U.}$[2], infine se la derivata prima della $y$ fosse $=0$ e dunque $2ax+b=0$ allora:
+        $$
+            \begin{aligned}
+                x=&-\frac{b}{2a}\\
+                =&-\frac{\frac{v_{oy}}{\cancel{v_{ox}}}}{\frac{g}{v_{ox}^{\cancel{2}}}}\\
+                =&-\frac{v_{oy}v_{ox}}{g}\\
+                =&\frac{v^2\sin(\alpha)\cos(\alpha)}{g}\\
+                =&\frac{v^2}{2g}\sin(2\alpha)
+            \end{aligned}
+        $$
+        Potrebbe essere utile la ``gittata'' [4] ovvero la distanza percorsa dal punto, questa la possiamo ricavare imponendo $y=0$: \dots

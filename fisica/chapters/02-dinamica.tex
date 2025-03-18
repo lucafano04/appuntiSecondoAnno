@@ -1,0 +1,48 @@
+\chapter{Dinamica}
+\label{chap:dinamica}
+
+Nel presente capitolo si analizzerà il moto di un corso a partire dai tre principi fondamentali della dinamica fino ad arrivare ad \dots
+% Il capitolo non è ancora stato trattato interamente nel corso
+
+\section{I tre principi fondamentali}
+    Andiamo ora ad enunciare i tre principi fondamentali della dinamica.
+    \begin{law}[Principio d'inerzia]
+        In un sistema inerziale, mantiene il suo stato di moto rettilineo uniforme o quiete finché una forza esterna non agisce su questo
+    \end{law}
+    Da notare come questa legge vale solo ed esclusivamente nel caso nel quale il sistema di riferimento sia inerziale. In caso contrario questo principio \underline{non si applica}.
+    \begin{law}[Principio di Newton]
+        \label{law:principio-newton}
+        L'accelerazione che un corpo riceve è legata a questo mediante una costante numerica $(m)$
+    \end{law}
+    Quindi $ \vec{a}=m\vec{F}$, spesso la constante $m$ viene apposta al denominatore della formula, ottenendo $ \vec{F}=m\vec{a}$. Questa è la forma più comune della legge di Newton, dove la forza ($F$) è uguale alla massa ($m$)\footnote{Sempre positiva}, misurata in $kg$, per l'accelerazione ($a$) misurata in $m/s^2$.
+    \begin{law}[Principio di azione e reazione]
+        La forza che un corpo $A$ esercita sul corpo $B$ è uguale alla forza che il corpo $B$ esercita sul corpo $A$, ma di verso opposto.
+    \end{law}
+    Questo principio è molto importante in quanto ci permette di capire come mai un corpo si muova. Infatti, se un corpo $A$ esercita una forza su un corpo $B$, il corpo $B$ eserciterà una forza uguale e di verso opposto su $A$, l'accelerazione d'altronde sarà diversa se le masse sono diverse.
+    \paragraph{Quantità di moto}
+        La quantità di moto è una grandezza vettoriale che descrive ``quanto'' movimento c'è in un sistema e dipende dalla massa e dalla velocità del corpo. È definito come segue:
+        $$
+            \vec{p}=m\vec{v}
+        $$
+        Ad esempio se un corpo di massa $m=100g$ viaggia a $v=360km/h$ la sua quantità di moto sarà $|\vec{p}|=0.1 [kg] \cdot 100 [m/s] = 10 [kg \cdot m/s]$
+    \paragraph{Impulso}
+        L'impulso è una grandezza vettoriale che descrive ``quanto'' una forza agisce su un corpo in uno specifico istante/intervallo di tempo. È definito come segue:
+        $$
+            \vec{J} = \vec{P_f} - \vec{P_i} = \Delta \vec{p} = m_f\vec{v_f} - m_i\vec{v_i}
+        $$
+        In regime di conservazione della massa, allora $m_f=m_i$ e quindi $\vec{J} = m\vec{v_f} - m\vec{v_i} = m(\vec{v_f} - \vec{v_i}) = m\vec{\Delta v}$ dove $\vec{\Delta v}$ è la variazione di velocità del corpo.\newline
+        Inoltre visto il secondo principio (\ref{law:principio-newton}) possiamo scrivere:
+        $$
+            \vec{F} = m\vec{a} = m\frac{d\vec{v}}{dt} \Rightarrow \vec{F} = m\frac{d\vec{v}}{dt}
+        $$
+        Questo è anche scrivibile usando la notazione:
+        $$
+            \vec{F}=m\frac{\Delta \vec{v}}{\Delta t}
+        $$
+        in questo caso $\vec{J} = \vec{F_{\text{imp}}} \Delta t$ dove $\vec{F_{\text{imp}}}$ è la forza impulsiva, in quanto stiamo trattando di un intervallo di tempo finito e non un infinitesimo.
+    \paragraph{Forza risultante}
+        La forza risultante è definita come la somma vettoriale di tutte le forze che agiscono su un corpo. $$
+            \vec{F_{1\rightarrow c}} + \vec{F_{2\rightarrow c}} + \dots + \vec{F_{N\rightarrow c}} = \sum_{i=1}^{N} \vec{F_{i\rightarrow c}} = \vec{R_{\text{c}}}
+        $$
+        Dove $\vec{R_{\text{c}}}$ è la forza risultante che agisce sul corpo $c$, mentre $\vec{F_{i\rightarrow c}}$ è la forza che il corpo $i$ esercita sul corpo $c$.\newline
+        Se un corpo fosse in quiete ovvero $\vec{S_i} = \vec{S_f}$ dunque $\vec{v_i} = \vec{v_f} = 0$ allora $\vec{a_{tot}} = \vec{0}$ e quindi $\vec{R_{\text{c}}} = \vec{0}$.
