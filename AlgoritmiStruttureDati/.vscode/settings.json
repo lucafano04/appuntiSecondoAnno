@@ -11,6 +11,7 @@
         "basecase",
         "ccdfs",
         "documentclass",
+        "Fredman",
         "Hateville",
         "hyperref",
         "inductivecase",
@@ -20,8 +21,10 @@
         "parentesizzazione",
         "parentesizzazioni",
         "Strassen",
+        "Tarjan",
         "Trasversal",
-        "usepackage"
+        "usepackage",
+        "Warshall"
     ],
     "editor.wordWrap": "on"
 }

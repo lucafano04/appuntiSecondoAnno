@@ -1,0 +1,234 @@
+\chapter{Scelta della struttura dati}
+In questo capitolo si analizza come può essere eseguita la scelta di una struttura dati rispetto ad un'altra per la risoluzione di uno stesso problema. Si analizzano le strutture dati più comuni e si valutano i pro e i contro di ognuna di esse. Inoltre si analizzano le strutture dati più adatte per la risoluzione di problemi specifici.
+
+\section{Cammini minimi}
+    Dato un \textbf{grafo orientato} $G=(V,E)$, un nodo sorgente $s$ ed una funzione peso $w: E \rightarrow \mathbb{R}$, il problema dei cammini minimi consiste nel: ``Dato un cammino $p=<v_1,v_2,\ldots,v_k>$, con $k>1$ e $v_i \in V$, il peso del cammino è dato da $w(p)=\sum_{i=1}^{k-1} w(v_i,v_{i+1})$''. Il problema consiste nel trovare il cammino di peso minimo tra il nodo sorgente $s$ e tutti gli altri nodi del grafo.
+    \paragraph{Pesi} Per il seguente problema ci si piò trovare in due casi:
+    \begin{itemize}
+        \item \textbf{Pesi positivi - positivi/negativi} Se i pesi degli archi sono tutti positivi o se ci sono pesi positivi e negativi, ma non ci sono cicli di peso negativo, allora si può utilizzare l'algoritmo di Dijkstra.
+        \item \textbf{Reali - interi} Se i pesi degli archi sono tutti interi o sono reali.
+    \end{itemize}
+    \paragraph{Sottostruttura ottima} Possono esserci due cammini minimi che condividono uno stesso tratto comune ($A\rightsquigarrow C$) ma non possono convergere in un nodo comune, in quanto l'albero dei cammini minimi è un albero di copertura radicato in $s$ avente un cammino da $s$ a $v$ per ogni $v \in V\setminus\{s\}$.
+    \paragraph{Albero di copertura}
+        Dato un grafo $G=(V,E)$ non orientato e connesso, un albero di copertura di $G$ è un sottoinsieme di archi $T \subseteq E$ tale che $T$ è un albero, $E_T$ è un sottoinsieme di $E$ e $T$ contiene tutti i nodi di $G$.
+    \paragraph{Rappresentazione dell'albero}
+        Per rappresentare l'albero usiamo la rappresentazione basata su vettori di padri.
+        \begin{algorithm}[H]
+            \caption{printPath(\Node $s$, \Node $d$, \Node[] $T$)}
+            \begin{algorithmic}
+                \If{$d=s$}
+                    \State \Call{print}{$s$}
+                \ElsIf{$T[d]==\Nil$}
+                    \State \Call{print}{``Error''}
+                \Else
+                    \State \Call{printPath}{$s,T[d],T$}
+                    \State \Call{print}{$d$}
+                \EndIf
+            \end{algorithmic}
+        \end{algorithm}
+    \subsection{Teorema di Bellman}
+        Il teorema di Bellman afferma che una soluzione ammissibile $T$ è \textbf{ottima} se e solo se:
+        \begin{align*}
+            d[v]=d[u]+w(u,v) \quad& \forall (u,v) \in T\\
+            d[v]\leq d[u]+w(u,v) \quad& \forall (u,v) \in E
+        \end{align*}
+        \begin{proof}
+            Sia $T$ una soluzione ottima e siano $(u,v)\in E$ allora se $(u,v)\in T$ allora $d[v]=d[u]+w(u,v)$, altrimenti se $(u,v)\not\in T$ allora $d[v]\leq d[u]+w(u,v)$ altrimenti esisterebbe un altro cammino nel grafo da $u$ a $v$ con peso minore di $d[v]$.\newline
+            Sia $T$ per assurdo non sia ottimo, allora esisterebbe una cammino $C$ da $s$ ad un qualunque nodo $u$ con peso minore di $d[u]$, allora esiste un'altro albero $T'$ che contiene $C'$ tale che $w(C')<w(C)$, quindi $T$ non è ottimo.
+            Sia $d'$ il vettore delle distanze associato a $T$ poiché $d'[s]=0$ ma $d'[v]<d[v]$ allora esiste un arco $(h,k)\in C'$ tale che $d'[h]=d[h] \land d'[k]<d[k]$. Per costruzione $d'[h]=d[h]$, $d'[k]=d'[h]+w(h,k)$ avendo ipotizzato che $T$ non sia ottimo e che quindi $d[k]\leq d[h]+w(h,k)$, quindi $d'[k]=d'[h]+w(h,k) = d[h]+w(h,k) \geq d[k]$, quindi $d'[k]\geq d[k]$ che è assurdo.
+        \end{proof}
+        \subsubsection{Algoritmo prototipo}
+            \begin{algorithm}[H]
+                \caption{$(\Int[], \Int[]) \text{prototipoCamminiMinimi}(\Graph G, \Node s)$}
+                \begin{algorithmic}
+                    \State \Comment{Inizializza $T$ ad una foresta di copertura composta da nodi isolati}
+                    \State \Comment{Inizializza $d$ con sovrastima della distanza ($d[s]=0,d[v]=\infty$)}
+                    \While{$\exists (u,v): d[u]+G.\Call{w}{u,v}<d[v]$}
+                        \State $d[v]=d[u]+G.\Call{w}{u,v}$
+                        \State \Comment{Sostituisci il padre di $v$ con $u$}
+                    \EndWhile
+                    \State \Return $T,d$
+                \end{algorithmic}
+            \end{algorithm}
+    \subsection{Dijkstra, 1959}
+        L'algoritmo di Dijkstra è un algoritmo che nella versione originale veniva usato prt trovare la distanza minima tra soli due nodi e sfrutta il concetto di coda con priorità.
+        \subsubsection{Algoritmo}
+            \begin{algorithm}[H]
+                \caption{shortestPath(\Graph $G$, \Node $s$)}
+                \begin{algorithmic}
+                    \State \textsc{PriorityQueue} $Q = \textsc{new PriorityQueue}()$
+                    \State $Q.\Call{insert}{s,0}$
+                    \While{$\not Q.\Call{isEmpty}{}$}
+                        \State \Int $u = Q.\Call{extractMin}{}$
+                        \State $b[u]=\False$
+                        \ForEach{$v \in G.\Call{adj}{u}$}
+                            \If{$d[v]>d[u]+G.\Call{w}{u,v}$}
+                                \If{$b[v]=\False$}
+                                    \State $Q.\Call{insert}{v,d[v]}$
+                                    \State $b[v]=\True$
+                                \Else
+                                    \State $Q.\Call{decreaseKey}{v,d[v]}$
+                                \EndIf
+                                \State $T[v]=u$
+                                \State $d[v]=d[u]+G.\Call{w}{u,v}$
+                            \EndIf
+                        \EndFor
+                    \EndWhile
+                \end{algorithmic}
+            \end{algorithm}
+    \subsubsection{Spiegazione}
+        Ogni nodo viene estratto una sola volta ed al momento dell'estrazione la sua distanza è minima, quindi non verrà più modificata. Ciò è dimostrabile per induzione sul numero $k$ di nodi estratti dalla coda. Se $k=1$ allora il nodo estratto è $s$ e la distanza è $0$, se $k>1$ allora quando il nodo estratto è $u$ la distanza $d[u]$ dipende dai nodi $k-1$ già estratti e non dipende dai nodi ancora da estrarre. Quindi $d[u]$ è minima e non verrà più modificata e quindi re-inserita nella coda.
+    \subsubsection{Complessità}
+        L'algoritmo di Dijkstra nella versione 1959 ha complessità $O(n^2)$, ma con l'uso di una coda con priorità basata su \textit{heap} (\textbf{Jonson 1977}) la complessità diventa $O(m\log n)$, se invece viene usata la \textit{heap} di Fibonacci (\textbf{Fredman-Tarjan 1987}) la complessità diventa $O(m+n\log n)$.
+    \subsection{Algoritmo di Bellman-Ford-Moore 1958 - Coda}
+        L'algoritmo di Bellman-Ford-Moore è un algoritmo che permette di trovare il cammino minimo tra un nodo sorgente e tutti gli altri nodi del grafo. L'algoritmo è basato su una coda e permette di gestire anche i grafi con cammini di peso negativo.
+        \subsubsection{Algoritmo}
+            \begin{algorithm}[H]
+                \caption{shortestPath(\Graph $G$, \Node $s$)}
+                \begin{algorithmic}
+                    \State \Queue $Q = \textsc{new Queue}()$
+                    \State $Q.\Call{enqueue}{s}$
+                    \While{\Not $Q.\Call{isEmpty}{}$}
+                        \State \Node $u = Q.\Call{dequeue}{}$
+                        \State $b[u]=\False$
+                        \ForEach{$v \in G.\Call{adj}{u}$}
+                            \If{$d[v]>d[u]+G.\Call{w}{u,v}$}
+                                \State $d[v]=d[u]+G.\Call{w}{u,v}$
+                                \If{$b[v]=\False$}
+                                    \State $Q.\Call{enqueue}{v}$
+                                    \State $b[v]=\True$
+                                \EndIf
+                                \State $T[v]=u$
+                            \EndIf
+                        \EndFor
+                    \EndWhile
+                    \State \Return $T,d$
+                \end{algorithmic}
+            \end{algorithm}
+        \subsubsection{Spiegazione}
+            Dopo l'inizializzazione nelle prime due righe, si entra nel ciclo principale che estrae un nodo dalla coda e lo esamina. Per ogni nodo adiacente si controlla se la distanza è minore di quella attuale ($+\infty$ se non è stata ancora visitata) e se è minore si aggiorna la distanza e si inserisce il nodo nella coda. Se il nodo è già stato visitato \textbf{e} la distanza è maggiore di quella attuale, allora non si fa nulla.
+        \subsubsection{Complessità}
+            L'algoritmo ci permette di trovare il cammino minimo tra un nodo sorgente e tutti gli altri nodi del grafo anche nel caso di pesi negativi, tuttavia questo ha un costo computazionale maggiore rispetto all'algoritmo di Dijkstra, infatti un nodo può essere inserito nella coda più di una volta, dato che l'inizializzazione della cosa ha costo $O(1)$, il \textit{dequeue} ha costo $O(1)$ ma viene eseguita $O(n^2)$ volte, quindi la complessità è $O(n^2)$, infine il \textit{enqueue} ha costo $O(1)$ ma viene eseguito $O(nm)$ volte, dunque la complessità totale è $O(nm)$.
+    \subsection{Cammini minimi su \texttt{DAG}}
+        Dato un grafo orientato aciclico (DAG) $G=(V,E)$, un nodo sorgente $s$ ed una funzione peso $w: E \rightarrow \mathbb{R}$, il problema dei cammini minimi è più semplice in quanto non ci sono cicli e quindi anche in presenza di pesi negativi non incorreremo mai in un ciclo di peso negativo, per semplificare il problema possiamo usare un ordinamento topologico.
+        \subsubsection{Algoritmo}
+            \begin{algorithm}[H]
+                \caption{shortestPath(\Graph $G$, \Node $s$)}
+                \begin{algorithmic}
+                    \State \Int[] $d = \New \Int[1\dots G.n]$
+                    \State \Int[] $T = \New \Int[1\dots G.n]$
+                    \ForEach{$u \in G.V$}
+                        \State $d[u]=\infty$
+                        \State $T[u]=\Nil$
+                    \EndFor
+                    \State $T[s]=\Nil$
+                    \State $d[s]=0$
+                    \State \Stack $S = \New \textsc{topSort}(G)$
+                    \While{$\Not S.\Call{isEmpty}{}$}
+                        \State \Node $u = S.\Call{pop}{}$
+                        \ForEach{$v \in G.\Call{adj}{u}$}
+                            \If{$d[u]+G.\Call{w}{u,v}<d[v]$}
+                                \State $T[v]=u$
+                                \State $d[v]=d[u]+G.\Call{w}{u,v}$
+                            \EndIf
+                        \EndFor
+                    \EndWhile
+                    \State \Return $T,d$
+                \end{algorithmic}
+            \end{algorithm}
+        \subsubsection{Complessità}
+            L'algoritmo ha complessità $O(n+m)$ limitato superiormente dal costo dell'ordinamento topologico.
+    \subsection{Recap}
+        Riportiamo di seguito una tabella contenete i vari algoritmi per la risoluzione del problema dei cammini minimi con il migliore algoritmo sulla base dei pesi e della struttura del grafo.
+        \begin{table}[H]
+            \centering
+            \begin{tabular}{|c|c|c|}
+                \hline
+                \textbf{Algoritmo} & \textbf{Complessità} & \textbf{Pesi} \\
+                \hline
+                \texttt{BFS} & $O(n+m)$ & Senza pesi \\
+                Dijkstra & $O(n^2)$ & Positivi, grafi densi \\
+                Johnson & $O(m\log n)$ & Positivi, grafi sparsi \\
+                Fredman-Tarjan & $O(m+n\log n)$ & Positivi, grafi densi, dimensioni elevate \\
+                Bellman-Ford-Moore & $O(nm)$ & Positivi/Negativi \\
+                \texttt{DAG} & $O(n+m)$ & Positivi/Negativi (\texttt{DAG}) \\
+                \hline
+            \end{tabular}
+            \caption{Recap cammini minimi}
+            \label{tab:recapCamminiMinimi}
+        \end{table}
+\section{Cammini minimi con sorgente multipla}
+    Dato un grafo $G=(V,E)$, un insieme di nodi sorgente $S$ ed una funzione peso $w: E \rightarrow \mathbb{R}$, il problema dei cammini minimi con sorgente multipla consiste nel trovare il cammino di peso minimo tra i nodi sorgente $S$ e tutti gli altri nodi del grafo.\newline
+    Intuitivamente possiamo pensare di eseguire l'algoritmo opportuno secondo la tabella precedentemente presentata \ref{tab:recapCamminiMinimi} per ogni nodo sorgente, andando quindi a ottenere le seguenti complessità:
+    \begin{table}[H]
+        \centering
+        \begin{tabular}{|c|c|c|}
+            \hline
+            \textbf{Input} & \textbf{Algoritmo} & \textbf{Complessità} \\
+            \hline
+            Pesi positivi, grafi densi & Dijkstra per ogni nodo & $O(n\cdot n^2)=O(n^3)$ \\
+            Pesi positivi, grafi sparsi & Johnson per ogni nodo & $O(n\cdot m\log n)$ \\
+            Pesi negativi & Bellman-Ford-Moore per ogni nodo & $O(n\cdot nm)=O(n^2m)$ \\
+            Pesi negativi grafo denso & Floyd-Warshall & $O(n^3)$ \\
+            Pesi negativo grafo sparso & Jonson per sorgenti multiple & $O(n\cdot m\log n)$ \\
+            \hline
+        \end{tabular}
+        \caption{Complessità cammini minimi con sorgente multipla}
+    \end{table} 
+    \subsection{Floyd-Warshall, 1962}
+        L'algoritmo di Floyd-Warshall è un algoritmo che permette di trovare il cammino minimo $k$-vincolato tra due nodi $x$ e $y$ di un grafo $G=(V,E)$, con $k\in\{0,1,\ldots,n\}$ ed il cammino non può passare per i vertici $v_{k+1},\ldots,v_n$ con $x,y$ esclusi da questo vincolo.
+        \subsubsection{Distanza $k$-vincolata}
+            Denotiamo con $d^k[x][y]$ il costo totale del cammino minimo $k$-vincolato tra $x$ e $y$ se tale cammino esiste, altrimenti $d^k[x][y]=\infty$.
+            $$
+                d^k[x][y]=\begin{cases}
+                    w(p^k_{xy}) & \text{se } p^k_{xy} \text{ esiste}\\
+                    \infty & \text{altrimenti}
+                \end{cases}
+            $$
+            La sua formulazione ricorsiva è:
+            $$
+                d^k[x][y]=\begin{cases}
+                    w(x,y) & \text{se } k=0\\
+                    \min\{d^{k-1}[x][y],d^{k-1}[x][k]+d^{k-1}[k][y]\} & \text{altrimenti}
+                \end{cases}
+            $$
+            Per la ricostruzione del cammino minimo usiamo una matrice di padri dove la posizione $T[x][y]$ contiene il nodo precedente a $y$ nel cammino minimo tra $x$ e $y$, nel caso $T[x][y]=x$ allora $y$ è adiacente a $x$, altrimenti si deve vedere la cella $T[x][T[x][y]]$ e così via.
+        \subsubsection{Algoritmo}
+            \begin{algorithm}[H]
+                \caption{(\Int[][],\Int[][]) \textsc{FloydWarshall}(\Graph $G$)}
+                \begin{algorithmic}
+                    \State \Int[][] $d = \New \Int[1\dots G.n][1\dots G.n]$
+                    \State \Int[][] $T = \New \Int[1\dots G.n][1\dots G.n]$
+                    \ForEach{$u,v \in G.V$}
+                        \State $d[u][v]=\infty$
+                        \State $T[u][v]=\Nil$
+                    \EndFor
+                    \ForEach{$u \in G.V$}
+                        \ForEach{$v \in G.\Call{adj}{u}$}
+                            \State $d[u][v]=G.\Call{w}{u,v}$
+                            \State $T[u][v]=u$
+                        \EndFor
+                    \EndFor
+                    \For{$k=1$ \textbf{to} $G.n$}
+                        \ForEach{$u \in G.V$}
+                            \ForEach{$v \in G.V$}
+                                \If{$d[u][v]>d[u][k]+d[k][v]$}
+                                    \State $d[u][v]=d[u][k]+d[k][v]$
+                                    \State $T[u][v]=T[k][v]$
+                                \EndIf
+                            \EndFor
+                        \EndFor
+                    \EndFor
+                    \State \Return $(d,T)$
+                \end{algorithmic}
+            \end{algorithm}
+        \subsubsection{Complessità}
+            L'algoritmo di Floyd-Warshall ha complessità $O(n^3)$ in quanto una volta inizializzate le matrici $d$ e $T$ si esegue un triplo ciclo annidato per calcolare le distanze minime a partire da $k=1$ fino a $k=n$.
+    \subsection{Chiusura transitiva (Algoritmo di Warshall)}
+        La chiusura transitiva di un grafo $G=(V,E)$ è un grafo $G'=(V,E')$ orientato tale che $(u,v)\in E'$ se e solo se esiste un cammino da $u$ a $v$ in $G$. L'algoritmo di Warshall permette di calcolare la chiusura transitiva di un grafo in tempo $O(n^3)$ in quanto segue la seguente formula ricorsiva:
+        $$
+            M^k[x][y]=\begin{cases}
+                M[x][y] & \text{se } k=0\\
+                M^{k-1}[x][y] \lor (M^{k-1}[x][k] \land M^{k-1}[k][y]) & \text{altrimenti}
+            \end{cases}
+        $$
