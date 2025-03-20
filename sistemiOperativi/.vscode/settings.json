@@ -1,8 +1,12 @@
 {
     "cSpell.words": [
         "mantienebilità",
+        "mythread",
         "pdftitle",
-        "POLP"
+        "POLP",
+        "PPID",
+        "pthread",
+        "Pthreads"
     ],
     "editor.wordWrap": "on"
 }

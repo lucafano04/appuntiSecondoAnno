@@ -1,0 +1,157 @@
+\chapter{Processi e \textit{Thread}}
+
+In questo capitolo vedremo cosa sono i processi e i \textit{thread} capendone le differenze e le somiglianze, vedremo come vengono gestiti e come vengono eseguiti. Infine vedremo come vengono gestiti i processi dal sistema operativo e come vengono eseguiti i processi dal sistema operativo.
+
+\section{Processi}
+    Un processo è l'istanza di un programma in esecuzione, quando il programma viene eseguito e quindi caricato nella memoria primaria (\texttt{RAM}) diventa un processo. Mentre un programma è la parte statica di un software, il processo è la parte dinamica. Un processo viene eseguito in maniera sequenziale, ovvero un'istruzione alla volta, ma nei sistemi operativi moderni un processo può essere eseguito in maniera concorrente, ovvero più processi possono essere eseguiti in parallelo.
+    \subsubsection{Immagine in memoria}
+        Un processo quando viene caricato in memoria viene caricato in una zona di memoria chiamata \textit{spazio degli indirizzi} (\textit{address space}). Questo spazio è diviso in varie sezioni (da indirizzi alti ad indirizzi bassi):
+        \begin{itemize}
+            \item \textbf{Dati}: contiene le variabili globali e statiche del programma.
+            \item \textbf{\textit{Stack}}: contiene le variabili locali e i parametri delle funzioni.
+            \item eventuale memoria dinamica allocata durante l'esecuzione.
+            \item \textbf{\textit{Heap}}: contiene la memoria dinamica allocata durante
+            \item \textbf{Codice}: contiene il codice del programma.
+            \item \textbf{Attributi del processo}: contiene informazioni sul processo.
+        \end{itemize}
+    \subsection{Stato di un processo}
+        Un processo durante la sua creazione ed esecuzione può trovarsi in diversi stati:
+        \begin{itemize}
+            \item \textbf{Nuovo}: il processo è stato creato ma non è ancora in esecuzione.
+            \item \textbf{Pronto}: il processo è pronto per essere eseguito, ma non è ancora in esecuzione. (oppure è stato messo in attesa dalla \texttt{CPU}).
+            \item \textbf{In esecuzione}: il processo è in esecuzione sulla \texttt{CPU}.
+            \item \textbf{In attesa}: il processo è in attesa di un evento (es. \texttt{I/O}).
+            \item \textbf{Terminato}: il processo è terminato.
+        \end{itemize}
+        Per la gestione di questi stati il sistema operativo usa un \textit{dispatcher} il quale compito è quello di passare tra i processi e cambiare il loro stato. Per questo motivo il \textit{dispatcher} è chiamato anche \textit{scheduler}.
+        \subsubsection{\textit{Scheduling}}
+            Lo \textit{scheduling} è il processo di selezione del processo da eseguire sulla \texttt{CPU}. Esistono vari tipi di \textit{scheduler}:
+            \begin{itemize}
+                \item \textbf{\textit{Long time scheduler}}: decide quali processi devono essere caricati in memoria. (Nella coda dei processi pronti).
+                \item \textbf{\textit{Short time scheduler}}: decide quale processo deve essere eseguito sulla \texttt{CPU}. (Seleziona i processi dalla coda dei processi pronti).
+            \end{itemize}
+            Mentre lo \textit{short-term} scheduler è un processo molto veloce in quanto viene chiamato molto spesso (ogni $10-100 ms$), il \textit{long-term} scheduler è un processo più lento in quanto viene chiamato molto raramente (ogni $1-10 s$ o anche di più), questo però è responsabile del grado di multiprogrammazione del sistema. 
+            \paragraph{Accantonamento}
+                L'accantonamento è il processo per il quale i processi pronti ad essere eseguiti vengono messi in una coda di attesa. Quando la \texttt{CPU} è pronta per eseguire un processo, il processo viene preso dalla coda e viene eseguito, nel caso nel quale il processo richieda un'operazione di \texttt{I/O} il processo viene messo in richiesta ed quando l'operazione di \texttt{I/O} (caratterizzata a sua volta da una coda per ogni dispositivo connesso) è completata il processo viene rimesso nella coda dei processi pronti.\newline 
+                Può anche succedere che il tempo per l'esecuzione di un processo sia scaduto, in questo caso il processo viene rimesso nella coda dei processi pronti. Se poi il processo generi dei processi figli, questi dopo la loro inizializzazione vengono messi nella coda dei processi pronti e vengono eseguiti, se il padre necessita che il processo figlio termini prima di lui, il padre viene messo in attesa che il figlio termini, altrimenti anche il padre viene messo nella coda dei processi pronti. Infine se un processo necessita di un segnale da parte di un altro processo, il processo viene messo in attesa finché non riceve il segnale (dal sistema o da un altro processo).
+            \paragraph{\texttt{I/O} vs \texttt{CPU} \textit{bound}}
+                Un processo può essere \texttt{I/O} bound o \texttt{CPU} \textit{bound}. Un processo \texttt{I/O} \textit{bound} è un processo che richiede molte operazioni di \texttt{I/O} e poche operazioni sulla \texttt{CPU}, mentre un processo \texttt{CPU} \textit{bound} è un processo che richiede molte operazioni sulla \texttt{CPU} e poche operazioni di \texttt{I/O}. Non è possibile stabilire a priori se un processo è \texttt{I/O} \textit{bound} o \texttt{CPU} \textit{bound}, ma è possibile stabilirlo solo durante l'esecuzione del processo analizzando quanta \texttt{CPU} usa e se richiede molte operazioni di \texttt{I/O}, sulla base di questo il processo viene classificato come \texttt{I/O} \textit{bound} o \texttt{CPU} \textit{bound}.
+        \subsubsection{Operazione di \textit{dispatch}}
+            Quando si deve passare da un processo ad un altro si deve fare un'operazione di \textit{dispatch}. Questa operazione consiste nel:
+            \begin{enumerate}
+                \item Cambiare il contesto (salvare lo stato del processo corrente (\texttt{PCB}) e caricare lo stato del processo successivo (\texttt{PCB})).
+                \item Passare alla modalità utente (quando viene eseguito il \textit{context switch} il sistema operativo è in modalità \textit{kernel}, mentre il processo deve essere eseguito in modalità utente).
+                \item Salto alla prossima istruzione da eseguire del processo successivo.
+            \end{enumerate}
+            Questa operazione è molto costosa in termini di tempo, in particolare l'operazione di \textit{context switch} richiede risorse che rallentano il sistema senza eseguire nessuna operazione utile, la durata di ciò è strettamente dipendente dall'architettura del processore e dal sistema operativo.
+    \subsection{Operazioni sui processi}
+        Nella quasi totalità dei sistemi operativi moderni è possibile eseguire più processi in parallelo, per fare ciò il sistema operativo deve fornire delle operazioni per la gestione dei processi oltre ad un modo per l'identificazione dei processi. Di seguito vediamo quali sono le operazioni possibili sui processi.
+        \subsubsection{Creazione di un processo}
+            Un processo, come già detto, può creare altri processi, questi processi creati sono detti processi figli. Un processo padre può creare più processi figli, questi processi figli possono creare a loro volta altri processi figli e così via. Ai processi normalmente viene associato un \textit{PID} (\textit{Process IDentifier}) che è un numero univoco che identifica il processo all'interno del sistema operativo. \newline
+            Il processo figlio può ottenere le risorse necessarie per la sua esecuzione in due modi:
+            \begin{itemize}
+                \item Ereditando le risorse del processo padre (\textit{sharing})
+                \item Ottenendo nuove risorse dal sistema operativo (\textit{partitioning})
+            \end{itemize}
+            Inoltre il processo figlio può essere eseguito in parallelo in maniera sincrona rispetto al processo padre (il processo padre aspetta che il processo figlio termini) o asincrona (il processo figlio viene eseguito in parallelo al processo padre).
+            \paragraph{Nei sistemi \texttt{UNIX}} Nei sistemi \texttt{UNIX} esistono diverse \textit{system call} per la creazione di processi, la principale è \texttt{fork()} che crea un processo figlio identico al processo padre, la differenza tra i due processi è il \textit{PID} e il \textit{PPID} (\textit{Parent Process IDentifier}). Il processo figlio eredita tutte le risorse del processo padre, inoltre il processo figlio può modificare le risorse ereditate dal processo padre. Altra chiamata di sistema è \texttt{exec()} che permette di caricare un nuovo programma in un processo figlio, in questo caso il programma tra il processo padre e il processo figlio è differente. Infine la chiamata di sistema \texttt{wait()} permette l'esecuzione sincrona di un processo figlio rispetto al processo padre.
+        \subsubsection{Terminazione di un processo}
+            Un processo può terminare in tre modi:
+            \begin{itemize}
+                \item \textbf{Normalmente}: il processo termina la sua esecuzione invocando la \textit{system call} \texttt{exit()} (con eventualmente un codice di uscita).
+                \item \textbf{Forzatamente dal processo padre}: il processo padre può terminare il processo figlio invocando la \textit{system call} \texttt{kill()}, oppure nel caso di un eccessivo uso di risorse, oppure a sua volta il processo padre termina anormalmente.
+                \item \textbf{Forzatamente dal sistema operativo}: il sistema operativo può terminare un processo nel caso di un errore di esecuzione, oppure nel caso nel quale l'utente chiuda l'applicazione.
+            \end{itemize}
+            Nota come nel primo caso non sia esclusa la possibilità che il processo termini in maniera anomala, ad esempio per un errore di esecuzione gestito dal processo stesso, infatti quando il codice di uscita è diverso da \texttt{0} si intende che il processo è terminato in maniera anomala, ogni codice diverso da \texttt{0} ha un significato diverso.\newline
+            Quando un processo termina il sistema operativo si occupa di liberare le risorse utilizzate dal processo come la memoria allocata, i file aperti, le connessioni di rete, o altre risorse.
+    \subsection{Gestione dei processi del \texttt{SO}}
+        Di fatto il sistema operativo non è altro che un programma a tutti gli effetti, e dunque la sua esecuzione è un processo come un altro. Questo non significa però che il sistema operativo non essere gestito separatamente dagli altri processi, infetti esistono diverse opzioni l'esecuzione del \textit{kernel}:
+        \begin{itemize}
+            \item Il \textit{kernel} viene eseguito completamente in maniera separata dagli altri processi.
+            \item Il \textit{kernel} viene eseguito all'interno di un processo utente.
+            \item Il \textit{kernel} viene eseguito come un processo separato.
+        \end{itemize}
+        \paragraph{\textit{Kernel} separato} In questo caso il \textit{kernel} è eseguito al di fuori degli altri processi, questo gli permette di avere uno spazio in memoria ben definito e riservato oltre ad avere il totale controllo del sistema ed a essere eseguito in modalità \textit{kernel} (ovvero con privilegi elevati). I processi sono dunque solo propri all'utente ed un processo non potrà mai essere eseguito in modalità \textit{kernel}.
+        \paragraph{\textit{Kernel} nel processo utente} In questo caso il \textit{kernel} è eseguito all'interno di un processo utente, questo permette ai programmi utente di chiamare qualunque servizio del sistema operativo, ma tramite una modalità protetta (\textit{kernel mode}) che permette al sistema operativo di controllare le chiamate e di evitare che un processo utente possa fare danni al sistema. Dato che il \textit{kernel} è un processo a tutti gli effetti la sua immagine in memoria sarà composta dal ``\textit{kernel stack}'' per la gestione delle chiamate di sistema e dal ``\textit{kernel code}'' che consiste nei dati e codice del \texttt{SO} condiviso tra tutti i processi.\newline
+        Questo approccio porta ad una riduzione del tempo di \textit{context switch} in quanto è necessario solo la \textit{mode switch} e non l'intero \textit{context switch} lasciando però intatte le possibilità di riattivazione del processo utente o di eseguire un altro processo eseguendo un \textit{context switch} completo.
+        \paragraph{\textit{Kernel} come processo separato} In questo caso ogni servizio del sistema operativo è eseguito come un processo separato in modalità protetta. L'unica parte del \textit{kernel} che deve essere eseguita separatamente è lo \textit{scheduler} in quanto deve essere eseguito in modalità \textit{kernel}. Questo approccio è molto vantaggioso per sistemi multiprocessore in quanto permette di eseguire i servizi del sistema operativo in parallelo ed in un processore designato.
+\section{\textit{Thread}}
+    Un \textit{thread} è l'unità di base d'uso della \texttt{CPU}, un processo può contenere uno o più \textit{thread} che condividono lo stesso codice, dati e file aperti, ma ognuno ha un suo \textit{stack}, lo stato del \textit{program counter} e dei registri ed un numero identificativo.\newline
+    Dunque le risorse e lo spazio di indirizzamento sono propri del processo, mentre lo stato della \texttt{CPU} è proprio del \textit{thread} assieme al \textit{program counter} e ai registri.\newline
+    Classicamente un processo è composto da un solo \textit{thread}, la capacità di avere più \textit{thread} in un processo è chiamata \textit{multithreading}. Questo permette di avere un processo con più \textit{thread} separando il flusso di esecuzione e lo spazio di indirizzamento, ma condividendo le risorse del processo. 
+    \paragraph{Vantaggi}
+        I vantaggi del \textit{multithreading} sono:
+        \begin{itemize}
+            \item \textbf{Risposta più veloce}: Se sono necessari molti calcoli o operazioni di \texttt{I/O} è possibile eseguire queste operazioni in parallelo.
+            \item \textbf{Condivisione delle risorse}: I \textit{thread} possono condividere le risorse del processo, mentre processi separati devono usare meccanismi di comunicazione.
+            \item \textbf{Economia}: Creare un \textit{thread} è più veloce e meno costoso di creare un processo.
+            \item \textbf{Scalabilità}: I \textit{thread} possono essere eseguiti in parallelo su più processori o su più core.
+        \end{itemize}
+    \subsection{Implementazione dei \textit{thread}}
+        Vediamo ora come sono implementati i \textit{thread} nei sistemi operativi.
+        \subsubsection{Stato dei \textit{thread}}
+            Un \textit{thread}, come un processo, può trovarsi in diversi stati:
+            \begin{itemize}
+                \item \textbf{Pronto}: il \textit{thread} è pronto per essere eseguito.
+                \item \textbf{In esecuzione}: il \textit{thread} è in esecuzione sulla \texttt{CPU}.
+                \item \textbf{In attesa}: il \textit{thread} è in attesa di un evento.
+            \end{itemize}
+            Un \textit{thread} può essere in uno di questi stati, ma il processo può non essere nello stesso stato di un \textit{thread} in quanto un processo può contenere più \textit{thread} e quindi un processo può essere in uno stato diverso da quello dei suoi \textit{thread}.\newline
+            Un classico problema degli stati dei \textit{thread} è la questione di cosa fare quando un \textit{thread} è in attesa di un evento, questa ``attesa'' deve bloccare l'intero processo o solo il \textit{thread} in attesa? Ciò dipende dall'implementazione dei \textit{thread} nel sistema operativo.
+        \subsubsection{Implementazione dei \textit{thread}}
+            Esistono due principali implementazioni dei \textit{thread}:
+            \begin{itemize}
+                \item \textbf{\textit{User-level threads}}: I \textit{thread} sono implementati a livello utente, il sistema operativo non è a conoscenza dei \textit{thread} e non li gestisce. Le funzionalità sono implementate in una libreria che gestisce i \textit{thread} e le chiamate di sistema.
+                \item \textbf{\textit{Kernel-level threads}}: I \textit{thread} sono implementati a livello del \textit{kernel}, il sistema operativo è a conoscenza dei \textit{thread} e li gestisce. 
+                \item \textbf{\textit{Hybrid threads}}: I \textit{thread} sono implementati a livello del \textit{kernel}, ma il sistema operativo permette di creare \textit{thread} a livello utente. (es. \texttt{SOLARIS})
+            \end{itemize}
+            \paragraph{\textit{User-level threads}} Se si opta per l'implementazione dei \textit{thread} a livello utente, il sistema operativo non è a conoscenza dei \textit{thread} e non li gestisce e dunque non è necessario passare in modalità \textit{kernel} per la gestione dei \textit{thread} risparmiando due \textit{context switch}. Ogni applicazione deve però implementate lo \textit{scheduler} dei \textit{thread} e la gestione degli stati dei \textit{thread}. Quanto detto garantisce una maggiore portabilità delle applicazioni senza dover riscrivere il codice per ogni sistema operativo, ma allo stesso tempo non permette di sfruttare appieno le potenzialità del sistema operativo. Se però un \textit{thread} necessita di un'operazione di \texttt{I/O} o di un'operazione che richiede l'intervento del sistema operativo, tutti i \textit{thread} del processo vengono bloccati in quanto il sistema operativo non è a conoscenza dei \textit{thread} e non può gestire i \textit{thread} in maniera indipendente. (es. \textit{Green threads (\texttt{JDK1.1})}, \texttt{GNU} \textit{Portable Threads}, \texttt{POSIX} \textit{Pthreads})
+            \paragraph{\textit{Kernel-level threads}} Se si opta per l'implementazione dei \textit{thread} a livello del \textit{kernel}, il sistema operativo è a conoscenza dei \textit{thread} e li gestisce, dunque il sistema operativo può gestire i \textit{thread} in maniera indipendente e può sfruttare appieno le potenzialità del sistema operativo. Ogni \textit{thread} è un processo a tutti gli effetti, dunque ogni \textit{thread} ha il proprio \textit{PCB} e il proprio spazio di indirizzamento. Questo permette di sfruttare appieno le potenzialità del sistema operativo, ma allo stesso tempo richiede due \textit{context switch} per passare da un \textit{thread} all'altro. (es. \texttt{Windows}, \texttt{Linux}, \textit{Native Threads (\texttt{JDK1.2})})
+            \paragraph{\textit{Hybrid threads}} Se si opta per l'implementazione dei \textit{thread} ibridi, il sistema operativo permette di creare \textit{thread} a livello utente, ma i \textit{thread} sono implementati a livello del \textit{kernel}. Questo permette di sfruttare appieno le potenzialità del sistema operativo, ma allo stesso tempo permette di creare \textit{thread} a livello utente. (es. \texttt{SOLARIS})
+    \subsection{Esempio di libreria - \texttt{pthreads}}
+        Nel caso di implementazione dei \textit{thread} a livello utente, il sistema operativo non è a conoscenza dei \textit{thread} e dunque non li gestisce, ma è necessario utilizzare una libreria che gestisca i \textit{thread}. Un esempio di libreria per la gestione dei \textit{thread} è \texttt{pthreads} (\texttt{POSIX} \textit{Threads}).\newline
+        \texttt{pthreads} è una libreria standard per la gestione dei \textit{thread} in sistemi \texttt{UNIX} e sistemi \texttt{UNIX-like}. La libreria fornisce un'interfaccia standard per la creazione, la sincronizzazione e la terminazione dei \textit{thread} nel linguaggio \texttt{C}. La libreria fornisce la possibilità di caratterizzare i \textit{thread} sulla base della priorità (influenza lo \textit{scheduling}) e della dimensione dello \textit{stack} (stabilisce quante risorse può utilizzare il \textit{thread}).\newline
+        Gli attributi di un \textit{thread} sono contenuti nell'oggetto di tipo \texttt{pthread\_attr\_t} e tramite la funzione \texttt{pthread\_attr\_init()} si inizializzano gli attributi del \textit{thread}. Una volta inizializzati gli attributi tramite la funzione \texttt{pthread\_create()} si crea il \textit{thread} passando come argomenti:
+        \begin{enumerate}
+            \item Una variabile del tipo \texttt{pthread\_t} che conterrà l'identificativo del \textit{thread}.
+            \item Un oggetto del tipo \texttt{pthread\_attr\_t} che conterrà gli attributi del \textit{thread}.
+            \item Un puntatore alla funzione che il \textit{thread} dovrà eseguire.
+            \item Un puntatore agli argomenti della funzione.
+        \end{enumerate}
+        Una volta creato il \textit{thread} questo terminerà quando il codice della funzione terminerà, oppure quando nel codice della funzione verrà invocata la funzione \texttt{pthread\_exit()} con parametro \texttt{value\_ptr} che conterrà il valore di uscita del \textit{thread}. Se invece il \textit{thread} deve essere sospeso in attesa di un altro \textit{thread} si può utilizzare la funzione \texttt{pthread\_join()} con parametri:
+        \begin{enumerate}
+            \item Un oggetto del tipo \texttt{pthread\_t} che identifica il \textit{thread} da attendere.
+            \item Un puntatore alla variabile che conterrà il valore di uscita del \textit{thread} atteso.
+        \end{enumerate}
+\begin{lstlisting}[language=C]
+#include <pthread.h>
+#include <stdio.h>
+void *tbody(void *arg)
+    {
+    int j;
+    printf("ciao sono un thread, mi hanno appena creato\n");
+    *(int *)arg = 10;
+    sleep(2) /* faccio aspettare un po il mio creatore poi termino */
+    pthread_exit((int *)50); /* oppure return ((int *)50); */
+}
+main(int argc, char **argv)
+{
+    int i;
+    pthread_t mythread;
+    void *result;
+    printf("sono il primo thread, ora ne creo un altro \n");
+    pthread_create(&mythread, NULL, tbody, (void *) &i);
+    printf("ora aspetto la terminazione del thread che ho creato \n");
+    pthread_join(mythread, &result);
+    printf("Il thread creato ha assegnato %d ad i\n",i);
+    printf("Il thread ha restituito %d \n",result);
+}
+\end{lstlisting}
+    In questo esempio la variabile ``mythread'' assume dei valori corrispondenti all'identificativo del \textit{thread} creato, mentre la variabile ``result'' assume il valore di uscita del \textit{thread} creato. La funzione ``tbody'' è la funzione che il \textit{thread} dovrà eseguire, mentre la variabile ``i'' è un argomento passato alla funzione. La funzione ``pthread\_exit()'' termina il \textit{thread} e restituisce il valore passato come argomento, mentre la funzione ``pthread\_join()'' sospende il \textit{thread} corrente in attesa del \textit{thread} passato come argomento e restituisce il valore di uscita del \textit{thread} atteso.
+    \subsubsection{Condivisione dello spazio logico} 
+        Come già anticipato i \textit{thread} condividono lo stesso spazio logico, questo significa che i \textit{thread} possono accedere alle stesse variabili globali e statiche e se un \textit{thread} modifica una variabile globale, la modifica sarà visibile a tutti gli altri \textit{thread}. Questo può portare a problemi di sincronizzazione tra i \textit{thread} e dunque è necessario utilizzare meccanismi di sincronizzazione per evitare problemi di accesso concorrente alle variabili globali. Possono esistere variabili locali ai \textit{thread} che sono visibili solo al \textit{thread} che le ha dichiarate, ma non sono visibili agli altri \textit{thread}, ciò usando la classe \texttt{thread\_specific\_data}.
+        \paragraph{Per la sincronizzazione} Per la sincronizzazione tra i \textit{thread} si possono utilizzare o gli strumenti direttamente forniti dalla libreria \texttt{pthreads} (come i semafori) oppure si possono utilizzare le primitive di sincronizzazione fornite dal sistema operativo (come \texttt{sleep(n)} che sospende il \textit{thread} corrente per $n$ secondi). Per tenere traccia del tempo trascorso nella funzione possono essere usati due metodi:
+        \begin{itemize}
+            \item Un \textit{interrupt Request} (\texttt{IRQ}) che viene generato ad intervalli regolari e che incrementa un contatore. Il \texttt{SO} controlla se ci sono delle \texttt{sleep} scadute e se ci sono le risveglia.
+            \item Riconfigurazione delle \texttt{IRQ} in modo che avvenga una \texttt{IRQ} quando la prima \texttt{sleep} scade, e una seconda \texttt{IRQ} quando la seconda \texttt{sleep} scade e così via. Ciò comporta a migliore precisione ma alto \textit{overhead} per la riconfigurazione delle \texttt{IRQ} ad ogni \texttt{sleep}.
+        \end{itemize}
