@@ -46,3 +46,181 @@ Nel presente capitolo si analizzerà il moto di un corso a partire dai tre princ
         $$
         Dove $\vec{R_{\text{c}}}$ è la forza risultante che agisce sul corpo $c$, mentre $\vec{F_{i\rightarrow c}}$ è la forza che il corpo $i$ esercita sul corpo $c$.\newline
         Se un corpo fosse in quiete ovvero $\vec{S_i} = \vec{S_f}$ dunque $\vec{v_i} = \vec{v_f} = 0$ allora $\vec{a_{tot}} = \vec{0}$ e quindi $\vec{R_{\text{c}}} = \vec{0}$.
+\section{Specificazione delle forze}
+    \paragraph{Reazione vincolare} La reazione vincolare ($\vec{N}$) è la forza che un corpo esercita su un altro corpo per impedirne il moto. Questa forza è sempre perpendicolare alla superficie di contatto tra i due corpi e diretta verso l'interno del corpo. Questa forza è sempre uguale e di verso opposto alla componente normale della forza peso. Questa forza è detta vincolare in quanto è una forza che impedisce il moto del corpo.
+    \paragraph{Forza Peso} La forza peso è la forza che la Terra esercita su un corpo, questa dipende direttamente dalla massa del corpo e dalla costante gravitazionale terrestre $g=9.81 [m/s^2]$. La forza peso è definita come segue: $$
+        \vec{P} = m\vec{g}
+    $$
+    Dunque: $ \vec{F} = m_I \vec{a} = m \vec{g} \Rightarrow \vec{a} = \vec{g} $ possiamo semplificare la massa inerziale con la massa gravitazionale in quando la forza che la terra esercita sulla massa $\vec{F_{M\rightarrow m}} = -\frac{q_{12}q_{21}}{r^2_{12}} \hat{r_{12}} G$ dove $G$ è la costante gravitazionale universale. La formula appena scritta è la formula generale con $q_{12}$ e $q_{21}$ che sono le cariche dei due corpi (quanto un corpo è propenso a partecipare ad una interazione) e $r_{12}$ è la distanza tra i due corpi. Nel caso della forza peso $q_{12}q_{21} = m\cdot M$ dove $M$ è la massa della terra e $m$ è la massa del corpo. Dunque la formula diventa: $$
+        \vec{F_{M\rightarrow m}} = -\frac{m\cdot M}{r^2} \hat{r} G
+    $$ ora la distanza tra i due corpi è la somma dei raggi dei due corpi, quindi $r = R_{\text{terra}} + h$ dove $R_{\text{terra}}$ è il raggio della terra e $h$ è l'altezza del corpo rispetto al suolo, dato che queste due grandezze sono molto diverse ed $h$ è molto piccolo rispetto a $R_{\text{terra}}$ possiamo approssimare $r \approx R_T$ e quindi la formula diventa: $$
+        \vec{F_{M\rightarrow m}} = -\frac{m\cdot M}{R^2} \hat{r} G
+    $$
+    e quindi $$
+        \vec{F_{M\rightarrow m}} = -m\left(\frac{GM}{R^2}\right) \hat{r} = -m\vec{g}
+    $$ In quanto questa è una forza allora in un sistema inerziale vale che $\vec{F}=m\vec{a}$ e quindi $m_I\vec{a} = -m\vec{g} \Rightarrow m_I = m$
+    \paragraph{Forza Elastica}  
+        La forza elastica è la forza che un corpo elastico esercita su un corpo che lo comprime o lo allunga. Questa forza è definita come segue: $$
+            \begin{aligned}
+                \vec{F_{\text{el}}} =& -k\vec{x}
+                =& -k(\vec{x_f} - \vec{x_eq})
+            \end{aligned}
+        $$
+        Dove $k$ è la costante elastica del corpo e $\vec{x}$ è la deformazione del corpo rispetto alla posizione di equilibrio ($\vec{x_{eq}}$). Questa forza è sempre diretta verso la posizione di equilibrio del corpo, dunque se il corpo è compresso la forza sarà diretta verso l'esterno, se il corpo è allungato la forza sarà diretta verso l'interno, in ogni caso il segno meno viene apposto in quanto è in opposizione alla deformazione.
+    \paragraph{Forza di Attrito} La forza di attrito è la forza che si oppone al moto di un corpo su una superficie. Questa forza è definita come segue: $$
+        \vec{F_{\text{att}}} = -\mu_s|\vec{N}|\cdot \hat{d}
+    $$
+    Dove $\mu_s$ è il coefficiente di attrito statico, $\vec{N}$ è la reazione vincolare (della quale ne consideriamo il modulo) e $\hat{d}$ è il versore della direzione del moto (dove il segno meno indica che la forza è in opposizione al moto).
+    \subsection{Reazione Vincolare}
+        Un corpo soggetto alla'azione di una forza, o della risultante non nulla di più forze, rimane fermo allora l'ambiente circostante provoca su quel corpo una forza uguale e di verso opposto alla risultante delle forze che agiscono su di esso, questo in quanto vale la terza legge di Newton. Questa forza è detta \textbf{reazione vincolare} nel caso di un corpo appoggiato su una superficie piana, la reazione vincolare è perpendicolare alla superficie di appoggio e diretta verso l'interno del corpo, opponendosi alla forza peso. La reazione vincolare si indica con $\vec{N}$ e se il corpo è in quiete allora $\vec{R} = \vec{N} + \vec{P} = \vec{0}$.
+        \subsubsection{Senzazione di peso} 
+            La reazione vincolare esercitata da un corpo, verso un altro corpo, (come un pavimento su una persona) è uguale e di verso opposto alla forza peso. È questa forza che dà la ``sensazione di peso'' e non la forza peso ($P$) in se. Quindi nel caso di un corpo grave appoggiato su una piattaforma orizzontale la quale si muove con accelerazione $a$ allora finché il corpo è appoggiato sulla piattaforma la reazione vincolare sarà $N + P = m\cdot a$, ovvero $N + m\cdot g = m\cdot a$ e quindi $N = m\cdot (a - g)$.\newline
+            Questo comporta quattro situazioni differenti:
+            \begin{enumerate}
+                \item $a$ è discorde con $g$ e (piattaforma accelera verso l'alto) $N$ è maggiore di $P$ e quindi la persona avrà la sensazione di peso maggiore.
+                \item $a$ è concorde con $g$ e (piattaforma accelera verso il basso) $N$ è minore di $P$ e quindi la persona avrà la sensazione di peso minore.
+                \item $a$ è concorde e coincide esattamente con $g$ allora $N = P$ e quindi la persona avrà la sensazione di assenza di peso.
+                \item $a$ è concorde con $g$ allora l'accelerazione sarà così elevata che il corpo ``non riesce a stare dietro'' e quindi ci sarà un distacco tra il corpo e la piattaforma.
+            \end{enumerate}
+    \subsection{Forza di attrito radente}
+        Sperimentalmente si può osservare come se si provi a spingere una massa $m$ su un piano orizzontale, questa non si muoverà per la forza $F$ che si sta esercitando su di essa, ma si muoverà solo nel momento nel quale il modulo della forza $F$ supera un certo valore ($\mu_S N$), il coefficiente $mu_S$ è il coefficiente di attrito statico e questo è dipendente dalle due superfici che si stanno sfregando. Dunque:
+        $$
+            \begin{cases}
+                F\leq \mu_S N & \text{condizione di quiete} \\
+                F > \mu_S N & \text{condizione di moto}
+            \end{cases}
+        $$
+        Nel caso in cui il corpo non si muova, la forza di attrito sarà uguale alla forza che si sta esercitando sul corpo, in quanto il corpo non si muove e quindi la forza risultante è nulla. Dunque $F = \mu_S N$ e quindi $N = \frac{F}{\mu_S}$, inoltre la forza di attrito è sempre diretta in opposizione al moto e quindi:
+        $$
+            R + F + P = 0
+        $$
+        Chiamiamo $A_{\text{max}}$ il valore massimo di $F$ che possiamo esercitare sul corpo affinché questo non si muova, allora $A_{\text{max}} = \mu_S N$, dove $N$ è la reazione vincolare normale al piano.
+        Possiamo quindi disegnare un grafico della forza di attrito in funzione della forza applicata:
+        \begin{figure}[H]
+            \centering
+            \begin{tikzpicture}
+                \begin{axis}[
+                    axis lines = left,
+                    xlabel = $F$,
+                    ylabel = $A$,
+                    xmin = 0, xmax = 10,
+                    ymin = 0, ymax = 10,
+                    ytick = {0, 5},
+                    yticklabels = {$0$, $A_{\text{max}}$},
+                    xtick = {0, 5},
+                    xticklabels = {$0$, $F = \mu_S N$},
+                ]
+                \addplot [
+                    domain=0:5, 
+                    samples=50, 
+                    color=red,
+                ]
+                {x};
+                \addplot [
+                    domain=0:10, 
+                    samples=100, 
+                    color=blue,
+                    style=dashed,
+                    ]
+                {5};
+                \end{axis}
+            \end{tikzpicture}
+            \caption{Grafico della forza di attrito in funzione della forza applicata}
+            \label{fig:attritoStatico}
+        \end{figure}
+        In figura \ref{fig:attritoStatico} possiamo vedere come la forza di attrito sia uguale alla forza applicata fino a quando questa non supera il valore massimo di attrito statico, in quel momento il corpo inizia a muoversi, quando questo accade continua ad esserci attrito ma il corpo si muove e quindi la forza di attrito diventa dinamica.\newline
+        La forza che si oppone al movimento di un corpo mentre questo si muove su una superficie è detta forza di attrito radente dinamico, questa forza è definita come segue:
+        $$
+            F_{\text{ad}} = -\mu_d N = ma
+        $$
+        Dove $\mu_d$ è il coefficiente di attrito dinamico, $N$ è la reazione vincolare. Dalla definizione notiamo come la forza di attrito dinamico sia sempre diretta in opposizione al moto ed \underline{non è affetta dalla velocità del corpo}, possiamo quindi aggiungere al grafico della Figura \ref{fig:attritoStatico} la forza di attrito dinamico:
+        \begin{figure}[H]
+            \centering
+            \begin{tikzpicture}
+                \begin{axis}[
+                    axis lines = left,
+                    xlabel = $F$,
+                    ylabel = $A$,
+                    xmin = 0, xmax = 10,
+                    ymin = 0, ymax = 10,
+                    ytick = {0, 4.75, 5},
+                    yticklabels = {$0$, $A_{\text{d}}$, $A_{\text{max}}$},
+                    xtick = {0, 5},
+                    xticklabels = {$0$, $F = \mu_S N$},
+                ]
+                \addplot [
+                    domain=0:5, 
+                    samples=50, 
+                    color=red,
+                ]
+                {x};
+                \addplot [
+                    domain=0:10, 
+                    samples=100, 
+                    color=blue,
+                    style=dashed,
+                    ]
+                {5};
+                \addplot[
+                    domain=5:5.25,
+                    samples=50,
+                    color=red,
+                ]{1/((x-3.95)^21+1)+4.75};
+                \addplot [
+                    domain=5.25:10, 
+                    samples=50, 
+                    color=red,
+                    ]
+                {4.75};
+                \end{axis}
+            \end{tikzpicture}
+            \caption{Grafico della forza di attrito in funzione della forza applicata}
+            \label{fig:attritoDinamico}
+        \end{figure}
+        Notiamo come il valore di $A_{\text{d}}$ sia minore di $A_{\text{max}}$ in è vero per ogni superficie che il coefficiente di attrito dinamico sia minore di quello statico ($\mu_d < \mu_S$), altrimenti il corpo non si muoverebbe.
+    \subsection{Piano Inclinato}
+        Se prendiamo in considerazione un corpo di massa $m$ assimilabile ad un punto materiale e soggetto alle forze peso, reazione vincolare e forza di attrito radente, se questo è appoggiato su una superficie inclinata di angolo $\theta$ rispetto all'orizzontale, allora se è la sola forza peso che agisce sul corpo, allora possiamo scrivere la seguente equazione:
+        $$
+            P + R = m\cdot a
+        $$
+        Dove $P$ è la forza peso, $R$ è la reazione vincolare e $a$ è l'accelerazione del corpo, la reazione vincolare agisce solo nella direzione normale alla superficie, quindi possiamo scomporre questo come:
+        $$
+            \begin{cases}
+                -mg\cos \theta + N = 0 & \text{direzione normale} \\
+                -mg\sin \theta = m\cdot a & \text{direzione parallela}
+            \end{cases}
+        $$
+        Da queste due equazioni possiamo notare come tutta l'eventuale accelerazione del corpo sia diretta lungo la superficie inclinata.\footnote{Ancora non abbiamo preso in considerazione la forza di attrito radente}
+        \begin{figure}[H]
+            \centering
+            % Figura di un corpo su un piano inclinato (triangolo rettangolo (angolo retto in basso a sinistra)  con la punta di angolo in basso a destra) con la forza peso, la suddivisione delle forze peso in due componenti, la reazione vincolare, il corpo è un rettangolo appoggiato sul piano inclinato. Gli angoli tra le componenti della forza peso e il piano inclinato devono essere indicati.
+            \begin{tikzpicture}
+                % Piano inclinato
+                \draw (0,0) -- (8,0) -- (0,2) -- cycle;
+                % Angoli del piano inclinato
+                \draw (6.5,0) arc (180:166.15:1.5);
+                \node at (6.75,0.25) {$\theta$};
+
+                % Corpo appoggiato sul piano inclinato
+                \draw[fill=gray, rotate around={-14.04:(4,1)}] (3.5,2) rectangle (4.5,1);
+                % Forza peso
+                \draw[->] (4,1.5) -- (4,0.5) node[anchor=east] {$P$};
+                % Componenti della forza peso
+                \draw[->] (4,1.5) -- (3.75,0.6) node[anchor=east] {$mg\cos \theta$};
+                \draw[->] (4,1.5) -- (4.25,1.425) node[anchor=west] {$mg\sin \theta$};
+                % Linee tratteggiate di supporto
+                \draw[dashed] (4,0.5) -- (3.75,0.6);
+                \draw[dashed] (4,0.5) -- (4.25,1.425);
+                % Reazione vincolare
+                \draw[->] (4,1.5) -- (4.25,2.4) node[anchor=west] {$N$};
+            \end{tikzpicture}
+            \caption{Forze che agiscono su un corpo su un piano inclinato}
+            \label{fig:pianoInclinato}
+        \end{figure}
+        Ora, prendendo in considerazione anche la forza di attrito radente, distinguiamo due principali casi:
+        \begin{itemize}
+            \item Il corpo è in stasi rispetto al piano inclinato
+            \item Il corpo sta scendendo (frenato) rispetto al piano inclinato
+        \end{itemize}
+        Nel primo caso ciò significa che la forza di attrito statico è uguale alla componente parallela della forza peso, quindi $F_{\text{att}} = \mu_S N = mg\sin \theta$ ed inoltre questa non eccede il valore massimo di attrito statico, quindi $\mu_S N \leq \mu_S mg\cos \theta$, dunque $mg\sin \theta = \mu_S mg\cos \theta$ e quindi $ mg(\sin \theta - \mu_S \cos \theta) = 0$ e quindi $\mu_S \geq \tan \theta$.\newline
+        Nel secondo caso, il corpo sta scendendo rispetto al piano inclinato, quindi viene esercitata una forza di attrito dinamico, questa forza è minore della componente parallela della forza peso, il corpo scende con accelerazione $a$ e quindi $mg\sin \theta - F_{\text{att}} = m\cdot a$ e quindi $mg\sin \theta - \mu_d N = m\cdot a$ e quindi $mg\sin \theta - \mu_d mg\cos \theta = m\cdot a$ e quindi $a = g(\sin \theta - \mu_d \cos \theta)$.
