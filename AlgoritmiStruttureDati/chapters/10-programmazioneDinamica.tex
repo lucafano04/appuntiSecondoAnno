@@ -173,6 +173,7 @@ La tecnica della programmazione dinamica, come per la tecnica \textit{divide-et-
                 \end{algorithm}
                 L'algoritmo \texttt{solution()} ha complessità $\Theta(n)$ in merito al tempo, mentre la complessità di \texttt{hateville()} è $\Theta(n)$ in merito al tempo e $\Theta(n)$ in merito allo spazio, se sussiste la necessità di ricostruire la soluzione allora non è possibile ridurre la complessità spaziale.
         \subsection{Zaino (\textit{Knapsack})}
+            \label{subsec:knapsack}
             Il problema dello zaino è un problema di ottimizzazione, in cui si ha uno zaino con una capacità massima $C$ ed lo scopo è quello di riempire lo zaino con oggetti di valore massimo, ma la somma dei pesi degli oggetti non deve superare la capacità dello zaino.\newline
             Si ha quindi in input un vettore $w$ dove $w[i]$ è il peso dell'oggetto $i$ ed un vettore $p$ dove $p[i]$ è il profitto dell'oggetto $i$ ed un intero $C$ che rappresenta la capacità dello zaino. L'algoritmo deve restituire un insieme $S\subseteq \{1,\ldots,n\}$ tale che $w(S)=\sum_{i\in S}w[i]\leq C$ e $\operatorname{argmax}_Sp(S)=\sum_{i\in S}p[i]$.
             \subsubsection{Definizione Ricorsiva}
@@ -540,43 +541,43 @@ La tecnica della programmazione dinamica, come per la tecnica \textit{divide-et-
                     \State \Return $pos$
                 \end{algorithmic}
             \end{algorithm}
-            \subsection{Prodotto di catena di matrici}
-                Il problema del prodotto di catena di matrici consiste nel trovare il modo più efficiente per calcolare il prodotto di $n$ a due a due compatibili matrici. Ricordando che il prodotto di matrici non è commutativo, ovvero $A\cdot B\neq B\cdot A$, ma è associativo, ovvero $(A\cdot B)\cdot C=A\cdot(B\cdot C)$.\newline
-                A livello algoritmico vogliamo trovare il modo più efficiente per calcolare il prodotto di $n$ matrici, ovvero vogliamo trovare il modo più efficiente per calcolare il prodotto di $A_1\cdot A_2\cdot A_3\cdot\dots\cdot A_n$ andando ad associare le matrici in modo da minimizzare il numero di moltiplicazioni scalari.
-                \subsubsection{Parentesizzazione}
-                Una parentesizzazione di $P_{i,j}$ del prodotto $A_i\cdot A_{i+1}\dots A_j$ consiste nella matrice $A_i$ se $i=j$ nel prodotto $A_i\cdot A_{i+1}\dots A_j$ se $i<j$ e in una parentesizzazione di $P_{i,k}$ e di $P_{k+1,j}$ se $i<j$.
-                La parentesizzazione ottima di $P_{i,j}$ è la parentesizzazione che minimizza il numero di moltiplicazioni scalari necessarie per calcolare $P_{i,j}$.
-                \paragraph{Numero possibile di parentesizzazione} Nel caso $P(n)$ abbiamo $n$ posizioni per \underline{l'ultimo prodotto}. Una volta fissato $k$ abbiamo $P(k)$ parentesizzazioni per $P_{i,k}$ e $P(n-k)$ parentesizzazioni per $P_{k+1,n}$, dunque il numero totale di parentesizzazioni è $P(k)\cdot P(n-k)$, tutto questo và ripetuto per ogni $k$ compreso tra $1$ e $n-1$. Dunque:
-                $$
-                    P(n)=\begin{cases}
-                        1 & n=1\\
-                        \sum_{k=1}^{n-1}P(k)\cdot P(n-k) & n>1
-                    \end{cases}
-                $$
-                Dunque provarne tutte le possibili parentesizzazioni ha complessità $\Omega\left(\frac{4^n}{\sqrt{n}}\right)$ il che rende improponibile l'approccio \textit{brute-force}.
-            \subsubsection{Parentesizzazione ottima}
-                In una parentesizzazione ottima ($A[i\dots j]$) allora esiste un $k$ tale che $A[i\dots j]=A[i\dots k]\cdot A[k+1\dots j]$ e $A[i\dots k]$ e $A[k+1\dots j]$ sono parentesizzazioni ottime di $A[i\dots k]$ e $A[k+1\dots j]$.
-                \begin{theorem}
-                    Se $P[i\dots j]=P[i\dots k]P[k+1\dots j]$ è una parentesizzazione ottima di $A[i\dots j]$ allora:
-                    \begin{itemize}
-                        \item $P[i\dots k]$ è una parentesizzazione ottima di $A[i\dots k]$
-                        \item $P[k+1\dots j]$ è una parentesizzazione ottima di $A[k+1\dots j]$
-                    \end{itemize}
-                \end{theorem}
-                \begin{proof}
-                    Per assurdo se $P[i\dots k]$ non fosse una parentesizzazione ottima di $A[i\dots k]$ allora esisterebbe una parentesizzazione $P'[i\dots k]$ tale che $P'[i\dots k]$ richiede meno moltiplicazioni scalari di $P[i\dots k]$, ma allora $P'[i\dots k]P[k+1\dots j]$ richiederebbe meno moltiplicazioni scalari di $P[i\dots k]P[k+1\dots j]$ il che è in contraddizione con l'ipotesi che $P[i\dots j]$ sia una parentesizzazione ottima di $A[i\dots j]$.
-                \end{proof}
-            \subsubsection{Valore della soluzione ottima}
-                Sia $DP[i][j]$ il minimo numero di moltiplicazioni scalari necessarie per calcolare il prodotto $A_i\cdot A_{i+1}\dots A_j$ allora:
-                \paragraph{Caso Base} Se $i=j$ allora $DP[i][j]=0$ in quanto non vi è alcuna moltiplicazione da fare.
-                \paragraph{Caso Ricorsivo} Se $i<j$ allora esiste una parentesizzazione ottima $P[i\dots j]$ tale che $P[i\dots j]=P[i\dots k]\cdot P[k+1\dots j]$ allora $DP[i][j] = DP[i][k]+DP[k+1][j]+c_{i-1}\cdot c_k \cdot c_j$ dove $c_i$ è il numero di righe della matrice $A[i]$ e $c_{i-1}$ è il numero di colonne della matrice $A[i-1]$ ed $c_j$ è il numero di colonne della matrice $A[j]$.\newline
-                Quindi: $$
-                    DP[i][j]=\begin{cases}
-                        0 & i=j\\
-                        \min_{i\leq k<j}\{DP[i][k]+DP[k+1][j]+c_{i-1}\cdot c_k \cdot c_j\} & i<j
-                    \end{cases}
-                $$
-            \subsubsection{Dalla formula all'algoritmo}
+    \subsection{Prodotto di catena di matrici}
+        Il problema del prodotto di catena di matrici consiste nel trovare il modo più efficiente per calcolare il prodotto di $n$ a due a due compatibili matrici. Ricordando che il prodotto di matrici non è commutativo, ovvero $A\cdot B\neq B\cdot A$, ma è associativo, ovvero $(A\cdot B)\cdot C=A\cdot(B\cdot C)$.\newline
+        A livello algoritmico vogliamo trovare il modo più efficiente per calcolare il prodotto di $n$ matrici, ovvero vogliamo trovare il modo più efficiente per calcolare il prodotto di $A_1\cdot A_2\cdot A_3\cdot\dots\cdot A_n$ andando ad associare le matrici in modo da minimizzare il numero di moltiplicazioni scalari.
+        \subsubsection{Parentesizzazione}
+            Una parentesizzazione di $P_{i,j}$ del prodotto $A_i\cdot A_{i+1}\dots A_j$ consiste nella matrice $A_i$ se $i=j$ nel prodotto $A_i\cdot A_{i+1}\dots A_j$ se $i<j$ e in una parentesizzazione di $P_{i,k}$ e di $P_{k+1,j}$ se $i<j$.
+            La parentesizzazione ottima di $P_{i,j}$ è la parentesizzazione che minimizza il numero di moltiplicazioni scalari necessarie per calcolare $P_{i,j}$.
+            \paragraph{Numero possibile di parentesizzazione} Nel caso $P(n)$ abbiamo $n$ posizioni per \underline{l'ultimo prodotto}. Una volta fissato $k$ abbiamo $P(k)$ parentesizzazioni per $P_{i,k}$ e $P(n-k)$ parentesizzazioni per $P_{k+1,n}$, dunque il numero totale di parentesizzazioni è $P(k)\cdot P(n-k)$, tutto questo và ripetuto per ogni $k$ compreso tra $1$ e $n-1$. Dunque:
+            $$
+                P(n)=\begin{cases}
+                    1 & n=1\\
+                    \sum_{k=1}^{n-1}P(k)\cdot P(n-k) & n>1
+                \end{cases}
+            $$
+            Dunque provarne tutte le possibili parentesizzazioni ha complessità $\Omega\left(\frac{4^n}{\sqrt{n}}\right)$ il che rende improponibile l'approccio \textit{brute-force}.
+        \subsubsection{Parentesizzazione ottima}
+            In una parentesizzazione ottima ($A[i\dots j]$) allora esiste un $k$ tale che $A[i\dots j]=A[i\dots k]\cdot A[k+1\dots j]$ e $A[i\dots k]$ e $A[k+1\dots j]$ sono parentesizzazioni ottime di $A[i\dots k]$ e $A[k+1\dots j]$.
+            \begin{theorem}
+                Se $P[i\dots j]=P[i\dots k]P[k+1\dots j]$ è una parentesizzazione ottima di $A[i\dots j]$ allora:
+                \begin{itemize}
+                    \item $P[i\dots k]$ è una parentesizzazione ottima di $A[i\dots k]$
+                    \item $P[k+1\dots j]$ è una parentesizzazione ottima di $A[k+1\dots j]$
+                \end{itemize}
+            \end{theorem}
+            \begin{proof}
+                Per assurdo se $P[i\dots k]$ non fosse una parentesizzazione ottima di $A[i\dots k]$ allora esisterebbe una parentesizzazione $P'[i\dots k]$ tale che $P'[i\dots k]$ richiede meno moltiplicazioni scalari di $P[i\dots k]$, ma allora $P'[i\dots k]P[k+1\dots j]$ richiederebbe meno moltiplicazioni scalari di $P[i\dots k]P[k+1\dots j]$ il che è in contraddizione con l'ipotesi che $P[i\dots j]$ sia una parentesizzazione ottima di $A[i\dots j]$.
+            \end{proof}
+        \subsubsection{Valore della soluzione ottima}
+            Sia $DP[i][j]$ il minimo numero di moltiplicazioni scalari necessarie per calcolare il prodotto $A_i\cdot A_{i+1}\dots A_j$ allora:
+            \paragraph{Caso Base} Se $i=j$ allora $DP[i][j]=0$ in quanto non vi è alcuna moltiplicazione da fare.
+            \paragraph{Caso Ricorsivo} Se $i<j$ allora esiste una parentesizzazione ottima $P[i\dots j]$ tale che $P[i\dots j]=P[i\dots k]\cdot P[k+1\dots j]$ allora $DP[i][j] = DP[i][k]+DP[k+1][j]+c_{i-1}\cdot c_k \cdot c_j$ dove $c_i$ è il numero di righe della matrice $A[i]$ e $c_{i-1}$ è il numero di colonne della matrice $A[i-1]$ ed $c_j$ è il numero di colonne della matrice $A[j]$.\newline
+            Quindi: $$
+                DP[i][j]=\begin{cases}
+                    0 & i=j\\
+                    \min_{i\leq k<j}\{DP[i][k]+DP[k+1][j]+c_{i-1}\cdot c_k \cdot c_j\} & i<j
+                \end{cases}
+            $$
+        \subsubsection{Dalla formula all'algoritmo}
             innanzitutto memorizziamo in un vettore $c[0\dots n]$ la dimensione delle matrici dove $c[0]$ è il numero di righe della prima matrice e $c[i]$ è il numero di colonne della matrice $A[i]$ ed $c[i-1]$ è il numero di righe della matrice $A[i]$. E due indici $i,j$ che partono da $1$ e $n$ rispettivamente.
             \begin{algorithm}[H]
                 \caption{\Int recPair(\Int c, \Int i, \Int j)}
@@ -594,26 +595,80 @@ La tecnica della programmazione dinamica, come per la tecnica \textit{divide-et-
                 \end{algorithmic}
             \end{algorithm}
             \paragraph{Versione bottom-up} La versione bottom-up dell'algoritmo è la seguente:
-            \begin{algorithm}
-                \caption{computePair(\Int[] $c$, \Int $n$)}
-                \begin{algorithmic}
-                    \State \Int[][] $DP = \New \Int[1\dots n][1\dots n]$
-                    \For{\Int $i=1$ \To $n$}
-                        \State $DP[i][i]=0$
-                    \EndFor
-                    \State \Int[][] $last = \New \Int[1\dots n][1\dots n]$
-                    \For{\Int $h=2$ \To $n$}
-                        \For{\Int $i=1$ \To $n-h+1$}
-                            \State \Int $j=i+h-1$
-                            \State $DP[i][j]=+\infty$
-                            \For{\Int $k=i$ \To $j-1$}
-                                \State $temp = DP[i][k]+DP[k+1][j]+c[i-1]\cdot c[k]\cdot c[j]$
-                                \If{$temp<DP[i][j]$}
-                                    \State $DP[i][j]=temp$
-                                    \State $last[i][j]=k$
-                                \EndIf
+                \begin{algorithm}
+                    \caption{computePair(\Int[] $c$, \Int $n$)}
+                    \begin{algorithmic}
+                        \State \Int[][] $DP = \New \Int[1\dots n][1\dots n]$
+                        \For{\Int $i=1$ \To $n$}
+                            \State $DP[i][i]=0$
+                        \EndFor
+                        \State \Int[][] $last = \New \Int[1\dots n][1\dots n]$
+                        \For{\Int $h=2$ \To $n$}
+                            \For{\Int $i=1$ \To $n-h+1$}
+                                \State \Int $j=i+h-1$
+                                \State $DP[i][j]=+\infty$
+                                \For{\Int $k=i$ \To $j-1$}
+                                    \State $temp = DP[i][k]+DP[k+1][j]+c[i-1]\cdot c[k]\cdot c[j]$
+                                    \If{$temp<DP[i][j]$}
+                                        \State $DP[i][j]=temp$
+                                        \State $last[i][j]=k$
+                                    \EndIf
+                                \EndFor
                             \EndFor
                         \EndFor
+                    \end{algorithmic}
+                \end{algorithm}
+    \subsection{Insieme indipendente di intervalli pesati}
+        \label{subsec:weightedInterval}
+        Il problema dell'insieme indipendente di intervalli pesati consiste nel trovare un sotto-insieme di intervalli $I$ tale che nessun intervallo di $I$ si sovrapponga ad un altro intervallo di $I$ e tale che la somma dei pesi degli intervalli di $I$ sia massima.
+        \subsubsection{Pre-elaborazione}
+            Prima di procedere con l'algoritmo è necessario ordinare gli intervalli, possiamo ordinare gli intervalli in base alla fine dell'intervallo, in questo modo possiamo sfruttare creare un vettore $DP[1\dots n]$ tale che $DP[i]$ sia il peso massimo di un insieme indipendente di intervalli che termina con l'intervallo $i$. Quindi:
+        \subsubsection{Profitto Massimo (Versione 1)}
+            $$
+                DP[i]=
+                \begin{cases}
+                    0 & i=0\\
+                    \max(DP[i-1], \max\{DP[j]+w_i:j<i\land b_j\leq a_i\}) & i>0
+                \end{cases}
+            $$
+            Questa formula ha complessità $O(n^2)$, ma possiamo fare meglio?
+        \subsubsection{Pre-elaborazione 2}
+            Possiamo sfruttare una altra pre-elaborazione per calcolare il primo predecessore utile di un elemento $i$ tale che $b_j\leq a_i$ e $j<i$, se $j$ non esiste allora $pred_i=0$.\newline
+            Per calcolare $pred_i$ possiamo usare il seguente algoritmo:
+            \begin{algorithm}[H]
+                \caption{\Int [] \textsc{computePredecessor}(\Int[] $a$, \Int[] $b$, \Int $n$)}
+                \begin{algorithmic}
+                    \State \Int[] $pred = \New \Int[1\dots n]$
+                    \State $pred[0]=0$
+                    \For{\Int $i=0$ \To $n$}
+                        \State $j = i-1$
+                        \While{$j>0 \And b[j]>a[i]$}
+                            \State $j=j-1$
+                        \EndWhile
+                        \State $pred[i]=j$
                     \EndFor
+                    \State \Return $pred$
+                \end{algorithmic}
+            \end{algorithm}
+            Questo viene fatto solo una volta prima dell'algoritmo principale.\newline
+            Quindi possiamo riscrivere la formula come segue:
+            $$
+                DP[i]=\begin{cases}
+                    0 & i=0\\
+                    \max(DP[i-1], DP[\textsc{pred}[i]]+w_i) & i>0
+                \end{cases}
+            $$
+            Questa formula ha complessità $O(n)$.
+        \subsubsection{Algoritmo}
+            \begin{algorithm}[H]
+                \caption{\Int \textsc{maxWeightedIndependentSet}(\Int[] $a$, \Int[] $b$, \Int[] $w$, \Int $n$)}
+                \begin{algorithmic}
+                    \State \Int[] $pred = \Call{computePredecessor}{a,b,n}$
+                    \State \Int[] $DP = \New \Int[1\dots n]$
+                    \State $DP[0]=0$
+                    \For{\Int $i=1$ \To $n$}
+                        \State $DP[i]=\max(DP[i-1], DP[\textsc{pred}[i]]+w[i])$
+                    \EndFor
+                    \State \Return $DP[n]$
                 \end{algorithmic}
             \end{algorithm}
