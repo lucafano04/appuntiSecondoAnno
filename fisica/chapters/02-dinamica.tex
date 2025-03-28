@@ -224,3 +224,234 @@ Nel presente capitolo si analizzerà il moto di un corso a partire dai tre princ
         \end{itemize}
         Nel primo caso ciò significa che la forza di attrito statico è uguale alla componente parallela della forza peso, quindi $F_{\text{att}} = \mu_S N = mg\sin \theta$ ed inoltre questa non eccede il valore massimo di attrito statico, quindi $\mu_S N \leq \mu_S mg\cos \theta$, dunque $mg\sin \theta = \mu_S mg\cos \theta$ e quindi $ mg(\sin \theta - \mu_S \cos \theta) = 0$ e quindi $\mu_S \geq \tan \theta$.\newline
         Nel secondo caso, il corpo sta scendendo rispetto al piano inclinato, quindi viene esercitata una forza di attrito dinamico, questa forza è minore della componente parallela della forza peso, il corpo scende con accelerazione $a$ e quindi $mg\sin \theta - F_{\text{att}} = m\cdot a$ e quindi $mg\sin \theta - \mu_d N = m\cdot a$ e quindi $mg\sin \theta - \mu_d mg\cos \theta = m\cdot a$ e quindi $a = g(\sin \theta - \mu_d \cos \theta)$.
+
+    \subsection{Forza Elastica - senza attrito}
+        Se prendiamo in considerazione un corpo di massa $m$ ancorato ad una molla la quale a sua volta è ancorata ad un muro, allora quando il corpo viene allontanato dalla posizione di equilibrio della molla, questa eserciterà una forza elastica sul corpo, questa forza è definita come segue:
+        $$
+            \vec{F}=-k\vec{x}=m\vec{a}\Rightarrow -k\vec{x} = m\frac{d^2\vec{x}}{dt^2}
+        $$
+        Dove $k$ è la costante elastica della molla, $\vec{x}$ è la deformazione della molla rispetto alla posizione di equilibrio e $\vec{a}$ è l'accelerazione del corpo secondo la seconda legge di Newton. La forza elastica è sempre diretta verso la posizione di equilibrio della molla, quindi se il corpo è compresso la forza sarà diretta verso l'esterno, se il corpo è allungato la forza sarà diretta verso l'interno, in ogni caso il segno meno viene apposto in quanto è in opposizione alla deformazione.
+        \begin{figure}[H]
+            \centering
+            \begin{tikzpicture}
+                \def\H{1.1}  % wall height
+                \def\T{0.3}  % wall thickness
+                \def\W{3.9}  % ground length
+                \def\D{0.25} % ground depth
+                \def\h{0.7}  % mass height
+                \def\w{0.8}  % mass width
+                \def\x{2.0}  % mass x position
+                \def\dx{0.8} % extension
+                \def\y{1.22*\H} % x axis y position
+                \def\F{0.8}  % force
+                
+                % AXIS
+                \draw[mydashed] (\x,0) --++ (0,\y) (\x+\dx,0) --++ (0,1.1*\y);
+                \draw[axis] (\x-0.4*\W,\y) -- (\x+0.4*\W,\y) node[right] {$x$};
+                \tick{\x,\y}{-90} node[scale=0.8,above=-1] {$0$};
+                \draw[ell] (0,1.3*\h) --++ (\x,0) node[midway,fill=white,inner sep=0] {$\ell_0$};
+                \draw[dx] (\x,1.6*\h) --++ (\dx,0) node[pos=0.45,fill=white,inner sep=0] {$x$};
+                
+                % SPRING & MASS
+                \draw[spring,segment length=7.5] (0,\h/2) --++ (\x+\dx,0);
+                \draw[ground] (0,0) |-++ (-\T,\H) |-++ (\T+\W,-\H-\D) -- (\W,0) -- cycle;
+                \draw (0,\H) -- (0,0) -- (\W,0);
+                \draw[mass] (\x+\dx,0) rectangle++ (\w,\h) node[midway] {$m$};
+                \draw[force] (\x+\dx+0.2*\w,0.9*\h) --++ (-\F,0) node[midway,right=1,above=-1] {$\vb{F}$};
+                
+            \end{tikzpicture}
+            \caption{Diagramma di un corpo su una molla senza attrito}
+        \end{figure}
+        Dall'ultima equazione possiamo notare come questa possa essere scritta come:
+        $$
+            m\frac{d^2\vec{x}}{dt^2}=-k\vec{x} \Rightarrow \frac{d^2\vec{x}}{dt^2}+\frac{k}{m}\vec{x}=0
+        $$
+        Dal quale possiamo definire $\omega$ ovvero ``la pulsazione'' come:
+        \begin{align}
+            \omega^2 \stackrel{\text{def.}}{\rightharpoonup} \frac{k}{m} \Rightarrow \omega = \sqrt{\frac{k}{m}} \label{eq:omega}
+        \end{align}
+        Inoltre in quando $\vec{x}=x\hat{x}$ ed il verso ($\hat{x}$) è costante, possiamo scrivere:
+        \begin{align}
+            \vec{x} \longrightarrow x \label{eq:posizione}
+        \end{align}
+        Ora viste le due equazioni (\ref{eq:omega}) e (\ref{eq:posizione}) possiamo scrivere:
+        $$
+            \frac{d^2x}{dt^2}+\omega^2 x = 0 \Longrightarrow \ddot{x}+\omega^2 x = 0 
+        $$
+        Questa è l'equazione differenziale del moto armonico semplice, la quale ha come soluzione:
+        $$
+            x(t) = A\cos(\omega t + \phi) \label{eq:soluzione}
+        $$
+        Abbiamo già incontrato i parametri $A$ e $\phi$ quando abbiamo parlato di moto armonico semplice, questi hanno lo stesso ruolo in questo caso, ovvero $A$ è l'ampiezza del moto e $\phi$ è la fase iniziale del moto.\newline
+        Questo moto ci suggerisce che, in assenza di attrito, la molla non termina mai il suo moto, ma continua a vibrare indefinitamente con una frequenza angolare $\omega$ e un'ampiezza $A$, che è la distanza massima dalla posizione di equilibrio. 
+        \begin{figure}[H]
+            \centering
+            \begin{tikzpicture}
+                \def\A{1.0} % ampiezza
+                \def\T{2.0} % periodo
+                \begin{axis}[
+                    axis lines = left,
+                    xlabel = $t$,
+                    ylabel = $x$,
+                    xmin = 0, xmax = \T+0.5,
+                    ymin = -\A-0.5, ymax = \A+0.5,
+                    xtick = {0, \T/4, \T/2, 3*\T/4, \T},
+                    xticklabels = {$0$, $\frac{T}{4}$, $\frac{T}{2}$, $\frac{3T}{4}$, $T$},
+                    ytick = {-\A, -\A/2, 0, \A/2, \A},
+                    yticklabels = {$-A$, $-\frac{A}{2}$, $0$, $\frac{A}{2}$, $A$},
+                    samples=100,
+                    smooth,
+                ]
+                \addplot [
+                    color=red,
+                    domain=0:\T+0.5,
+                ]{(\A)*cos(deg(2*pi*x/\T))};
+                \end{axis}
+            \end{tikzpicture}
+            \caption{Grafico del moto armonico semplice}
+            \label{fig:motoArmonicoSemplice}
+        \end{figure}
+        In figura \ref{fig:motoArmonicoSemplice} possiamo vedere il grafico del moto armonico semplice, dove $A$ è l'ampiezza del moto e $T$ è il periodo del moto. Vista l'equazione del moto il parametro $A$ è calcolato come: $$
+            A = \sqrt{x^2_0 + \frac{v_0^2}{\omega^2}} \label{eq:ampiezza}
+        $$
+        Dove $x_0$ è la posizione iniziale del corpo e $v_0$ è la velocità iniziale del corpo, se questo è in quiete allora $v_0 = 0$ e quindi $A = x_0$.
+    \subsection{Moto del pendolo}
+        Per come viene affrontato il moto del pendolo all'interno di questo corso si considerino le seguenti ipotesi:
+        \begin{itemize}
+            \item Non sono presenti attriti nel filo
+            \item Il filo è inestensibile
+            \item Il filo non ha massa
+            \item La massa del pendolo è concentrata in un punto materiale
+            \item Il pendolo non è soggetto alla resistenza dell'aria
+            \item Il pendolo è situato nel vuoto
+            \item Il pendolo è soggetto alla forza di gravità costante ($g$) e uniforme
+        \end{itemize}
+        Una volta definite queste ipotesi possiamo passare a definire il moto del pendolo. Il pendolo è un sistema composto da una massa $m$ appesa ad un filo di lunghezza $L$, il quale è fissato ad un punto di sospensione.\newline
+        Se il pendolo è in quiete, la forza peso $P$ agisce verticalmente verso il basso e la reazione vincolare $N$ agisce lungo il filo.
+        
+        \begin{figure}[H]
+            \centering
+            \begin{tikzpicture}
+                % save length of g-vector and theta to macros
+                \pgfmathsetmacro{\Gvec}{1.5}
+                \pgfmathsetmacro{\myAngle}{0}
+                % calculate lengths of vector components
+                \pgfmathsetmacro{\Gcos}{\Gvec*cos(\myAngle)}
+                \pgfmathsetmacro{\Gsin}{\Gvec*sin(\myAngle)}
+                
+                \coordinate (centro) at (0,0);
+                \draw[dashed,gray,-] (centro) -- ++ (0,-3.5) node (mary) [black,below]{$ $};
+                \draw[thick] (centro) -- ++(270+\myAngle:3) coordinate (bob);
+                \draw [blue,-stealth] (bob) -- ($(bob)!\Gcos cm!(centro)$);
+                \draw [-stealth] (bob) -- ++(0,-\Gvec)
+                    coordinate (g)
+                    node[near end,left] {$g$};
+                \filldraw [fill=black!40,draw=black] (bob) circle[radius=0.1];
+            \end{tikzpicture}
+            \caption{Schema delle forze che agiscono su un pendolo sulla verticale}
+        \end{figure}
+
+        Se invece il pendolo è in movimento, la forza peso $P$ agisce comunque verso il basso, la tensione del filo $T_f$ agisce lungo questo ed il pendolo è in movimento dunque per la seconda legge di Newton possiamo scrivere:
+        $$
+            P + T_f = m\cdot a \Rightarrow m\cdot g + T_f = m\cdot a
+        $$
+        Possiamo scomporre le forze in due componenti, una normale alla direzione del pendolo e una parallela alla direzione del pendolo, in questo modo possiamo scrivere:
+        $$
+            \begin{aligned}
+                N: \quad & -T_f + P_\perp & = 0\\
+                \tau: \quad & -P_\parallel & = m\cdot a_\tau
+            \end{aligned} = \begin{cases}
+                -T_f + m\cdot g\cdot \cos \theta &= 0 \\
+                \cancel{m}\cdot g\cdot \sin \theta &= \cancel{m}\cdot a_\tau
+            \end{cases} = 
+            \begin{cases}
+                T_f &= m\cdot g\cdot \cos \theta \\
+                a_\tau &= g\cdot \sin \theta
+            \end{cases}
+        $$
+        \begin{figure}[H]
+            \centering
+            \begin{tikzpicture}
+                % save length of g-vector and theta to macros
+                \pgfmathsetmacro{\Gvec}{1.5}
+                \pgfmathsetmacro{\myAngle}{30}
+                % calculate lengths of vector components
+                \pgfmathsetmacro{\Gcos}{\Gvec*cos(\myAngle)}
+                \pgfmathsetmacro{\Gsin}{\Gvec*sin(\myAngle)}
+            
+                \coordinate (centro) at (0,0);
+                \draw[dashed,gray,-] (centro) -- ++ (0,-3.5) node (mary) [black,below]{$ $};
+                \draw[thick] (centro) -- ++(270+\myAngle:3) coordinate (bob);
+                \pic [draw, ->, "$\theta$", angle eccentricity=1.5] {angle = mary--centro--bob};
+                \draw [blue,-stealth] (bob) -- ($(bob)!\Gcos cm!(centro)$);
+                \draw [-stealth] (bob) -- ($(bob)!-\Gcos cm!(centro)$)
+                    coordinate (gcos)
+                    node[midway,above right] {$a\cos\theta$};
+                \draw [-stealth] (bob) -- ($(bob)!\Gsin cm!90:(centro)$)
+                    coordinate (gsin)
+                    node[midway,above left] {$a\sin\theta$};
+                \draw [-stealth] (bob) -- ++(0,-\Gvec)
+                    coordinate (g)
+                    node[near end,left] {$g$};
+                \pic [draw, ->, "$\theta$", angle eccentricity=1.5] {angle = g--bob--gcos};
+                \filldraw [fill=black!40,draw=black] (bob) circle[radius=0.1];
+            \end{tikzpicture}
+            \caption{Schema delle forze che agiscono su un pendolo non sulla verticale}
+        \end{figure}
+        Dunque la tensione del filo al momento del rilascio del pendolo è uguale alla componente normale della forza peso, mentre l'accelerazione tangenziale è uguale alla componente tangenziale della forza peso. Queste però valgono solo se il pendolo è appena stato rilasciato, infatti nel momento in cui il pendolo inizia a muoversi esiste una ``forza di richiamo'' che ``tenta'' di riportare il pendolo alla posizione di equilibrio, questa forza, a differenza della molla, non ha una direzione costante, ma cambia in funzione dell'angolo $\theta$ e della lunghezza del pendolo $L$. Dunque nei momenti successivi al rilascio del pendolo, possiamo scomporre le forze come:
+        $$
+            \left\{
+                \begin{aligned}
+                    -T + P_\perp &= m\cdot a_n
+                    P_\parallel &= m\cdot a_\tau
+                \end{aligned}
+            \right.
+            \Rightarrow \left\{
+                \begin{aligned}
+                    -T + m\cdot g\cdot \cos \theta &= m\cdot a_n \\
+                    m\cdot g\cdot \sin \theta &= m\cdot a_\tau
+                \end{aligned}
+            \right.
+            \Rightarrow \left\{
+                \begin{aligned}
+                    -\frac{T}m+g\cdot \cos \theta &= a_n \\
+                    g\cdot \sin \theta &= a_\tau
+                \end{aligned}
+            \right.
+        $$
+        Per esprimere la forza di richiamo in funzione dell'angolo $\theta$ e della lunghezza del pendolo $L$, possiamo scrivere:
+        $$
+            \begin{aligned}
+                a_t &= \frac{R d^2\theta}{dt^2} = \frac{l d^2 v}{dt^2}\\
+                a_n &= \frac{v^2}{R} = \frac{v^2}{l}=\frac1l\left(\frac{ds}{dt}\right)^2 = \frac{1}{l}\left(\frac{d\theta}{dt}\right)^2 = \frac{l^{\cancel{2}}}{\cancel{l}} \left(\frac{d\theta}{dt}\right)^2 = l\left(\frac{d\theta}{dt}\right)^2
+            \end{aligned}
+        $$
+        Invertendo opportunamente i versi del sistema di riferimento possiamo scrivere: $$
+            \left\{
+                T_f - P_\perp = m a_n = m\frac{v^2}l\\
+                -P_\parallel = m a_\tau = m\frac{d^2\theta}{dt^2}
+            \right.
+        $$
+        Ora come visto in precedenza la tensione del filo dipende dall'angolo $\theta$, $\tau(\theta)=mg\cos \theta + m\frac{v^2(\theta)}l$ dunque possiamo scrivere:
+        $$
+            -\cancel{m}g\sin \theta = \cancel{m}\frac{d^2\theta}{dt^2} \Rightarrow \frac{d^2\theta}{dt^2} + \frac{g}{l}\sin \theta = 0
+        $$
+        Il che significa che la massa del pendolo non influisce sul moto del pendolo, ma solo la lunghezza del pendolo e l'accelerazione di gravità. Questa è l'equazione differenziale del moto armonico semplice, la quale ha come soluzione:
+        $$
+            \ddot{v}+\frac{g}{l}\sin \theta = 0
+        $$
+        Ora risolvere per ogni valore di $\theta$ è difficile!
+        \subsubsection{Piccole oscillazioni}
+            Prendiamo ora in considerazione un angolo $\theta$ molto piccolo ($\theta \ll 1$), in questa situazione vale che:
+            $$
+                \sin \theta \leq \theta \leq \tan \theta
+            $$
+            per lo sviluppo in serie di Taylor vale che:
+            $$  
+                \sin \theta \approx \theta - \frac{\theta^3}{6} + O(\theta^5)
+            $$
+            Si hanno correzioni nell'ordine di $\theta^3$, ma per $\theta$ molto piccolo ($\theta = 0.17 \Rightarrow \theta^3 = 0.005$) possiamo considerare $\sin \theta \approx \theta$, quindi possiamo scrivere:
+            $$
+                \ddot{v}+\frac{g}{l}\theta = 0 \Rightarrow \ddot{v}+\omega\theta = 0
+            $$
+            Dove $\omega = \sqrt{\frac{g}{l}}$ è la pulsazione del pendolo. Questa ci dice che per $\theta$ molto piccolo il periodo non dipende dall'angolo $\theta$, ma solo dalla lunghezza del pendolo e dall'accelerazione di gravità, dunque siamo in situazione di \textbf{ISOCRONISMO}.
