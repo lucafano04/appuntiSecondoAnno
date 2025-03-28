@@ -22,6 +22,7 @@
 \usepackage{appendix}
 \usepackage{xparse}
 \usepackage{listings}
+\usepackage{subcaption}
 
 \setlength{\parskip}{0pt}
 \titlespacing*{\subparagraph}{1em}{0em}{0em} 
@@ -161,10 +162,7 @@
     \include{chapters/02-componentiSO}
     \include{chapters/03-architetturaSistemaOperativo}
     \include{chapters/04-processiThread}
-
-    % Page numeration back to arabic
-    \newpage
-    \pagenumbering{arabic}
-
+    \include{chapters/05-comunicazioneTraProcess}
+    \include{chapters/06-schedulingCPU}
     
 \end{document}

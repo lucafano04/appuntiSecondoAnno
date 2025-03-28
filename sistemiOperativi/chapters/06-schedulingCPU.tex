@@ -1,0 +1,207 @@
+\chapter{\textit{Scheduling} della \texttt{CPU}}
+
+Andremo an analizzare in questo capitolo lo \textit{Scheduling} della \texttt{CPU}, ovvero il modo in cui il sistema operativo decide quale processo eseguire in un dato momento. Lo \textit{Scheduling} è una parte fondamentale del sistema operativo, poiché influisce direttamente sulle prestazioni e sull'efficienza del sistema. Distingueremo inoltre i vari tipi di \textit{Scheduling} (breve, medio e lungo termine) e i vari algoritmi di \textit{Scheduling} (FIFO, SJF, Round Robin, ecc.).
+
+\section{Concetto di \textit{Scheduling}}
+    Lo \textit{Scheduling} è il processo di assegnazione di attività nel tempo, l'uso della multiprogrammazione permette di eseguire più processi in parallelo, ma il sistema operativo deve decidere quale processo eseguire in un dato momento, visto che la \texttt{CPU} può eseguire solo un processo alla volta. Bisogna quindi decretare se un programma può essere ammesso nella memoria e quale processo deve essere eseguito in un dato momento. \newline
+    Come visto nella sezione \ref{sec:scheduling04}, un processo può trovarsi in uno dei seguenti stati:
+    \begin{itemize}
+        \item \textbf{New}: il processo è stato creato, ma non è ancora pronto per essere eseguito.
+        \item \textbf{Ready}: il processo è pronto per essere eseguito, ma non ha ancora ottenuto l'accesso alla \texttt{CPU}.
+        \item \textbf{Running}: il processo sta attualmente eseguendo sulla \texttt{CPU}.
+        \item \textbf{Waiting}: il processo è in attesa di un evento esterno (ad esempio, l'input dell'utente o la disponibilità di una risorsa).
+        \item \textbf{Terminated}: il processo ha completato la sua esecuzione e sta per essere rimosso dalla memoria.
+    \end{itemize}
+    Inoltre esistono diverse code di \texttt{Ready} e di \texttt{Waiting}, a seconda del tipo di processo. Ad esempio, i processi in attesa di \texttt{I/O} potrebbero essere in una coda separata rispetto ai processi in attesa di un semaforo. 
+    \subsubsection{Implementazione delle Code}
+        A livello pratico le code di \texttt{Ready} e di \texttt{Waiting} sono implementate come liste collegate (\textit{linked list}) o come array.\newline Ogni coda ha un \textit{queue header} che contiene informazioni sulla coda stessa, come il puntatore al primo elemento della coda ed il puntatore all'ultimo elemento della coda. Ogni processo ha un \textit{process control block} (\texttt{PCB}) che contiene informazioni sul processo stesso, come il suo stato, il contenuto dei registri quando il processo era in esecuzione, il puntatore al prossimo processo da eseguire, ecc\dots \newline
+        Una coda può essere o la coda di \textit{ready}, dove i processi pronti per essere eseguiti sono in attesa di essere assegnati alla \texttt{CPU}, oppure una delle code di \textit{waiting}, dove i processi sono in attesa di un evento esterno ed ogni coda rappresenta un evento diverso.
+
+\section{Tipi di \textit{Scheduling}}
+    Per la gestione dei processi si possono distinguere tre tipi di \textit{scheduling}, di cui due principali ed uno secondario:
+    \begin{itemize}
+        \item \textit{\textbf{Long-term scheduling}} - Pianificazione a lungo termine
+        \item \textit{\textbf{Short-term scheduling}} - Pianificazione a breve termine
+        \item \textit{\textbf{Medium-term scheduling}} - Pianificazione a medio termine
+    \end{itemize}
+    \subsubsection{Pianificazione a lungo termine - (\textit{job-scheduler})}
+        La pianificazione a lungo termine è il processo di selezione dei processi da ammettere nella memoria principale. Questo tipo di pianificazione è responsabile della creazione di nuovi processi e della loro ammissione nella memoria, e dunque nella coda \textit{ready}, per essere eseguiti. La pianificazione a lungo termine determina il grado di multiprogrammazione del sistema, ovvero il numero di processi che possono essere eseguiti contemporaneamente. Se il grado di multiprogrammazione è troppo alto, il sistema potrebbe diventare instabile e i processi potrebbero non ricevere le risorse necessarie per essere eseguiti. Se il grado di multiprogrammazione è troppo basso, la \texttt{CPU} potrebbe rimanere inattiva per lunghi periodi di tempo, riducendo l'efficienza del sistema. Inoltre il \textit{long-term scheduler} è responsabile della determinazione del tipo di processo da eseguire, ovvero se questo è \texttt{CPU} \textit{bound} oppure \texttt{I/O} \textit{bound}.
+        \paragraph{Frequenza} La pianificazione a lungo termine viene eseguita con frequenza dell'ordine del secondo o di pochi secondi, poiché la creazione di nuovi processi e la loro ammissione nella memoria sono operazioni relativamente costose in termini di tempo e risorse.\newline
+        Questo sistema è opzionale e può essere assente.
+    \subsubsection{Pianificazione a breve termine - \textit{\texttt{CPU}-scheduler}}
+        La pianificazione a breve termine è il processo di selezione del processo da eseguire sulla \texttt{CPU} in un dato momento. Questo tipo di pianificazione è responsabile della gestione dei processi in esecuzione e della loro assegnazione alla \texttt{CPU}. La pianificazione a breve termine determina quale processo deve essere eseguito in un dato momento, in base a diversi criteri, come la priorità del processo, il tempo di attesa e il tempo di completamento. La pianificazione a breve termine è responsabile della gestione della \texttt{CPU} e della sua assegnazione ai processi in esecuzione.
+        \paragraph{Frequenza} La pianificazione a breve termine viene eseguita con frequenza dell'ordine dei millisecondi, dunque deve essere una operazione molto veloce, infatti se il tempo di processo è $100ms$ ed il tempo di \textit{scheduling} è $10ms$, il tempo di \textit{scheduling} incide per il 9\% sul tempo totale di esecuzione del processo. Se il tempo di \textit{scheduling} è troppo alto, il sistema potrebbe diventare instabile e i processi potrebbero non ricevere le risorse necessarie per essere eseguiti. Se il tempo di \textit{scheduling} è troppo basso, la \texttt{CPU} potrebbe rimanere inattiva per lunghi periodi di tempo, riducendo l'efficienza del sistema.\newline
+        Questo sistema è sempre presente e non può essere assente, poiché è necessario per la gestione della \texttt{CPU} e dei processi in esecuzione.
+    \subsubsection{Pianificazione a medio termine - \textit{medium-term scheduler}}
+        La pianificazione a medio termine è un processo intermedio tra la pianificazione a lungo termine e la pianificazione a breve termine. Questo è presente se e solo se il sistema operativo supporta la \textit{swapping}, ovvero il trasferimento di processi dalla memoria principale alla memoria secondaria (disco) e viceversa. La porzione di disco usata per questo scopo è chiamata \textit{swap space} ed sostanzialmente è della \texttt{RAM} virtuale che viene usata per memorizzare i processi che non sono attualmente in esecuzione. La pianificazione a medio termine è responsabile della gestione della memoria e della sua assegnazione ai processi in esecuzione. Questo tipo di pianificazione è responsabile dell'immagazzinamento dei processi nella memoria secondaria e del loro trasferimento nella memoria principale quando necessario. Questo processo viene eseguito con tutti i processi che escono dalla \texttt{CPU} per rientrare nella \textit{ready queue} ma non può avvenire se il processo esce dalla \texttt{CPU} per inserirsi nella \textit{waiting queue}.
+
+
+\section{Scheduling della \texttt{CPU}}
+    \paragraph{\textit{Scheduler}}Lo \textit{scheduler} della \texttt{CPU} è, a livello logico, il modulo del \texttt{SO} che decide quale processo eseguire in un dato momento, vista la frequenza di chiamate a funzioni di \textit{Scheduling} e la velocità con cui i processi passano da uno stato all'altro, lo \textit{scheduler} deve essere molto veloce.
+    \paragraph{\textit{Dispatcher}} Il \textit{dispatcher} è il modulo del \texttt{SO} che effettivamente esegue il passaggio di controllo tra i processi, ovvero il passaggio da un processo all'altro. Il \textit{dispatcher} è responsabile di:
+    \begin{itemize}
+        \item \textit{Switch} del contesto: salva il contesto del processo corrente e carica il contesto del processo successivo.
+        \item Passaggio alla modalità utente: il \texttt{SO} deve passare dalla modalità kernel alla modalità utente per eseguire il processo.
+        \item Salto alla opportuna locazione nel codice: il \texttt{dispatcher} deve saltare alla locazione corretta nel codice del processo.
+    \end{itemize}
+    La latenza di un \textit{dispatcher} consiste nel tempo necessario per eseguire queste operazioni, ovvero fermare il processo corrente e passare al successivo. La latenza del \textit{dispatcher} è molto importante, poiché influisce sulle prestazioni del sistema. Un \textit{dispatcher} veloce può migliorare le prestazioni del sistema, mentre un \textit{dispatcher} lento può causare un degrado delle prestazioni.
+    \subsubsection{Modello astratto del sistama} 
+        Quando parliamo di un processo a livello astratto consideriamo che questo possa essere o in \texttt{CPU} \textit{burst} oppure in \texttt{I/O} \textit{burst}
+        \paragraph{Distribuzione dei \texttt{CPU} \textit{burst}} Solitamente i processi hanno una distribuzione dei \texttt{CPU} \textit{burst} che segue una distribuzione esponenziale, ovvero la maggior parte dei processi ha un \texttt{CPU} \textit{burst} breve, mentre pochi processi hanno un \texttt{CPU} \textit{burst} lungo. Questo è dovuto al fatto che i processi brevi sono più comuni rispetto ai processi lunghi. Per questo motivo è stato implementato il processo di prelazione (\textit{preemption})
+        \paragraph{Prelazione} Come detto in precedenza, i processi brevi sono più comuni rispetto ai processi lunghi, per questo motivo è stato implementato il processo di prelazione (\textit{preemption}), ovvero la possibilità di interrompere un processo in esecuzione per dare la precedenza ad un altro processo. Esistono dunque in circolazione due tipi di \textit{scheduler}:
+        \begin{itemize}
+            \item \textbf{Non preemptive}: il processo in esecuzione non può essere interrotto, ma deve terminare la sua esecuzione prima di passare al successivo.
+            \item \textbf{Preemptive}: il processo in esecuzione può essere interrotto in qualsiasi momento per dare la precedenza ad un altro processo.
+        \end{itemize}
+        La prelazione è utile per garantire che i processi brevi vengano eseguiti il prima possibile, evitando che i processi lunghi occupino la \texttt{CPU} per troppo tempo. Tuttavia, la prelazione può anche causare un aumento della latenza del \textit{dispatcher}, poiché il \textit{dispatcher} deve eseguire il passaggio di controllo tra i processi più frequentemente.
+    \subsubsection{Metriche di \textit{scheduling}}
+        Esistono diverse metriche sulle quali scegliere un algoritmo di \textit{scheduling} piuttosto che un altro, le più comuni sono:
+        \begin{itemize}
+            \item \textbf{Utilizzo della \texttt{CPU}} (\textit{CPU Utilization}): percentuale di tempo in cui la \texttt{CPU} è occupata ad eseguire processi. Un utilizzo della \texttt{CPU} del 100\% è l'ideale, ma è difficile da raggiungere.
+            \item \textbf{\textit{Throughput}}: numero di processi completati in un dato intervallo di tempo. Un \textit{throughput} elevato è desiderabile, poiché indica che il sistema sta eseguendo molti processi in un breve periodo di tempo.
+            \item \textbf{Tempo di attesa} (\textit{Waiting Time}): tempo medio che un processo trascorre in attesa di essere eseguito. Un tempo di attesa basso è desiderabile, poiché indica che i processi vengono eseguiti rapidamente.
+            \item \textbf{Tempo di completamento} (\textit{Turnaround Time}): tempo medio che un processo trascorre nel sistema, dalla sua creazione alla sua terminazione. Un tempo di completamento basso è desiderabile, poiché indica che i processi vengono eseguiti rapidamente.
+            \item \textbf{Tempo di risposta} (\textit{Response Time}): tempo medio che intercorre tra l'invio di una richiesta e la ricezione della risposta. Un tempo di risposta basso è desiderabile, poiché indica che il sistema risponde rapidamente alle richieste degli utenti.
+        \end{itemize}
+        Il compito di un algoritmo di \textit{scheduling} è quello di massimizzare l'utilizzo della \texttt{CPU} e il \textit{throughput}, minimizzando il tempo di attesa, il tempo di completamento e il tempo di risposta. Tuttavia, non è sempre possibile ottimizzare tutte queste metriche contemporaneamente, poiché spesso ci sono compromessi tra di esse. Ad esempio, un algoritmo che massimizza l'utilizzo della \texttt{CPU} potrebbe aumentare il tempo di attesa dei processi, mentre un algoritmo che minimizza il tempo di attesa potrebbe ridurre l'utilizzo della \texttt{CPU}.
+    \subsection{Algoritmi di \textit{scheduling}}
+        Andiamo ora ad analizzare i vari algoritmi di \textit{scheduling} della \texttt{CPU}, partendo da quelli più semplici e passando a quelli più complessi.
+        \subsubsection{\textit{First-Come, First-Served} (\texttt{FCFS})}
+            L'algoritmo \texttt{FCFS} è il più semplice degli algoritmi di \textit{scheduling}, i processi vengono eseguiti nell'ordine in cui arrivano nella coda di \texttt{Ready}. Questo algoritmo è semplice da implementare e non richiede alcun calcolo complesso. Tuttavia, ha alcuni svantaggi:
+            \begin{itemize}
+                \item Non tiene conto della lunghezza dei processi, quindi i processi lunghi possono bloccare l'esecuzione dei processi brevi.
+                \item Può causare un aumento del tempo di attesa e del tempo di completamento per i processi brevi.
+            \end{itemize}
+            L'algoritmo \texttt{FCFS} è un algoritmo non preemptive, poiché un processo in esecuzione non può essere interrotto fino al suo completamento. Questo può portare a una bassa efficienza del sistema, poiché i processi brevi possono rimanere in attesa per lungo tempo.
+            \paragraph{Esempio} consideriamo questi processi:
+
+            \begin{table}[H]
+                \centering
+                \begin{tabular}{|c|c|c|}
+                    \hline
+                    \textbf{Processo} & \textbf{Tempo di arrivo} & \textbf{\textit{\texttt{CPU} burst}} \\ \hline
+                    P1 & 0 & 24 \\ \hline
+                    P2 & 2 & 3 \\ \hline
+                    P3 & 4 & 3 \\ \hline
+                \end{tabular}
+            \end{table}
+            Allora i tempi di attesa, completamento e di risposta sono:
+            \begin{table}[H]
+                \centering
+                \begin{tabular}{|c|c|c|c|c|}
+                    \hline
+                    \textbf{Processo} & \textbf{$T_r$} & \textbf{$T_w$} & \textbf{$T_t$} \\ \hline
+                    P1 & 0 & 0 & 24 \\ \hline
+                    P2 & 24 & 22 & 25 \\ \hline
+                    P3 & 27 & 23 & 30 \\ \hline
+                \end{tabular}
+            \end{table}
+            Dunque il tempo medio di attesa è:
+            $$
+                T_{w,med} = \frac{T_{w,P1} + T_{w,P2} + T_{w,P3}}{3} = \frac{0 + 22 + 23}{3} = 15$$
+            Il tempo medio di completamento è:
+            $$
+                T_{t,med} = \frac{T_{t,P1} + T_{t,P2} + T_{t,P3}}{3} = \frac{24 + 25 + 30}{3} = 26$$
+            Se però cambiano i tempi di arrivo dei processi, ad esempio:
+            \begin{table}[H]
+                \centering
+                \begin{tabular}{|c|c|c|}
+                    \hline
+                    \textbf{Processo} & \textbf{Tempo di arrivo} & \textbf{\textit{\texttt{CPU} burst}} \\ \hline
+                    P1 & 4 & 24 \\ \hline
+                    P2 & 0 & 3 \\ \hline
+                    P3 & 2 & 3 \\ \hline
+                \end{tabular}
+            \end{table}
+            Allora i tempi di attesa, completamento e di risposta sono:
+            \begin{table}[H]
+                \centering
+                \begin{tabular}{|c|c|c|c|}
+                    \hline
+                    \textbf{Processo} & \textbf{$T_r$} & \textbf{$T_w$} & \textbf{$T_t$} \\ \hline
+                    P1 & 2 & 2 & 26 \\ \hline
+                    P2 & 0 & 0 & 3 \\ \hline
+                    P3 & 1 & 1 & 4 \\ \hline
+                \end{tabular}
+            \end{table}
+            Dunque il tempo medio di attesa è:
+            $$
+                T_{w,med} = \frac{T_{w,P1} + T_{w,P2} + T_{w,P3}}{3} = \frac{2 + 0 + 1}{3} = 1
+            $$
+            Il che è molto più veloce rispetto al caso precedente, nonostante il processo P1 sia più lungo. Questo è dovuto al fatto che i processi brevi sono stati eseguiti prima di P1, riducendo il tempo di attesa per P1.
+        \subsubsection{\textit{Shortest Job First} (\texttt{SJF})}
+            L'algoritmo \texttt{SJF} è un algoritmo di \textit{scheduling} che assegna la \texttt{CPU} al processo con il \textit{\texttt{CPU} burst} più breve. Questo algoritmo è in grado di ridurre il tempo di attesa e il tempo di completamento dei processi, poiché i processi brevi vengono eseguiti per primi. Questo algoritmo può essere implementato sia in modo \textit{preemptive} che in modo non \textit{preemptive}. Se è implementato in modo \textit{preemptive}, il processo in esecuzione può essere interrotto se arriva un processo con un \textit{\texttt{CPU} burst} più breve rispetto al \texttt{CPU} \textit{burst} \underline{rimanente} del processo in esecuzione (\textit{Shortest-Remaining-Time-First} - \texttt{SRTF}). Se è implementato in modo non \textit{preemptive}, il processo in  esecuzione non può essere interrotto fino al suo completamento.
+            \paragraph{Esempio} consideriamo questi processi:
+            \begin{table}[H]
+                \centering
+                \begin{tabular}{|c|c|c|}
+                    \hline
+                    \textbf{Processo} & \textbf{Tempo di arrivo} & \textbf{\textit{\texttt{CPU} burst}} \\ \hline
+                    P1 & 0 & 7 \\ \hline
+                    P2 & 2 & 4 \\ \hline
+                    P3 & 4 & 1 \\ \hline
+                    P4 & 5 & 4 \\ \hline
+                    \end{tabular}
+            \end{table}
+            Allora i processi verranno eseguiti in questo ordine:
+            \begin{itemize}
+                \item P1 (0-7)
+                \item P3 (7-8)
+                \item P2 (8-12)
+                \item P4 (12-16)
+            \end{itemize}
+            Creando quindi i seguenti tempi di attesa, completamento e di risposta:
+            \begin{table}[H]
+                \centering
+                \begin{tabular}{|c|c|c|c|}
+                    \hline
+                    \textbf{Processo} & \textbf{$T_r$} & \textbf{$T_w$} & \textbf{$T_t$} \\ \hline
+                    P1 & 0 & 0 & 7 \\ \hline
+                    P2 & 6 & 6 & 10 \\ \hline
+                    P3 & 3 & 3 & 4 \\ \hline
+                    P4 & 7 & 7 & 11 \\ \hline
+                \end{tabular}
+            \end{table}
+            Dunque il tempo medio di attesa è:
+            $$
+                T_{w,med} = \frac{T_{w,P1} + T_{w,P2} + T_{w,P3} + T_{w,P4}}{4} = \frac{0 + 6 + 3 + 7}{4} = 4
+            $$
+            Se gli stessi processi arrivano nello stesso ordine ma in un sistema \textit{preemptive}, i processi verranno eseguiti in questo ordine:
+            \begin{itemize}
+                \item P1 (0-2) - 5 rimasti
+                \item P2 (2-4) - 2 rimasti
+                \item P3 (4-5)
+                \item P2 (5-7)
+                \item P4 (7-11)
+                \item P1 (11-16)
+            \end{itemize}
+            Creando quindi i seguenti tempi di attesa, completamento e di risposta:
+            \begin{table}[H]
+                \centering
+                \begin{tabular}{|c|c|c|c|}
+                    \hline
+                    \textbf{Processo} & \textbf{$T_r$} & \textbf{$T_w$} & \textbf{$T_t$} \\ \hline
+                    P1 & 0 & 0 & 16 \\ \hline
+                    P2 & 5 & 5 & 10 \\ \hline
+                    P3 & 4 & 4 & 5 \\ \hline
+                    P4 & 7 & 7 & 11 \\ \hline
+                \end{tabular}
+            \end{table}
+            Dunque il tempo medio di attesa è:
+            $$
+                T_{w,med} = \frac{T_{w,P1} + T_{w,P2} + T_{w,P3} + T_{w,P4}}{4} = \frac{0 + 5 + 4 + 7}{4} = 4
+            $$
+            Il che è lo stesso del caso non \textit{preemptive}, ma in questo caso il tempo di attesa è più basso per i processi brevi, mentre il tempo di attesa per i processi lunghi è più alto.\newline
+            Il principale problema di questo algoritmo è quello che è impossibile determinare con precisione il \textit{\texttt{CPU} burst} di un processo, poiché questo dipende da molti fattori esterni. Viene dunque usata una media esponenziale (\textit{exponential average}) per stimare il \textit{\texttt{CPU} burst} di un processo. La media esponenziale è una media che dà più peso ai valori recenti rispetto ai valori più vecchi. La formula per calcolare la media esponenziale è:
+            $$T_{n+1} = \alpha T_n + (1 - \alpha) T_{n-1}$$
+            dove:
+            \begin{itemize}
+                \item $T_{n+1}$ è il nuovo valore della media esponenziale
+                \item $T_n$ è il valore corrente del \textit{\texttt{CPU} burst}
+                \item $T_{n-1}$ è il valore precedente del \textit{\texttt{CPU} burst}
+                \item $\alpha$ è un valore compreso tra 0 e 1 che determina il peso dei valori recenti rispetto ai valori più vecchi. Un valore di $\alpha$ vicino a 1 dà più peso ai valori recenti, mentre un valore di $\alpha$ vicino a 0 dà più peso ai valori più vecchi.
+            \end{itemize}
+        \subsubsection{\textit{Scheduling} a priorità}
+            Nello \textit{scheduling} a priorità ad ogni processo viene associata una priorità, i processi con priorità più alta vengono eseguiti per primi. Questo algoritmo può essere implementato sia in modo \textit{preemptive} che in modo non \textit{preemptive}. Un esempio di \textit{scheduling} con priorità è il comando \texttt{nice} di \texttt{Linux}, che permette di modificare la priorità di un processo.
+            \paragraph{Politiche di assegnamento priorità} L'assegnamento di un livello di priorità rispetto ad un altro può essere influenzato da fattori interni o esterni al \texttt{SO}. Come fattori interni troviamo ad esempio: limiti di tempo, requisiti di memoria, numero di file richiesti, \dots\newline Possono anche essere influenzati da fattori esterni, come ad esempio l'importanza (umana) del processo, se per quel determinato processo si ha un guadagno economico o anche motivi politici, \dots
+            \paragraph{Problemi} Il principale problema dei \texttt{SO} con \textit{scheduling} a priorità è la \textit{starvation}, ovvero certi processi a bassa priorità potrebbero non essere mai eseguiti in quanto ci sono sempre processi con priorità più alta in attesa di essere eseguiti. Questo problema può essere risolto utilizzando una tecnica chiamata \textit{aging}, che consiste nell'aumentare gradualmente la priorità dei processi a bassa priorità man mano che trascorrono del tempo in attesa. In questo modo, anche i processi a bassa priorità avranno la possibilità di essere eseguiti, evitando la \textit{starvation}.
