@@ -173,6 +173,7 @@ L'obbiettivo di questo capitolo è quello di definire il lavoro e l'energia, e d
             \end{align}
             Se l'Equazione \ref{eq:forzaConservativa3} non risultasse verificata allora la forza $\vec{F}$ non sarebbe conservativa, e quindi il lavoro compiuto dalla forza $\vec{F}$ su un corpo che si sposta da una posizione $i$ ad una posizione $f$ dipenderebbe dal percorso seguito dal corpo stesso.
         \subsection{Energia Potenziale}
+            \label{subsec:energiaPotenziale}
             Prendiamo in considerazione una forza conservativa $\vec{F}$, dunque il lavoro compiuto dalla forza $\vec{F}$ su un corpo che si sposta da una posizione $i$ ad una posizione $f$ è indipendente dal percorso ma solo dalla posizione iniziale e finale del corpo stesso. Fissiamo ora il punto $i\rightarrow O$ come punto di originario, e il punto $f\rightarrow P$ come punto finale del corpo stesso, quindi possiamo scrivere:
             \begin{equation}
                 E_{\rho}(x,y,z)=E_{\rho,P}=-\int_{O}^{P} \vec{F}\cdot d\vec{s} \label{eq:energiaPotenziale}
@@ -196,4 +197,36 @@ L'obbiettivo di questo capitolo è quello di definire il lavoro e l'energia, e d
                 \begin{equation}
                     E_{\rho, P} = mgz.
                 \end{equation}
-                Dove $z$ è l'altezza del corpo rispetto al piano orizzontale, e $m$ è la massa del corpo. L'energia potenziale della forza peso è quindi direttamente proporzionale all'altezza del corpo rispetto al piano orizzontale, e alla massa del corpo stesso. Il segno dell'energia potenziale della forza peso è positivo, in quanto la forza peso compie lavoro positivo sul corpo quando questo si sposta verso l'alto, e negativo quando il corpo si sposta verso il basso.
+                Dove $z$ è l'altezza del corpo rispetto al piano orizzontale, e $m$ è la massa del corpo. L'energia potenziale della forza peso è quindi direttamente proporzionale all'altezza del corpo rispetto al piano orizzontale, e alla massa del corpo stesso. Il segno dell'energia potenziale della forza peso è positivo, in quanto la forza peso compie lavoro positivo sul corpo quando questo si sposta verso l'alto, e negativo quando il corpo si sposta verso il basso.\newline
+                \textbf{N.B. \ref{lez:31-03-2025}}
+        \subsection{Conservazione dell'energia meccanica}
+            \label{subsec:conservazioneEnergiaMeccanica}
+            Nell'ipotesi che su una massa non agiscano forze dissipative, allora dato che valgono contemporaneamente le Equazioni \ref{eq:forzaConservativa} e \ref{eq:energiaPotenziale2}, possiamo combinarle e scrivere:
+            \begin{align}
+                W =& \Delta E_K = E_{K,B} - E_{K,A} \nonumber\\
+                W =& -\Delta E_{\rho} = E_{\rho,A} - E_{\rho,B} \nonumber\\
+                E_{k,A} + E_{\rho,A} =& E_{k,B} + E_{\rho,B} 
+            \end{align}
+            Dunque se non agiscono forze dissipative: ``La somma dell'energia cinetica e dell'energia potenziale di un corpo è costante''. Il che è il principio di conservazione dell'\textbf{energia meccanica}, che afferma che l'energia meccanica totale di un corpo è costante se non agiscono forze dissipative sul corpo stesso. \newline
+            Se in un corpo agiscono allo stesso tempo forze conservative e forze dissipative, allora la somma dell'energia cinetica e dell'energia potenziale del corpo non è costante, ma varia nel tempo in funzione del lavoro compiuto dalle forze dissipative. Dunque
+            \begin{align*}
+                W =& W_{c} + W_{nc} &= E_{k,B} - E_{k,A}\\
+                & E_{\rho,A} - E_{\rho,B} + W_{nc} &= E_{k,B} - E_{k,A}\\
+                W_{nc} =& (E_{k,B} + E_{\rho,B}) - (E_{k,A} + E_{\rho,A})&\\
+                =& E_{m,B} - E_{m,A}\\
+            \end{align*}
+            Dove $W_{nc}$ è il lavoro compiuto dalle forze non conservative, $E_{m}$ è l'energia meccanica totale del corpo, e $E_{m,A}$ e $E_{m,B}$ sono le energie meccaniche totali del corpo nei punti $A$ e $B$ rispettivamente. In sostanza se agiscono forze non conservative sul corpo, allora la somma dell'energia cinetica e dell'energia potenziale del corpo varia nel tempo in funzione del lavoro compiuto dalle forze non conservative.\newline
+            \textbf{N.B. \ref{lez:31-03-2025}}
+        \subsection{Potenza}
+            La potenza è definita come il lavoro in un certo lasso di tempo, dunque:
+            \begin{equation}
+                \overline{P}=\frac{W}{\Delta t}
+            \end{equation}
+            Questa è definita come la potenza media del lavoro $W$ nel tempo $\Delta t$, se al posto di questo vogliamo conoscere la ``potenza istantanea'', con un abuso di notazione andando a prendere l'infinitesimo lavoro $dW$ che non ha un vero e proprio senso, scriviamo:
+            \begin{equation}
+                P=\frac{dW}{dt}
+            \end{equation}
+            dimensionalmente l'unità di misura della potenza è il Watt ($\operatorname{W}$) che è quindi definita come
+            \begin{equation*}
+                [P]=\left[\frac{E}{T}\right]=\left[F\cdot\frac{L}{T}\right]=\left[M\cdot\frac{L}{T^2}\cdot\frac{L}{T}\right]=\left[F\cdot V\right]
+            \end{equation*}
