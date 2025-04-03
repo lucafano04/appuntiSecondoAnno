@@ -1,0 +1,53 @@
+\chapter{Sincronizzazione dei processi}
+In questo capitolo andremo ad affrontare come gestire la sincronizzazione dei processi, ovvero come evitare che più processi accedano contemporaneamente a risorse condivise, causando inconsistenze nei dati o comportamenti imprevisti. La sincronizzazione è fondamentale in un sistema operativo per garantire che le operazioni sui dati condivisi siano eseguite in modo sicuro e prevedibile. Si parlerà di varie primitive di sincronizzazione ancora più complesse del meccanismi di \texttt{join} e \texttt{fork} già visti in precedenza. In particolare, ci concentreremo su mutex, semafori e variabili di condizione. Questi strumenti sono essenziali per la programmazione concorrente e ci permettono di gestire l'accesso alle risorse condivise in modo sicuro e controllato. Inoltre, esploreremo le problematiche legate alla sincronizzazione, come il deadlock e la starvation, e come evitarle attraverso tecniche di progettazione adeguate.
+\paragraph{Modello astratto} Il modello astratto di un processo è quello di produttore-consumatore dove un processo produce dati e un altro li consuma. Deve essere quindi garantita l'esecuzione concorrente di più processi, in modo che il produttore possa aggiungere ad un \textit{buffer} condiviso e il consumatore possa prelevare dati da esso contemporaneamente. Questo \textit{buffer} ha comunque dei vincoli, non deve essere permessa la scrittura se questo è pieno e se è vuoto non deve essere permesso il prelievo.
+\subsubsection{\textit{Buffer} \texttt{P/C}: Modello \textit{software}}
+    Il \textit{buffer} viene visto in maniera circolare con due puntatori, \texttt{in} ed \texttt{out} dove, \texttt{in} punta alla prossima posizione libera e \texttt{out} punta alla prossima posizione da prelevare. Il \textit{buffer} vuoto ha $\texttt{in} == \texttt{out}$ e il \textit{buffer} pieno ha $\texttt{out} == (\texttt{in} + 1)\% n$. Nel corso per semplicità usiamo un contatore \texttt{counter} che indica il numero di elementi presenti nel \textit{buffer} e quindi il \textit{buffer} è vuoto se \texttt{counter == 0} e pieno se \texttt{counter == n}.
+    Dunque con l'uso del contatore il processo produttore aumenta il contatore di uno e il processo consumatore lo diminuisce di uno, il problema di ciò è che l'istruzione \texttt{counter++} e \texttt{counter--} vengono divise in tre istruzioni assembly differenti:
+
+\begin{lstlisting}[language=C, morekeywords={mov, eax, add}]
+    mov eax, [counter] ; carica il contatore in eax
+    add eax, 1 ; incrementa il contatore
+    mov [counter], eax ; salva il contatore
+\end{lstlisting}
+
+    Se due processi eseguono in parallelo il contatore potrebbe essere incrementato due volte o decrementato due volte, portando a risultati errati. Per evitare questo problema è necessario utilizzare un meccanismo di sincronizzazione che garantisca l'accesso esclusivo alla variabile \texttt{counter} durante l'operazione di incremento o decremento. Abbiamo appena visto un esempio di \underline{sezione critica} costituita dalla lettura e scrittura della variabile \texttt{counter}.
+\section{Problema della sezione critica}
+    La sezione critica è una porzione di codice che accede a una risorsa condivisa e deve essere eseguita in modo esclusivo da un solo processo alla volta. Per garantire che solo un processo alla volta possa eseguire la sezione critica. La soluzione deve soddisfare le seguenti proprietà:
+    \begin{itemize}
+        \item \textbf{Mutua esclusione}: Solo un processo alla volta può essere nella sezione critica.
+        \item \textbf{Progresso}: Se nessun processo è nella sezione critica e ci sono processi in attesa, uno di essi deve essere in grado di entrare nella sezione critica. La decisione non può essere rimandata indefinitamente.
+        \item \textbf{Attesa limitata}: Deve esistere un numero massimo di volte per cui un processo può essere bloccato in attesa di entrare nella sezione critica. Non deve essere possibile che un processo rimanga in attesa indefinitamente.
+    \end{itemize}
+    \subsubsection{Struttura generica di un processo}
+    La struttura generica di un processo che accede a una sezione critica è la seguente:
+\begin{lstlisting}[language=C]
+while (true) {
+    // Sezione non critica
+    // ... codice non critico ...
+    
+    // Sezione di entrata
+    // ... codice per entrare nella sezione critica ...
+    // Sezione critica
+    // Sezione di uscita
+    // ... codice per uscire dalla sezione critica ...
+    // Sezione non critica
+}
+\end{lstlisting}
+    La sezione di entrata è il codice che consente al processo di entrare nella sezione critica, mentre la sezione di uscita è il codice che consente al processo di uscire dalla sezione critica. La sezione non critica è il codice che può essere eseguito in parallelo con altri processi senza problemi di sincronizzazione.
+    \subsection{Soluzioni al problema della sezione critica}
+        Quando si prova a risolvere il problema della sezione critica, è importante considerare le varie soluzioni e i loro vantaggi e svantaggi. Assumiamo di prima istanza che la sincronizzazione sia in ambiente globale, ovvero che esistono celle di memoria condivise tra i processi. In questo caso, possiamo sfruttare delle soluzioni \textit{software} le quali richiedono solo un aggiunta di codice alle applicazioni esistenti, ma ciò non sfrutta nessun supporto da parte dell'\textit{hardware} e/o dal sistema operativo. Le soluzioni \textit{hardware} invece richiedono un supporto da parte dell'\textit{hardware} e/o del sistema operativo, ma richiedono molte meno modifiche al codice delle applicazioni. Le soluzioni \textit{hardware} sono più veloci e più efficienti rispetto a quelle \textit{software}, ma richiedono un maggiore sforzo di implementazione e possono essere più complesse da gestire.
+
+
+        \subsubsection{Algoritmo 1}
+        \begin{lstlisting}[language=C]
+PROCESS i;
+int turn; /* Se turn == i processo i entra nella sezione critica */
+while(1){
+    while(turn != i); /* Attesa attiva */
+    // Sezione critica
+    turn = j; /* Passa il turno al processo j */
+    // Sezione non critica
+}
+\end{lstlisting}
+        In questo modo si garantisce che solo un processo alla volta possa entrare nella sezione critica. Tuttavia, questo algoritmo presenta alcuni problemi, infatti se uno dei due processi termina, l'altro processo rimarrà bloccato in attesa dopo che questo ha passato il suo turno (non viene rispettato il progresso). Inoltre, questo algoritmo richiede una stretta alternanza tra i processi, infatti finché entrambi i processi non vogliono entrare nella sezione critica, non è possibile che uno dei due possa entrare. Infine, questo algoritmo non è adatto per più di due processi, poiché richiede una variabile \texttt{turn} per ogni coppia di processi.
