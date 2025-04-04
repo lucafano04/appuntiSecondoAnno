@@ -40,7 +40,7 @@ while (true) {
 
 
         \subsubsection{Algoritmo 1}
-        \begin{lstlisting}[language=C]
+            \begin{lstlisting}[language=C++,basicstyle=\footnotesize]
 PROCESS i;
 int turn; /* Se turn == i processo i entra nella sezione critica */
 while(1){
@@ -49,5 +49,174 @@ while(1){
     turn = j; /* Passa il turno al processo j */
     // Sezione non critica
 }
+            \end{lstlisting}
+            In questo modo si garantisce che solo un processo alla volta possa entrare nella sezione critica. Tuttavia, questo algoritmo presenta alcuni problemi, infatti se uno dei due processi termina, l'altro processo rimarrà bloccato in attesa dopo che questo ha passato il suo turno (non viene rispettato il progresso). Inoltre, questo algoritmo richiede una stretta alternanza tra i processi, infatti finché entrambi i processi non vogliono entrare nella sezione critica, non è possibile che uno dei due possa entrare. Infine, questo algoritmo non è adatto per più di due processi, poiché richiede una variabile \texttt{turn} per ogni coppia di processi.
+        \subsubsection{Algoritmo 2}
+            \begin{lstlisting}[language=C++,basicstyle=\footnotesize]
+PROCESS i;
+bool flag[2]; /* flag[i] == true se il processo i vuole entrare*/
+while(true){
+    flag[i] = true; /* Indica che il processo i vuole entrare */
+    while(flag[j]); /* Attesa attiva */
+    // Sezione critica
+    flag[i] = false; /* Indica che il processo i e' uscito */
+    // Sezione non critica
+}
+            \end{lstlisting}
+            In questo algoritmo nel momento nel quale un processo vuole entra nella sezione critica, imposta il proprio flag a \texttt{true} e attende che l'altro processo imposti il proprio flag a \texttt{false}. In questo modo si garantisce che solo un processo alla volta possa entrare nella sezione critica. Qui il problema del progresso è risolto, ma questa soluzione presenta un problema di ``stallo'' (starvation), infatti se un processo imposta il proprio flag a \texttt{true} e poi avviene un timeout ed il processo viene messo in attesa, l'altro processo non potrà mai entrare nella sezione critica pur impostando il proprio flag a \texttt{true}.\newline
+            Se l'impostazione del flag avvenisse dopo l'attesa attiva, allora non si presenterebbe il problema dello stallo, ma si presenterebbe un problema di mutua esclusione.
+            \subsubsection{Algoritmo 3}
+            \begin{lstlisting}[language=C++,basicstyle=\footnotesize]
+PROCESS i;
+int turn; /* Se turn == i processo i entra nella sezione critica */
+bool flag[2]; /* flag[i] == true se il processo i vuole entrare*/
+while(true){
+    flag[i] = true; /* Indica che il processo i vuole entrare */
+    turn = j; /* Passa il turno al processo j */
+    while(flag[j] && turn == j); /* Attesa attiva */
+    // Sezione critica
+    flag[i] = false; /* Indica che il processo i e' uscito */
+    // Sezione non critica
+}
+            \end{lstlisting}
+            Questo algoritmo risolve il problema dello stallo, e garantisce la mutua esclusione, questo grazie alla doppia condizione di attesa. Infatti, se il processo i vuole entrare nella sezione critica, imposta il proprio flag a \texttt{true} e poi passa il turno al processo j. Se il processo j è in attesa e ha il turno, il processo i non può entrare nella sezione critica, se invece il processo j non vuole entrare nella sezione critica il suo flag sarà \texttt{false} e il processo i potrà entrare nella sezione critica. 
+            \subsubsection{Algoritmo del fornaio}
+                L'idea di questo algoritmo è quella che quando un processo vorrebbe entrare nella sezione critica, questo deve prima scegliere un numero, il processo con il numero più basso entra nella sezione critica. Se due processi scelgono lo stesso numero, il processo con l'identificativo più basso entra per primo. Questo algoritmo se implementato correttamente garantisce tre proprietà fondamentali:
+                \begin{lstlisting}[language=C++,basicstyle=\footnotesize]
+PROCESS i;
+int number[N]; /* number[i] == numero scelto dal processo i */
+while(true){
+    number[i] = Max(number[0], number[1], ..., number[N-1]) + 1; /* Sceglie un numero */
+    for (j = 0; j < N; j++){
+        while(number[j] != 0 && number[j] < number[i]); /* Attesa attiva */
+    }
+    // Sezione critica
+    number[i] = 0; /* Indica che il processo i e' uscito */
+    // Sezione non critica
+}
+                \end{lstlisting}
+                Se si fà particolare attenzione alla condizione di attesa, si può notare che il processo i entra nella sezione critica solo se il numero scelto è il più basso tra tutti i processi. Inoltre, se due processi scelgono lo stesso numero, il processo con l'identificativo più basso entra per primo. Questo algoritmo è molto semplice e intuitivo, ma presenta alcuni problemi di correttezza, infatti con questa implementazione non è garantita la mutua esclusione, in quanto due processi potrebbero scegliere lo stesso numero e entrare nella sezione critica contemporaneamente.
+            \subsubsection{Algoritmo del fornaio v0.2}
+\begin{lstlisting}[language=C++,basicstyle=\footnotesize]
+PROCESS i;
+int number[N]; /* number[i] == numero scelto dal processo i */
+int turn; /* Se turn == i processo i entra nella sezione critica */
+bool choosing[N]; /* choosing[i] == true se il processo i sta scegliendo un numero */
+while(true){
+    choosing[i] = true; /* Indica che il processo i sta scegliendo un numero */
+    number[i] = Max(number[0], number[1], ..., number[N-1]) + 1; /* Sceglie un numero */
+    choosing[i] = false; /* Indica che il processo i ha scelto un numero */
+    for (j = 0; j < N; j++){
+        while(choosing[j]); /* Attesa attiva */
+        while(number[j] != 0 && number[j] < number[i]); /* Attesa attiva */
+    }
+    // Sezione critica
+    number[i] = 0; /* Indica che il processo i e' uscito */
+    // Sezione non critica
+}
 \end{lstlisting}
-        In questo modo si garantisce che solo un processo alla volta possa entrare nella sezione critica. Tuttavia, questo algoritmo presenta alcuni problemi, infatti se uno dei due processi termina, l'altro processo rimarrà bloccato in attesa dopo che questo ha passato il suo turno (non viene rispettato il progresso). Inoltre, questo algoritmo richiede una stretta alternanza tra i processi, infatti finché entrambi i processi non vogliono entrare nella sezione critica, non è possibile che uno dei due possa entrare. Infine, questo algoritmo non è adatto per più di due processi, poiché richiede una variabile \texttt{turn} per ogni coppia di processi.
+                In questo algoritmo, il processo i prima di scegliere un numero imposta il proprio flag \texttt{choosing} a \texttt{true}, in questo modo gli altri processi sanno che il processo i sta scegliendo un numero e non devono entrare nella sezione critica. Dopo aver scelto un numero, il processo i imposta il proprio flag \texttt{choosing} a \texttt{false}, in questo modo gli altri processi sanno che il processo i ha scelto un numero e possono entrare nella sezione critica. Questo algoritmo garantisce la mutua esclusione, il progresso e l'attesa limitata.
+
+            \subsubsection{Algoritmo del fornaio v1.0}
+                Per ovviare ai problemi di correttezza dell'algoritmo del fornaio, è possibile utilizzare un algoritmo che utilizza una variabile \texttt{int number[N]} che contiene l'ultimo processo scelto, in questo modo si garantisce che l'ultimo processo scelto non vada a ri-occupare subito la sezione critica.
+                \begin{lstlisting}[language=C++,basicstyle=\footnotesize]
+PROCESS i;
+bool choosing[N]; /* choosing[i] == true se il processo i sta scegliendo un numero */
+int number[N]; /* ultimo numero scelto dal processo i */
+while(1){
+    choosing[i] = true; /* Indica che il processo i sta scegliendo un numero */
+    number[i] = Max(number[0], number[1], ..., number[N-1]) + 1; /* Sceglie un numero */
+    choosing[i] = false; /* Indica che il processo i ha scelto un numero */
+    for (j = 0; j < N; j++){
+        while(choosing[j]); /* Attesa che il processo j ha scelto un numero */
+        while(number[j] != 0 && (
+            number[j] < number[i] 
+                ||
+            number[j] == number[i]
+            && i < j)); /* Attesa attiva */
+    }
+    // Sezione critica
+    number[i] = 0; /* Indica che il processo i e' uscito */
+    // Sezione non critica
+}
+                \end{lstlisting}
+                In questo algoritmo, viene risolto il problema della mutua esclusione, del progresso e dell'attesa limitata.
+
+    \subsection{Soluzioni \textit{hardware}}
+        Le soluzioni \textit{hardware} sono più veloci e più efficienti rispetto a quelle \textit{software}, ma richiedono un maggiore sforzo di implementazione e possono essere più complesse da gestire. Un metodo ``semplice'' come gestione \textit{hardware} è quello di disabilitare gli \textit{interrupt} durante l'esecuzione della sezione critica. Questo metodo è semplice da implementare, ma presenta alcuni problemi, infatti se il test per l'accesso alla sezione critica viene eseguito in molto tempo gli \textit{interrupt} dovrebbero essere disabilitati per molto tempo, causando un degrado delle prestazioni del sistema. Inoltre, questo metodo non è adatto per sistemi multiprocessore, poiché gli \textit{interrupt} possono essere disabilitati solo per il processore corrente e non per gli altri processori. Una alternativa è quello di rendere l'operazione di accesso e scrittura alla variabile atomica, ovvero che impieghi un unico ciclo di \textit{clock}. Esempio di questo è l'istruzione \texttt{test\&set} oppure lo \texttt{compare\&swap}.
+        \subsubsection{Test\&Set}
+            L'istruzione \texttt{test\&set} è un'istruzione atomica che consente di testare e impostare una variabile in un'unica operazione. Questa istruzione è utilizzata per implementare la mutua esclusione nei sistemi operativi. La sintassi dell'istruzione \texttt{test\&set} è la seguente:
+            \begin{lstlisting}[language=C++, morekeywords={mov, eax, add}]
+bool test_and_set(bool &var){
+    bool temp;
+    temp = var; /* Salva il valore corrente di var in temp */
+    var = true; /* Imposta var a true */
+    return temp; /* Restituisce il valore precedente di var */
+}
+            \end{lstlisting}
+            Tutte e tre le operazioni sono eseguite in un'unica istruzione atomica, quindi non possono essere interrotte da altri processi. Quando la funzione viene chiamata, il valore corrente di \texttt{var} viene salvato in \texttt{temp}, quindi \texttt{var} viene impostato a \texttt{true} e infine il valore precedente di \texttt{var} viene restituito. Se il valore precedente di \texttt{var} era \texttt{false}, significa che la sezione critica è libera e il processo può entrarvi. Se il valore precedente di \texttt{var} era \texttt{true}, significa che la sezione critica è occupata e il processo deve attendere.
+            \paragraph{Uso dell'istruzione \texttt{test\&set}}
+                \begin{lstlisting}[language=C++,basicstyle=\footnotesize]
+PROCESS i;
+bool lock; /* lock == true se la sezione critica e' occupata */
+while(true){
+    while(test_and_set(lock)); /* Attesa attiva */
+    // Sezione critica
+    lock = false; /* Indica che il processo i e' uscito */
+    // Sezione non critica
+}
+                \end{lstlisting}
+                In questo esempio, il processo i utilizza l'istruzione \texttt{test\&set} per testare e impostare la variabile \texttt{lock}. Se la sezione critica è occupata, il processo i rimane in attesa finché non diventa libera. Dato che l'istruzione \texttt{test\&set} è atomica, non ci sono problemi di mutua esclusione e il processo i può entrare nella sezione critica in modo sicuro. Inoltre solo il primo processo che vede \texttt{lock == false} può entrare nella sezione critica, gli altri processi rimarranno in attesa finché non diventa libera. Una volta che il processo i esce dalla sezione critica, imposta \texttt{lock} a \texttt{false} per indicare che la sezione critica è ora libera. Il problema di questo algoritmo è che l'attesa finita non è garantita, infatti non sono presenti meccanismi per evitare che un processo rimanga in attesa indefinitamente in quanto un processo potrebbe entrare ed uscire dalla sezione critica più volte prima che il processo i possa entrarvi.
+        \subsubsection{Swap}
+            L'istruzione \texttt{swap} è un'altra istruzione atomica che consente di scambiare il valore di due variabili in un'unica operazione. Questa istruzione è utilizzata per implementare la mutua esclusione nei sistemi operativi. La sintassi dell'istruzione \texttt{swap} è la seguente:
+            \begin{lstlisting}[language=C++, morekeywords={mov, eax, add}]
+void swap(bool &a, bool &b){
+    bool temp;
+    temp = a; /* Salva il valore corrente di a in temp */
+    a = b; /* Imposta a al valore di b */
+    b = temp; /* Imposta b al valore di temp */
+}
+            \end{lstlisting}
+            Tutte e tre le operazioni sono eseguite in un'unica istruzione atomica, quindi non possono essere interrotte da altri processi. Quando la funzione viene chiamata, il valore corrente di \texttt{a} viene salvato in \texttt{temp}, quindi \texttt{a} viene impostato al valore di \texttt{b} e infine \texttt{b} viene impostato al valore di \texttt{temp}. In questo modo, i valori di \texttt{a} e \texttt{b} vengono scambiati in un'unica operazione atomica.
+            \paragraph{Uso dell'istruzione \texttt{swap}}
+                \begin{lstlisting}[language=C++,basicstyle=\footnotesize]
+PROCESS i;
+bool lock; /* lock == true se la sezione critica e' occupata */
+while(true){
+    bool dummy = true; /* Dummy per evitare di passare un riferimento */
+    do
+        swap(lock, dummy); /* Attesa attiva */
+    while(dummy); /* Dummy == false se la sezione critica e' occupata */
+    // Sezione critica
+    lock = false; /* Indica che il processo i e' uscito */
+    // Sezione non critica
+}
+                \end{lstlisting}
+                In questo esempio, il processo i utilizza l'istruzione \texttt{swap} per scambiare il valore di \texttt{lock} con un valore \texttt{dummy}. Se la sezione critica è occupata, il processo i rimane in attesa finché non diventa libera. Dato che l'istruzione \texttt{swap} è atomica, non ci sono problemi di mutua esclusione e il processo i può entrare nella sezione critica in modo sicuro. Inoltre solo il primo processo che vede \texttt{lock == false} può entrare nella sezione critica, gli altri processi rimarranno in attesa finché non diventa libera. Una volta che il processo i esce dalla sezione critica, imposta \texttt{lock} a \texttt{false} per indicare che la sezione critica è ora libera. Il problema di questo algoritmo è che l'attesa finita non è garantita, infatti non sono presenti meccanismi per evitare che un processo rimanga in attesa indefinitamente in quanto un processo potrebbe entrare ed uscire dalla sezione critica più volte prima che il processo i possa entrarvi.
+        \subsubsection{Test\&Set con attesa limitata}
+            \begin{lstlisting}[language=C++,basicstyle=\footnotesize]
+PROCESS i;
+bool waiting[N]; /* waiting[i] == true se il processo i sta aspettando */
+bool lock; /* lock == true se la sezione critica e' occupata */
+while(1){
+    waiting[i] = true; /* Indica che il processo i sta aspettando */
+    bool key = true;
+    while(waiting[i] && key){ /* Attesa attiva */
+        key = test_and_set(lock); /* Prova ad entrare */
+    }
+    waiting[i] = false; /* Indica che il processo sta per entrare */
+    // Sezione critica
+    int j = (i+1) % N; /* Prendo in considerazione il prossimo processo */
+    while(j != i && !waiting[j]){ // Controllo se il processo j sta aspettando
+        j = (j+1) % N; /* Prendo in considerazione il prossimo processo */
+    } 
+    if(j == i){ /* Se non ci sono altri processi in attesa */
+        lock = false; /* Indica che la sezione critica e' libera */
+    }else{
+        waiting[j] = false; /* Indica che il processo j puo' entrare */
+    }
+    // Sezione non critica
+}
+            \end{lstlisting}
+            In questo esempio, il processo i utilizza l'istruzione \texttt{test\&set} per testare e impostare la variabile \texttt{lock}. Se la sezione critica è occupata, il processo i rimane in attesa finché non diventa libera. Dato che l'istruzione \texttt{test\&set} è atomica, non ci sono problemi di mutua esclusione e il processo i può entrare nella sezione critica in modo sicuro. Inoltre solo il primo processo che vede \texttt{lock == false} può entrare nella sezione critica, gli altri processi rimarranno in attesa finché non diventa libera, oppure il processo che è appena uscito dalla sezione critica gli passi il turno. Se nessun processo è in attesa allora l'ultimo processo che è uscito dalla sezione critica libera la sezione critica impostando \texttt{lock} a \texttt{false}. In questo modo si garantisce che solo un processo alla volta possa entrare nella sezione critica e che l'attesa sia limitata.
+    
