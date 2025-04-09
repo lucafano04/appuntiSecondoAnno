@@ -147,4 +147,141 @@ In questo capitolo vedremo come funziona la tecnica \textit{greedy} e come si ap
         La complessità di questo algoritmo è $O(n\log n)$ se deve essere effettuato l'ordinamento, altrimenti $O(n)$.
         \subsubsection{Corrtettezza}
             Assumendo che gli oggetti siano stati ordinati per $v_i$ in modo decrescente, e che $x$ sia la soluzione ottima, allora supponendo che $x[1] < \min(\frac{C}{w[1]}, 1) < 1$ ovvero che non abbiamo preso tutto l'oggetto $1$, allora possiamo costruire una nuova soluzione nella quale $x'[1]=\min(\frac{C}{w[1]}, 1)$ e $x'[i]=x[i]$ per $i>1$, ottenendo una soluzione migliore di quella iniziale.
+
+\section{Problemi con strutture dati speciali}
+    Vediamo ora come la tecnica \textit{greedy} può essere applicata a problemi che richiedono strutture dati speciali
+    \subsection{Compressione di Huffman}
+        Il problema della compressione, in generale, è quello di ridurre la dimensione di un file, in modo da occupare meno spazio su disco e/o essere più veloce da trasferire, mantenendo comunque la qualità del file.
+        \paragraph{Possibili soluzioni ``base''} Una prima soluzione è quella di utilizzare una funzione di codifica $f:f(c)=x$ dove:
+        \begin{itemize}
+            \item $c$ è un qualsiasi carattere preso da un alfabeto $\sum$
+            \item $x$ è una rappresentazione binaria
+            \item ``$c$ è codificato in $x$'' significa che $f(c)=x$ e $f^{-1}(x)=c$
+        \end{itemize}
+        \paragraph{Esempio} 
+        \begin{table}
+            \centering
+            \begin{tabular}{|c|c|c|c|c|c|c|c|}
+                \hline \textbf{Caratteri} & \texttt{a} & \texttt{b} & \texttt{c} & \texttt{d} & \texttt{e} & \texttt{f} & \textbf{Dim.}\\
+                \hline
+                \textbf{Frequenza} & 40\% & 13\% & 12\% & 16\% & 9\% & 5\% & \\
+                \hline
+                \texttt{ASCII} & 01100001 & 01100010 & 01100011 & 01100100 & 01100101 & 01100110 & $8n$\\
+                \hline
+                \texttt{Codifica 1} & 000 & 001 & 010 & 011 & 100 & 101 & $3n$\\
+                \hline
+                \texttt{Codifica 2} & 0 & 101 & 100 & 111 & 1101 & 1100 & $2.24n$\\
+                \hline
+            \end{tabular}
+            \caption{Esempio per la compressione di Huffman}
+            \label{tab:huffman}
+        \end{table}
+        Supponiamo di avere un file di $n$ caratteri, questo è composto dall'alfabeto \texttt{a b c d e f}, conosciamo la frequenza relativa di ogni carattere, e vogliamo codificare il file in modo da occupare meno spazio possibile.\footnote{Fare riferimento alla tabella \ref{tab:huffman}}\newline
+        Con la codifica ``$a=000, b=001, c=010, d=011, e=100, f=101$'' passiamo dalla codifica \texttt{ASCII} a $8$ bit, e quindi dimensione $8\cdot n$, a una codifica di $3$ bit, e quindi dimensione $3\cdot n$.\newline
+        Si può fare di meglio, infatti se consideriamo la codifica: ``$a=0, b=101, c=100, d=110, e=1101, f=1100$'' otteniamo un costo totale pari a:
+        $$
+            (0.45\cdot 1) + (0.13\cdot 3) + (0.12\cdot 3) + (0.16\cdot 3) + (0.09\cdot 4) + (0.05\cdot 4) = 2.24n
+        $$
+        questa strategia di codifica viene detta ``codifica a prefissi'' dove ogni carattere è codificato con una stringa di bit, e nessuna stringa di bit è un prefisso di un'altra stringa di bit, se ciò non fosse vero, allora sarebbe possibile decodificare la stringa di bit in più modi, e quindi non sarebbe possibile decodificare il file.
+        \subsubsection{Rappresentazione in albero} 
+            Per semplificare ed ottimizzare la decodifica di un file, possiamo rappresentare la codifica in un albero binario, dove ogni nodo rappresenta una scelta, ogni foglia rappresenta un carattere, e il percorso per arrivare alla foglia rappresenta la codifica del carattere. Ad esempio, l'albero corrispondente alla codifica \texttt{Codifica 2} della tabella \ref{tab:huffman} è il seguente:
+            \begin{figure}[H]
+                \centering
+                \begin{tikzpicture}[scale=0.5]
+                    \node[draw, circle, minimum size=0.75cm] (root) at (16, 0) {};
+                    \node[draw, circle, minimum size=0.75cm] (a) at (8, -2) {a};
+                    \node[draw, circle, minimum size=0.75cm] (n1) at (24, -2) {};
+                    \node[draw, circle, minimum size=0.75cm] (n2) at (20, -4) {};
+                    \node[draw, circle, minimum size=0.75cm] (b) at (22, -6) {b};
+                    \node[draw, circle, minimum size=0.75cm] (c) at (18, -6) {c};
+                    \node[draw, circle, minimum size=0.75cm] (n3) at (28, -4) {};
+                    \node[draw, circle, minimum size=0.75cm] (d) at (30, -6) {d};
+                    \node[draw, circle, minimum size=0.75cm] (n4) at (26, -6) {};
+                    \node[draw, circle, minimum size=0.75cm] (e) at (28, -8) {e};
+                    \node[draw, circle, minimum size=0.75cm] (f) at (24, -8) {f};
+                    % 
+                    \draw (root) to node {0} (a);
+                    \draw (root) to node {1} (n1);
+                    \draw (n1) to node {10} (n2);
+                    \draw (n1) to node {11} (n3);
+                    \draw (n2) to node {101} (b);
+                    \draw (n2) to node {100} (c);
+                    \draw (n3) to node {111} (d);
+                    \draw (n3) to node {110} (n4);
+                    \draw (n4) to node {1101} (e);
+                    \draw (n4) to node {1100} (f);
+                \end{tikzpicture}
+                \caption{Albero di Huffman per la codifica \texttt{Codifica 2}}
+                \label{fig:huffman}
+            \end{figure}
+            La codifica di un carattere è data dal percorso per arrivare alla foglia corrispondente, ad esempio la codifica del carattere \texttt{a} è $0$, la codifica del carattere \texttt{b} è $101$, e così via.\newline
+            Questo ci fa capire che per decodificare un carattere dall'albero dobbiamo seguire il percorso dall'alto verso il basso, se il bit letto è $0$ andiamo a sinistra, se è $1$ andiamo a destra, e quando arriviamo ad una foglia abbiamo decodificato il carattere e passiamo al carattere successivo.
+        \subsubsection{Definizioni formali}
+            Dato un file $F$ composto da $n$ caratteri, e un alfabeto $\sum$ di $m$ caratteri, inoltre siano:
+            \begin{itemize}
+                \item $T$ un albero binario di profondità $d$ e con $m$ foglie
+                \item Per ogni $c \in \sum$, sia $d_T(c)$ la profondità della foglia $c$ nell'albero $T$
+                \item Il codice per il carattere $c$ richiede $d_T(c)$ bit
+                \item $f[c]$ il numero di occorrenze del carattere $c$ nel file $F$
+            \end{itemize}
+            Allora la dimensione della codifica del file $F$ è:
+            $$
+                C(F,T) = \sum_{c\in \sum} f[c] \cdot d_T(c)
+            $$
+            \paragraph{Principio del codice di Huffman} Il principio sul quale si basa l'algoritmo di Huffman è il seguente:
+            \begin{itemize}
+                \item Minimizzare la lunghezza dei caratteri più frequenti
+                \item Assegnare ai caratteri meno frequenti codici più lunghi
+            \end{itemize}
+            inoltre ogni file ha la sua codifica che viene creata in base alla frequenza dei caratteri, e quindi non esiste una codifica ottima per tutti i file, ma solo per un certo file.
+            \paragraph{Algoritmo} Si prende una sequenza di caratteri ai quali è associata la frequenza, si rimuovono i due nodi con frequenze minori ($f_x, f_y$), si crea un nuovo nodo con frequenza $f_x + f_y$ e con etichetta $-$, si collegano i due nodi rimossi al nuovo nodo, e si ripete il processo fino a quando non rimane un solo nodo, che sarà la radice dell'albero di Huffman.
+            \paragraph{Implementazione}
+                Di seguito l'implementazione dell'algoritmo di Huffman, che utilizza una coda di priorità per rimuovere i nodi con frequenza minima:
+                \begin{algorithm}[H]
+                    \caption{\Tree \textsc{huffman}(\Int[] $c$, \Int[] $f$, \Int $n$)}
+                    \begin{algorithmic}
+                        \State \PriorityQueue $Q \gets \New \PriorityQueue$ \Comment{Coda di priorità}
+                        \For{\Int $i \gets 1$ \To $n$}
+                            \State $Q.\Call{insert}(\Tree(c[i], f[i]), f[i])$
+                        \EndFor
+                        \For{\Int $i \gets 1$ \To $n-1$}
+                            \State $z_1 \gets Q.\Call{deleteMin}()$
+                            \State $z_2 \gets Q.\Call{deleteMin}()$
+                            \State $z \gets \Tree(\Nil, z_1.f + z_2.f)$ \Comment{Creazione del nodo padre}
+                            \State $z.left \gets z_1$
+                            \State $z.right \gets z_2$
+                            \State $Q.\Call{insert}(z, z.f)$
+                        \EndFor
+                    \end{algorithmic}
+                \end{algorithm}
+            \paragraph{Dimostrazione di correttezza} 
+                La correttezza dell'algoritmo di Huffman è garantita dal fatto che, ad ogni iterazione, vengono rimossi i due nodi con frequenza minima, e quindi la codifica risultante sarà ottima. Inoltre, l'uso della coda di priorità garantisce che l'algoritmo abbia una complessità $O(n \log n)$. In questo caso la scelta \textit{greedy} consiste nel rimuovere i due nodi con frequenza minima e creare un nuovo nodo con frequenza $f_x + f_y$, in modo da minimizzare la lunghezza dei caratteri più frequenti. La tesi del teorema è che: esiste un codice prefisso ottimo per $\sum$ in cui $x,y$ hanno la stessa profondità massima e i loro codici differiscono per l'ultimo bit.
+                \begin{proof}
+                    $[\text{Omessa}]$
+                \end{proof}
+    \subsection{Albero di copertura di peso minimo}
+        Il problema dell'albero di copertura di peso minimo è un problema di ottimizzazione combinatoria, in cui si cerca di trovare un albero di copertura di un grafo pesato che minimizzi il peso totale degli archi. (e.g. ottimizzazione di una rete di telecomunicazioni)
+        \paragraph{Definizione} 
+            Sia in input al problema $G=(V,E)$ un grafo pesato, non orientato, connesso, e sia $w: V\times V \rightarrow \mathbb{R}$ una funzione di peso definita sugli archi del grafo tale che se $(u,v) \in E$ allora $w(u,v)$ è il peso dell'arco $(u,v)$, e $w(u,v) = \infty$ se $(u,v) \notin E$. L'obiettivo è trovare un sotto-grafo $T$ di $G$ tale che:
+            \begin{itemize}
+                \item $T$ è un albero
+                \item $T$ contiene tutti i vertici di $G$
+                \item Il peso totale degli archi di $T$ è minimo
+                \item $T$ è un albero di copertura di $G$
+                \item $E_T \subseteq E$
+            \end{itemize}
+            Non esiste uno ed un solo albero di copertura di peso minimo, ma esistono più alberi di copertura di peso minimo, e quindi non è possibile determinare un albero di copertura di peso minimo in modo univoco.
+        \subsubsection{Algoritmo generico}
+            Come idea generale vogliamo prendere tutti gli ``archi sicuri'' ovvero quelli archi $(u,v)$ tali per cui $A\cap \{(u,v)\}$ è un sotto insieme di un qualsiasi albero di copertura minimo del grafo $G$. 
+            \begin{algorithm}[H]
+                \caption{\Set \textsc{mst-generico}(\Graph $G$, \Int[] $w$)}
+                \begin{algorithmic}
+                    \State \Set $A \gets \emptyset$
+                    \While{$A$ non forma un albero di copertura}
+                        \State trova un arco $(u,v)$ sicuro
+                        \State $A \gets A \cup \{(u,v)\}$
+                    \EndWhile
+                    \State \Return $A$
+                \end{algorithmic}
+            \end{algorithm}
             
