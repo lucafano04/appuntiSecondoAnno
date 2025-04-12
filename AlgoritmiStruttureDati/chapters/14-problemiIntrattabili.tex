@@ -1,4 +1,5 @@
 \chapter{\texorpdfstring{Problemi intrattabili - Teoria $\mathbb{NP}$-completi}{Problemi intrattabili - Teoria NP-completi}}
+\thispagestyle{chapterInit}
 
 In questo capitolo si andranno ad analizzare problemi il quale tempo di esecuzione non cresce in maniera polinomiale ($O(n^k)$ con $k\in\mathbb{N}$), dunque esistono problemi che per essere risolti richiedono un tempo almeno esponenziale ($\mathbb{EXPTIME}$), alcuni di questi possono essere la valutazione della posizione degli scacchi, il problema delle torri di \textit{Hanoi}. Inoltre esistono problemi che non hanno soluzione, come l'\textit{Halting Problem}.\newline
 Tutti i problemi di questa classe hanno in comune il fatto che non è stata dimostrata né l'esistenza, né l'inesistenza di un algoritmo che possa risolverli in tempo polinomiale. Questi problemi sono stati definiti \textbf{intrattabili}.\newline
@@ -179,3 +180,15 @@ I problemi di ottimizzazione contengono infatti i problemi di ricerca e di decis
             \texttt{SAT} \leq_p \texttt{3-SAT} \leq_p \texttt{Independent-set} \leq_p \texttt{Vertex-cover} \leq \texttt{SAT}
         $$
         E dunque ognuno di questi problemi è $\mathbb{NP}$-completo in quanto \texttt{SAT} è $\mathbb{NP}$-completo ed gli altri possono essere usati per ridurre \texttt{SAT} a loro.\newline
+        Esistono molti problemi riducibili a \texttt{SAT} oltre a quelli visti, e dunque $\mathbb{NP}$-completi, tra cui:
+        \begin{itemize}
+            \item \texttt{Clique}
+            \item \texttt{Hamiltonian-path}
+            \item \texttt{Hamiltonian-cycle}
+            \item \texttt{Traveling-salesman}
+            \item \texttt{Graph-coloring}
+            \item \texttt{Knapsack}
+            \item \texttt{Set-cover}
+            \item \texttt{Job-scheduling}
+        \end{itemize}
+        tutti questi hanno una pratica applicazione nel mondo reale, e dunque sono stati studiati a lungo ma non esiste un algoritmo polinomiale per risolverli. Dunque possiamo dire che al momento non esiste un algoritmo polinomiale per risolvere i problemi $\mathbb{NP}$-completi, e dunque non esiste un algoritmo polinomiale per risolvere i problemi in $\mathbb{NP}$.
