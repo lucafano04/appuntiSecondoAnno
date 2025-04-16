@@ -220,3 +220,137 @@ while(1){
             \end{lstlisting}
             In questo esempio, il processo i utilizza l'istruzione \texttt{test\&set} per testare e impostare la variabile \texttt{lock}. Se la sezione critica è occupata, il processo i rimane in attesa finché non diventa libera. Dato che l'istruzione \texttt{test\&set} è atomica, non ci sono problemi di mutua esclusione e il processo i può entrare nella sezione critica in modo sicuro. Inoltre solo il primo processo che vede \texttt{lock == false} può entrare nella sezione critica, gli altri processi rimarranno in attesa finché non diventa libera, oppure il processo che è appena uscito dalla sezione critica gli passi il turno. Se nessun processo è in attesa allora l'ultimo processo che è uscito dalla sezione critica libera la sezione critica impostando \texttt{lock} a \texttt{false}. In questo modo si garantisce che solo un processo alla volta possa entrare nella sezione critica e che l'attesa sia limitata.
     
+\section{Semafori}
+    I semafori sono una primitiva di sincronizzazione la quale è un numero intero non negativo, che può essere incrementato e decrementato. Per eseguire queste operazioni, i semafori utilizzano due operazioni fondamentali: \texttt{wait} - \texttt{P} e \texttt{signal} - \texttt{V}. La prima operazione decrementa il valore del semaforo, se questo è maggiore di zero, altrimenti il processo viene messo in attesa. La seconda operazione incrementa il valore del semaforo e, se ci sono processi in attesa, uno di essi viene risvegliato.\newline
+    Esistono due tipi principali di semafori, i semafori binari e i semafori generici. I semafori binari possono assumere solo i valori 0 e 1, mentre i semafori generici possono assumere qualsiasi valore intero non negativo. I semafori binari possono essere implementati tramite i semafori generici, ma non viceversa. 
+    \subsubsection{Semafori binari}
+        L'implementazione concettuale delle funzioni \texttt{wait} e \texttt{signal} è la seguente:
+        \begin{lstlisting}[language=C++,basicstyle=\footnotesize]
+P(semaphore s){
+    while(s == false){ /* Attesa attiva */
+        // Non fa nulla
+    }
+    s = false; /* Imposta il semaforo a false */
+}
+V(semaphore s){
+    s = true; /* Imposta il semaforo a true */
+}
+        \end{lstlisting}
+        In questo esempio, la funzione \texttt{P} attende che il semaforo sia libero (ovvero che il suo valore sia \texttt{true}) e poi lo imposta a \texttt{false}. La funzione \texttt{V} imposta il semaforo a \texttt{true}, indicando che la sezione critica è ora libera. 
+    \subsubsection{Semafori generici}
+        L'implementazione concettuale delle funzioni \texttt{wait} e \texttt{signal} è la seguente:
+        \begin{lstlisting}[language=C++,basicstyle=\footnotesize]
+P(semaphore s){
+    while(s <= 0){ /* Attesa attiva */
+        // Non fa nulla
+    }
+    s--; /* Decrementa il semaforo */
+}
+V(semaphore s){
+    s++; /* Incrementa il semaforo */
+}
+        \end{lstlisting}
+        In questo esempio, la funzione \texttt{P} attende che il semaforo sia maggiore di zero e poi lo decrementa. La funzione \texttt{V} incrementa il semaforo, indicando che la sezione critica è ora libera.
+    \subsubsection{Note}
+        Per essere efficienti le funzioni \texttt{P} e \texttt{V} devono essere implementate in modo atomico, in modo che non possano essere interrotte da altri processi. Come abbiamo visto però l'implementazione atomica delle funzioni \texttt{P} e \texttt{V} non è garantita. Andiamo dunque a vedere come garantire l'atomicità delle funzioni \texttt{P} e \texttt{V} utilizzando i semafori.
+        \begin{lstlisting}[language=C++,basicstyle=\footnotesize]
+/* Inizializzato s a true */
+P(bool &s){
+    bool key = false;
+    do{
+        swap(s, key); /* Attesa attiva */
+    }while(key == false);
+    s = false; /* Imposta il semaforo a false */
+}
+V(bool &s){
+    s = true; /* Imposta il semaforo a true */
+}
+        \end{lstlisting}
+        In questo esempio, la funzione \texttt{P} utilizza l'istruzione \texttt{swap} per testare e impostare il semaforo. Se il semaforo è occupato, il processo rimane in attesa finché non diventa libero. La funzione \texttt{V} imposta il semaforo a \texttt{true}, indicando che la sezione critica è ora libera. In questo modo si garantisce che le funzioni \texttt{P} e \texttt{V} siano atomiche e che non possano essere interrotte da altri processi.
+    \subsubsection{Implementazione semafori interi}
+        Coi semafori interi l'implementazione si complica, dobbiamo comunque garantire l'atomicità delle funzioni \texttt{P} e \texttt{V}, ma dobbiamo anche garantire che il semaforo non possa assumere valori negativi ed che sia possibile incrementarlo di uno senza che durante questo tempo un altro processo possa decrementarlo. Per fare ciò possiamo usiamo due semafori binari, \texttt{mutex} e \texttt{delay} questi vengono usati rispettivamente per garantire la mutua esclusione e per garantire che le operazioni siano eseguite in modo atomico. La funzione \texttt{P} viene implementata come segue:
+        \begin{lstlisting}[language=C++,basicstyle=\footnotesize]
+P(semaphore s){
+    P(mutex); /* Acquisisce il semaforo mutex */
+    s = s - 1; /* Decrementa il semaforo */
+    if(s < 0){ /* Se il semaforo e' negativo */
+        V(mutex); /* Rilascia il semaforo mutex */
+        P(delay); /* Attende il semaforo delay */
+    }else{
+        V(mutex); /* Rilascia il semaforo mutex */
+    }
+}
+        \end{lstlisting}
+        In questo esempio, la funzione \texttt{P} acquisisce il semaforo \texttt{mutex} per garantire la mutua esclusione. Poi decrementa il semaforo e controlla se il suo valore è negativo. Se il valore è negativo, rilascia il semaforo \texttt{mutex} e attende il semaforo \texttt{delay} (che è Inizializzato a \texttt{false}). Se il valore è maggiore o uguale a zero, rilascia il semaforo \texttt{mutex} e termina. La funzione \texttt{V} viene implementata come segue:
+        \begin{lstlisting}[language=C++,basicstyle=\footnotesize]
+V(semaphore s){
+    P(mutex); /* Acquisisce il semaforo mutex */
+    s = s + 1; /* Incrementa il semaforo */
+    if(s <= 0){ /* Se il semaforo e' negativo */
+        V(delay); /* Rilascia il semaforo delay */
+    }
+    V(mutex); /* Rilascia il semaforo mutex */
+}
+        \end{lstlisting}
+        In questo esempio, la funzione \texttt{V} acquisisce il semaforo \texttt{mutex} per garantire la mutua esclusione. Poi incrementa il semaforo e controlla se il suo valore è negativo. Se il valore è negativo, rilascia il semaforo \texttt{delay} (che è Inizializzato a \texttt{false}). Se il valore è maggiore o uguale a zero, rilascia il semaforo \texttt{mutex} e termina. Nota come acquisire il semaforo \texttt{mutex} prima di modificare il semaforo \texttt{s} e rilasciarlo dopo averlo modificato, dato che questo è inizializzato a \texttt{true}, serva per garantire che ogni operazione sul semaforo \texttt{s} sia eseguita in modo atomico. \newline
+        Notiamo come nell'implementazione, anche se risolviamo il problema della sezione critica, non risolviamo il problema del \textit{busy-waiting} ovvero l'attesa attiva. Infatti, se un processo entra nella sezione critica quando il suo tempo di \texttt{CPU}-\textit{burst} termina e il processo viene messo in attesa, il semaforo \texttt{mutex} rimarrà occupato fino a quando il processo non verrà risvegliato andando a far sprecare al processo corrente tempo di \texttt{CPU}.
+    \subsubsection{Implementazione senza \textit{busy-waiting}}
+        Per evitare il problema del \textit{busy-waiting} possiamo utilizzare una lista \texttt{s.list} che contiene la lista dei processi in attesa. La funzione \texttt{P} viene implementata come segue:
+        \begin{lstlisting}[language=C++,basicstyle=\footnotesize]
+P(semaphore s){
+    P(mutex); /* Acquisisce il semaforo mutex */
+    s.value = s.value - 1; /* Decrementa il semaforo */
+    if(s.value < 0){ /* Se il semaforo e' negativo */
+        append(process I, s.List); /* Aggiunge il processo alla lista */
+        sleep() & V(mutex); /* Rilascia il semaforo mutex */
+    }else{
+        V(mutex); /* Rilascia il semaforo mutex */
+    }
+}
+        \end{lstlisting}
+        In questo esempio, la funzione \texttt{P} acquisisce il semaforo \texttt{mutex} per garantire la mutua esclusione. Poi decrementa il semaforo e controlla se il suo valore è negativo. Se il valore è negativo, aggiunge il processo alla lista dei processi in attesa e lo mette in attesa. Se il valore è maggiore o uguale a zero, rilascia il semaforo \texttt{mutex} e termina. La funzione \texttt{V} viene implementata come segue:
+        \begin{lstlisting}[language=C++,basicstyle=\footnotesize]
+V(semaphore s){
+    P(mutex); /* Acquisisce il semaforo mutex */
+    s.value = s.value + 1; /* Incrementa il semaforo */
+    if(s.value <= 0){ /* Se il semaforo e' negativo */
+        PCB *p = remove(s.List); /* Rimuove il primo processo dalla lista */
+        wakeup(p) & V(mutex); /* Rilascia il semaforo mutex */
+    }else{
+        V(mutex); /* Rilascia il semaforo mutex */
+    }
+}
+        \end{lstlisting}
+        In questo esempio, la funzione \texttt{V} acquisisce il semaforo \texttt{mutex} per garantire la mutua esclusione. Poi incrementa il semaforo e controlla se il suo valore è negativo. Se il valore è negativo, rimuove il primo processo dalla lista dei processi in attesa e lo risveglia. Se il valore è maggiore o uguale a zero, rilascia il semaforo \texttt{mutex} e termina. Notare come non abbiamo discusso l'assenza di \textit{busy-waiting} sui semafori binari \texttt{mutex} e \texttt{delay}, ma generalmente il processo non rimane in attesa attiva, ma gli viene inviato un segnale di \textit{sleep} e viene messo in attesa. Questo algoritmo è più efficiente rispetto all'implementazione precedente, poiché non richiede l'attesa attiva e consente di risparmiare tempo di \texttt{CPU}. Tuttavia, questo algoritmo richiede un maggiore sforzo di implementazione e può essere più complesso da gestire.\newline
+        Per gestire l'implementazione senza \textit{busy-waiting} per i semafori booleani \texttt{mutex} e \texttt{delay} dobbiamo far conto sul \texttt{SO}, infatti questo può gestire questi o disabilitando gli \texttt{interrupt}, oppure ignorando il \textit{busy-waiting} su \texttt{mutex} in quanto questo è un semaforo binario ed il suo cambio è molto veloce.\newline
+        Per garantire l'assenza di \textit{starvation} la lista deve essere implementata tramite \texttt{FIFO}
+    \subsubsection{Applicazioni dei semafori} 
+        Nel caso di voler eseguire in sequenza i processi $A$ e poi $B$ allora scriveremo il seguente codice:
+        \begin{lstlisting}[language=C++,basicstyle=\footnotesize]
+/* S=0 */
+PROCESS A;
+    // Esecuzione del processo A
+    V(S); /* Indica che il processo A e' uscito */
+PROCESS B;
+    // Attesa del processo A
+    P(S); /* Attende il processo A */
+    // Esecuzione del processo B
+        \end{lstlisting}
+        In ogni caso col semaforo \texttt{S} inizializzato a 0, il processo $A$ eseguirà per primo e poi il processo $B$, sia che il tempo in \texttt{CPU} venga assegnato prima ad $A$ e poi a $B$, sia che il tempo in \texttt{CPU} venga assegnato prima a $B$ e poi a $A$. Infatti, il processo $B$ non potrà entrare nella sezione critica finché il processo $A$ non avrà rilasciato il semaforo \texttt{S}.\newline
+        Se invece vogliamo eseguire in sequenza i processi $A, B, A, B,\dots$ allora scriveremo il seguente codice:
+        \begin{lstlisting}[language=C++,basicstyle=\footnotesize]
+/* S=0 S1=1 */
+PROCESS A;
+while(1){
+    P(S1);
+    // Esecuzione del processo A
+    V(S); /* Indica che il processo A e' uscito */
+}
+PROCESS B;
+while(1){
+    P(S);
+    // Esecuzione del processo B
+    V(S1); /* Indica che il processo B e' uscito */
+}
+        \end{lstlisting}
+        In questo caso, il processo $A$ e il processo $B$ si alternano nell'esecuzione. Infatti, il processo $A$ entra nella sezione critica e poi rilascia il semaforo \texttt{S} per consentire al processo $B$ di entrare nella sezione critica. Una volta che il processo $B$ esce dalla sezione critica, rilascia il semaforo \texttt{S1} per consentire al processo $A$ di entrare nella sezione critica. Questo ciclo continua fino a quando i processi non terminano.\footnote{Ulteriori esempi ed applicazioni trattate a lezione sono state omesse, in quanto anche se trattate approfonditamente a lezione, queste sono la merita applicazione del concetto di semaforo.}
