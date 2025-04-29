@@ -1,0 +1,174 @@
+\chapter{Fenomeni di urto}
+\label{cap:fenomeniUrto}
+
+\section{Introduzione agli urti}
+    Considerando l'urto tra due punti materiali, durante la collisione possono agire forze molto intense, ma di breve durata, queste sono chiamate \textbf{forze impulsive}. Dato che le forze durante l'urto sono interne al sistema considerato allora in assenza di forze esterne, la quantità di moto totale del sistema è conservata. Dunque considerando $m_1$ e $m_2$ le masse dei due punti materiali, e $v_{1,\text{in}}, v_{2,\text{in}}$ le loro velocità prima dell'urto, e $v_{1,\text{out}}, v_{2,\text{out}}$ le loro velocità immediatamente dopo l'urto, possiamo scrivere:
+    \begin{align*}
+        P_{\text{in}} = & m_1v_{1,\text{in}} + m_2v_{2,\text{in}} = m_1v_{1,\text{out}} + m_2v_{2,\text{out}} = P_{\text{out}}
+    \end{align*}
+    Dunque la quantità di moto nel centro di massa del sistema è conservata, e possiamo scrivere:
+    \begin{align}
+        P=(m_1+m_2)v_{cm} = P_{\text{in}} = P_{\text{out}} = \text{costante}
+    \end{align}
+    Dal lato opposto le quantità di moto delle masse $1$ e $2$ non rimangono costanti, queste sono definite come la differenza tra la velocità moltiplicata per la massa. Dunque possiamo scrivere:
+    \begin{align*}
+        m_1v_{1,\text{out}} - m_1v_{1,\text{in}} = J_{2,1} = \int_{t_1}^{t_2} F_{2,1} dt\\
+        m_2v_{2,\text{out}} - m_2v_{2,\text{in}} = J_{1,2} = \int_{t_1}^{t_2} F_{1,2} dt
+    \end{align*}
+    Dove $J_{2,1}$ è l'impulso della massa $2$ sulla massa $1$, e $J_{1,2}$ è l'impulso della massa $1$ sulla massa $2$. Dunque possiamo scrivere:
+    \begin{align*}
+        J_{2,1} + J_{1,2} = 0\\
+        \Rightarrow J_{2,1} = -J_{1,2}
+    \end{align*}
+    Questo è verificato in quanto le forze agenti sulle masse $1$ e $2$ sono uguali e opposte, quindi l'impulso della massa $2$ sulla massa $1$ è uguale in modulo ma opposto in verso all'impulso della massa $1$ sulla massa $2$.\newline
+    Inoltre anche in presenze di forze esterne se la durata dell'urto è molto breve, possiamo considerare le forze esterne come nulle in quanto vale che:
+    $$
+        \Delta P=\int_{t_1}^{t_2} F^{\text{(E)}} dt = F^{\text{(E)}}_{m}\tau
+    $$
+    e dunque se $\tau$ è molto piccola, il $\Delta P$ è molto piccola, e quindi possiamo considerare le forze esterne come nulle, questo a meno che le $F^{\text{(E)}}$ non siano impulsive nel periodo $\tau$.\newline
+    Analogamente possiamo scrivere l'impulso $J$ come:
+    \begin{align}
+        J = \int_{t_1}^{t_2} F dt = F_{m}\tau
+    \end{align}
+    Dove la forza $F_{m}$ è la forza media durante l'intervallo di tempo $\tau$.\newline
+    Conseguenza dirette ed applicazione della conservazione dell'energia cinetica e della quantità di moto possiamo scrivere l'energia cinetica totale del sistema come:
+    $$
+        E'_k = \frac12m_1v_1'^2 + \frac12m_2v_2'^2
+    $$
+    Detto questo non è sempre vero che l'energia meccanica e quindi l'energia cinetica è conservata. Infatti quando analizziamo un urto solitamente distinguiamo tre casi principalmente: \begin{description}
+        \item[Urto elastico] Oltre alla conservazione della quantità di moto, è conservata anche l'energia cinetica totale del sistema.
+        \item[Urto anelastico] Viene conservata solo la quantità di moto, mentre l'energia cinetica totale del sistema non è conservata.
+        \item[Urto completamente anelastico] Un urto completamente anelastico è un caso particolare di urto anelastico, nel quale le due masse si muovono insieme dopo l'urto. In questo caso la posizione delle due masse dopo l'urto coincide con la posizione del centro di massa del sistema.
+    \end{description}
+    La quantità di moto, in generale, di un sistema con $N$ masse è descritta dalla seguente equazione:
+    \begin{align}
+        P = \sum_{i=1}^{N} m_i v_i = M v_{cm} \label{eq:quantitaMoto}
+    \end{align}
+    Dunque possiamo scrivere la quantità di moto totale del sistema come:
+    \begin{align*}
+        P = m_1v_{1,\text{in}} + m_2v_{2,\text{in}} = m_1v_{1,\text{out}} + m_2v_{2,\text{out}}
+    \end{align*}
+    \subsection{Passaggio dal sistema di riferimento del centro di massa}
+        Può essere utile passare dal sistema di riferimento generale a quello del centro di massa, in quanto in questo sistema di riferimento la quantità di moto totale del sistema è sempre nulla. Per fare questo consideriamo:
+        \begin{align*}
+            x(t) \rightarrow & x'(t) = x(t) - x_{cm}(t)\\
+            \downarrow \frac{d}{dt} & \\
+            v(t) \rightarrow & v'(t) = v(t) - v_{cm}(t)\\
+            \downarrow \frac{d}{dt} & \\
+            a(t) \rightarrow & a'(t) = a(t) - a_{cm}(t)
+        \end{align*}
+        In queste formule usiamo i simboli $x_{cm}$, $v_{cm}$ e $a_{cm}$ per indicare la posizione, la velocità e l'accelerazione del centro di massa del sistema, per ricavarci queste dobbiamo consideriamo la posizione del centro di massa del sistema come:
+        \begin{align}
+            \vec{x}_{cm} = \frac{\sum_{1}^{N} m_i \vec{x}_i}{\sum_{1}^{N} m_i} = \sum_{i=1}^{N} \frac{m_i}{M} \vec{x}_i \label{eq:posizioneCM}
+        \end{align}
+        eseguendo alcuni passaggi possiamo ricavare la velocità e l'accelerazione del centro di massa del sistema come:
+        \begin{align*}
+            \vec{x}_{cm} = & \sum_{i=1}^{N} \frac{m_i}{M} \vec{x}_i &&\\
+            \downarrow \frac{d}{dt} & \\
+            \vec{v}_{cm} = & \frac{d}{dt}\left(\sum_{i=1}^{N} \frac{m_i}{M} \vec{x}_i\right)
+            =& \sum_{i=1}^{N} \frac{m_i}{M} \frac{dx_i}{dt}
+            =& \sum_{i=1}^{N} \frac{m_i}{M} \vec{v}_i\\
+            \downarrow \frac{d}{dt} & \\
+            \vec{a}_{cm} = & \frac{d}{dt}\left(\sum_{i=1}^{N} \frac{m_i}{M} \vec{v}_i\right)
+            =& \sum_{i=1}^{N} \frac{m_i}{M} \frac{d\vec{v}_i}{dt}
+            =& \sum_{i=1}^{N} \frac{m_i}{M} \vec{a}_i
+        \end{align*}
+        
+        Oltre alla posizione, velocità e accelerazione del centro di massa del sistema, possiamo anche calcolare l'energia cinetica totale del sistema nel sistema di riferimento del centro di massa. Infatti possiamo scrivere:
+        \begin{align}
+            E_{k,\text{tot}}\rightarrow & E'_{k,\text{tot}} = \sum_{i=1}^{N} E'_{k,i} = \sum_{i=1}^{N} \frac{1}{2}m_i v_i'^2
+        \end{align}
+        Il che con qualche passaggio diventa:
+        \begin{align*}
+            E'_{k,\text{tot}} = & \sum_{i=1}^{N} \frac{1}{2}m_i \left(v_i - v_{cm}\right)^2\\
+            = & \sum_{i=1}^{N} \frac{1}{2}m_i \left(v_i^2 - 2v_iv_{cm} + v_{cm}^2\right)\\
+            = & \sum_{i=1}^{N} \frac{1}{2}m_i v_i^2 - 2\sum_{i=1}^{N} m_i v_iv_{cm} + \sum_{i=1}^{N} \frac{1}{2}m_i v_{cm}^2\\
+            = & E_{k,\text{tot}} - 2v_{cm}\sum_{i=1}^{N} m_i v_i + \frac{1}{2}M v_{cm}^2\\
+            = & E_{k,\text{tot}} - 2v_{cm}\cdot Mv_{cm} + \frac{1}{2}M v_{cm}^2\\
+            = & E_{k,\text{tot}} - Mv_{cm}^2 + \frac{1}{2}M v_{cm}^2\\
+            = & E_{k,\text{tot}} - \frac{1}{2}M v_{cm}^2
+        \end{align*}
+        Dunque l'energia cinetica del sistema nel sistema di riferimento del centro di massa non è influenzata dalle singole velocità, ma solo dalla velocità del centro di massa del sistema.
+
+\section{Urto elastico}
+    Come già detto, in un urto elastico oltre alla conservazione della quantità di moto, è conservata anche l'energia cinetica totale del sistema. Dunque possiamo scrivere:
+    \begin{align}
+        m_1v_{1,\text{in}} + m_2v_{2,\text{in}} = m_1v_{1,\text{out}} + m_2v_{2,\text{out}} \label{eq:urtoElasticoQuantitaMoto}\\
+        \frac12m_1v_{1,\text{in}}^2 + \frac12m_2v_{2,\text{in}}^2 = \frac12m_1v_{1,\text{out}}^2 + \frac12m_2v_{2,\text{out}}^2 \label{eq:urtoElasticoEnergiaCinetica}
+    \end{align}
+    In quanto queste valgono contemporaneamente, possiamo dunque ricavarci una relazione tra le velocità di uscita e quelle di ingresso. Dalla \eqref{eq:urtoElasticoQuantitaMoto} possiamo ricavare $v_{1,\text{out}}$ e sostituirlo nella \eqref{eq:urtoElasticoEnergiaCinetica}:
+    \begin{align*}
+        v_{1,\text{out}} = \frac{\left(m_1-m_2\right)v_{1,\text{in}} + 2m_2v_{2,\text{in}}}{m_1+m_2}\\
+        v_{2,\text{out}} = \frac{\left(m_2-m_1\right)v_{2,\text{in}} + 2m_1v_{1,\text{in}}}{m_1+m_2}
+    \end{align*}
+    Se il nostro sistema di riferimento è il centro di massa del sistema, possiamo scrivere:
+    \begin{align*}
+        v_{1,\text{in}}' = -v_{1,\text{out}}'\\
+        v_{2,\text{in}}' = -v_{2,\text{out}}'
+    \end{align*}
+    Nel caso volessimo ``risolvere'' un urto elastico tra due masse $m_1$ e $m_2$ per prima dobbiamo determinare il numero di dimensioni del sistema, e quindi scrivere le equazioni \eqref{eq:urtoElasticoQuantitaMoto} e \eqref{eq:urtoElasticoEnergiaCinetica} in $n$ dimensioni. Per $3$ dimensioni si avranno $4$ equazioni, per $2$ dimensioni si avranno $3$ equazioni, e per $1$ dimensione si avrà $2$ equazioni, però su $n$ dimensioni con $2$ masse si hanno $2n$ incognite, dunque nel caso di $2$ dimensioni con $3$ equazioni abbiamo una incognita libera, mentre nel caso di $3$ dimensioni con $4$ equazioni abbiamo $2$ incognite libere, ma con $1$ dimensione abbiamo $2$ equazioni e $2$ incognite, quindi non abbiamo incognite libere e possiamo risolvere l'urto. 
+
+\section{Urto (completamente) anelastico}
+    In un urto anelastico, la quantità di moto totale del sistema è conservata, mentre l'energia cinetica totale del sistema non è conservata. Dunque possiamo scrivere:
+    \begin{align*}
+        E_{k,f}' \neq & E_{k,i}'\\
+        E_{k,i}' = \frac{1}{2}m_1v_{1,\text{in}}^2 + \frac{1}{2}m_2v_{2,\text{in}}^2 \neq & \frac{1}{2}m_1v_{1,\text{out}}^2 + \frac{1}{2}m_2v_{2,\text{out}}^2 = E_{k,f}'\\
+        E_{k,i}' = E_{k,i} - \cancel{\frac{1}{2}M v_{cm}^2} \neq & E_{k,f}' = E_{k,f} - \cancel{\frac{1}{2}M v_{cm}^2}\\
+        E_{k,i} \neq & E_{k,f}\\
+    \end{align*}
+    L'analisi degli anelastici o completamente anelastici risulta utile nell'esperimento del ``pendolo balistico.
+    \subsubsection{Pendolo balistico}
+        Nel problema del pendolo balistico, abbiamo un proiettile di massa $m_1$ che colpisce un pendolo di massa $m_2$ e lunghezza $L$. Il proiettile si conficca nel pendolo, e il sistema inizia a muoversi insieme, il pendolo raggiungerà una certa altezza $h$ con angolo $\theta$ con $\theta = \arccos\left(\frac{L-h}{L}\right)$, bisogna quindi analizzare momenti diversi, il primo è l'urto tra il proiettile e il pendolo, il quale è completamente anelastico, il secondo è il moto del pendolo, il quale è un moto di tipo conservativo.
+        \paragraph{Urto} Inizialmente il pendolo è fermo (e quindi con $P$ nulla), mentre il proiettile ha quantità di moto $P_{p} = m_1v_{p}$ quindi la quantità di moto del sistema è $P=mv+M\mathcal{0}$, questa si conserva nell'urto, denotando $V$ la velocità del pendolo nell'istante dopo l'urto abbiamo $P=mv+M\mathcal{0}=m_2V$ e quindi:
+        \begin{align*}
+            V&=\frac{m_1v}{m_1+m_2}\\
+            v&=\frac{m_1+m_2}{m_1}V\\
+        \end{align*}
+        \paragraph{Moto del pendolo} Il pendolo inizia a muoversi con velocità $V$, e quindi ha energia cinetica $E_{k,i} = \frac{1}{2}(m_1+m_2)V^2$, il pendolo si alza fino ad un'altezza $h$ e quindi ha energia potenziale $E_{p,f} = (m_1+m_2)gh$, nel punto di massimo il pendolo non ha energia cinetica ($E_{k,f} = 0$), e nel punto di minimo il pendolo non ha energia potenziale ($E_{p,i} = 0$), vale per la conservazione dell'energia meccanica che:  
+        \begin{align*}
+            E_{k,i} + E_{p,i} = E_{k,f} + E_{p,f}\\ 
+            \frac{1}{2}(m_1+m_2)V^2 + 0 = 0 + (m_1+m_2)gh\\
+            \frac{1}{2}V^2\cancel{(m_1+m_2)} = \cancel{(m_1+m_2)}gh\\
+            \frac{1}{2}V^2 = gh\\
+            V^2 = 2gh\\
+        \end{align*}
+        \paragraph{Composizione}   
+            Combinando le due equazioni ricavate possiamo scrivere che:  
+                \begin{align*}
+                    \left(\frac{m_1+m_2}{m_1}v\right)^2 &= 2gh\\
+                    \frac{(m_1+m_2)^2}{2gh} &= v^2\\
+                    v &= \sqrt{\frac{(m_1+m_2)^2}{2gh}}\\
+                    v &= \frac{m_1+m_2}{\sqrt{2gh}}\\
+                \end{align*}
+            il che ci permette di calcolare la velocità del proiettile in funzione della massa del pendolo, della massa del proiettile e dell'altezza raggiunta dal pendolo.
+\section{Nota Sui sistemi di riferimento, inerziali e non inerziali}
+    Un sistema di riferimento è un insieme di punti materiali, che possono essere fissi o in movimento, rispetto ai quali si può misurare la posizione. Abbiamo visto il sistema di riferimento del centro di massa per il quale valido che la quantità di moto totale del sistema è nulla, e quindi possiamo scrivere:
+    \begin{align*}
+        P = \sum_{i=1}^{N} m_i v_i = M v_{cm} = 0
+    \end{align*}
+    Se questi stessi punti materiali che costruiscono il centro di massa fossero soggetti alla forza di gravità allora rispetto al sistema ``centro di massa'' noteremo una forza apparente \textbf{esterna} al sistema che accelera l'intero sistema. Dunque possiamo dire che il sistema di riferimento del centro di massa in questa situazione \textbf{non è} inerziale. Se un sistema inoltre subisce più forze esterne allora la risultante di queste sarà il prodotto della massa totale del sistema per l'accelerazione del centro di massa, la quale è nulla in un sistema inerziale:
+    $$ \vec{R_{est}}=m\vec{a_{cm}}$$ 
+    Questa formula è il risultato considerando un sistema di riferimento ``ancora più esterno'' inerziale. Difatti come già visto la posizione del centro di massa rispetto ad un punto in un sistema inerziale $O$, considerando $r_i$ la posizione del punto $i$ rispetto al sistema di riferimento $O$ e $r'_i$ la posizione del punto $i$ rispetto al sistema di riferimento del centro di massa, possiamo scrivere:
+    $$
+        r_i = r'_i + OO'
+    $$
+    Dato che $$
+        r'_cm = \frac{\sum_{i=1}m_i r'_i}{\sum_{i=1}m_i} = \frac{\sum_{i=1}m_i (r_i + O'O)}{\sum_{i=1}m_i} = \frac{\sum_{i=1}m_i r_i}{\sum_{i=1}m_i} + O'O' = r_{cm} + O'O'
+    $$
+    come derivata della posizione otteniamo che la velocità del centro di massa è:
+    $$
+        v_{cm} = \frac{dr_{cm}}{dt} = \frac{\sum_{i=1}m_i \frac{dr_i}{dt}}{\sum_{i=1}m_i} = \frac{\sum_{i=1}m_i v_i}{\sum_{i=1}m_i} = \frac{P}{m}
+    $$
+    e quindi l'accelerazione del centro di massa è:
+    $$
+        a_{cm} = \frac{dv_{cm}}{dt} = \frac{\sum_{i=1}m_i \frac{dv_i}{dt}}{\sum_{i=1}m_i} = \frac{\sum_{i=1}m_i a_i}{\sum_{i=1}m_i} = \frac{\sum_{i=1}m_i a_i}{m}
+    $$
+    Assumendo che il sistema di riferimento $O$ sia inerziale, possiamo scrivere per ogni punto: $m_ia_i = F_i = F_i^{(\text{E})} + F_i^{(\text{I})}$, dove $F_i^{(\text{E})}$ è la forza esterna e $F_i^{(\text{I})}$ è la forza interna. Dunque possiamo scrivere:
+    $$
+        ma_{CM} = \sum_{i} m_ia_i = \sum_{i} \left(F_i^{(\text{E})} + F_i^{(\text{I})}\right) = F^{(\text{E})} + F^{(\text{I})}
+    $$
+    ma per definizione le forze interne si annullano, quindi possiamo scrivere:
+    $$
+        ma_{CM} = F^{(\text{E})}
+    $$
+    Dunque possiamo dire che un sistema di riferimento è inerziale se la risultante delle forze esterne è uguale alla massa totale del sistema per l'accelerazione del centro di massa. Se questa condizione non è soddisfatta, il sistema di riferimento non è inerziale. In un sistema di riferimento non inerziale, le forze apparenti sono forze fittizie che si manifestano a causa dell'accelerazione del sistema stesso. Queste forze non sono reali e non possono essere misurate direttamente, ma sono utili per analizzare il moto in sistemi non inerziali.
