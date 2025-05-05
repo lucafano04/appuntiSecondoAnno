@@ -1,1 +1,73 @@
 \chapter{Termodinamica}
+
+Passiamo ora a studiare la termodinamica, che è la branca della fisica che studia le trasformazioni di energia e il calore. Quando trattiamo di termodinamica solitamente ci riferiamo a sistemi macroscopici, cioè sistemi composti da un numero molto elevato di particelle, questo numero è ben descritto dalla costante di Avogadro ($N_A=6\cdot 10^{23}$) questo è un numero puro. Il numero di Avogadro è il numero di atomi o molecole contenuti in un grammo di sostanza dunque se abbiamo $N$ particelle in un sistema allora $N\rightarrow n=\frac{N}{N_A}$ è il numero di moli ($\operatorname{mol}$). Le moli sono una grandezza fondamentale per indicare la quantità di sostanza. Altre grandezze fondamentali quando trattiamo di termodinamica sono la densità di massa $\rho = \frac{m}{V}$ misurata in $\left[\frac{M}{L^3}\right]=\frac{kg}{m^3}$, la densità molare $m \stackrel{def}= \frac{n}{V}$ misurata in $\left[\frac{M}{L^3}\right]=\frac{mol}{m^3}$, la pressione che è una quantità scalare che indica la forza esercitata su una superficie, è definita come il rapporto tra la forza e l'area su cui essa agisce, $P\stackrel{def}{=}\frac{\left| \vec{F_{\perp,s}}\right|}{S}$, misurata in $\left[\frac{M}{L^2T^2}\right]=\frac{N}{m^2}=\frac{kg}{m\cdot s^2}$. La pressione oltre ad avere dimensionalità di $\left[\frac{F}{L^2}\right]$ può essere espressa come \textit{Pascal} ($\frac{1\ \operatorname{N}}{1\ \operatorname{m}^2}=1\operatorname{Pa}$ dato che tale quantità è insignificante sono state istituite le misure di $1\operatorname{bar}=10^5\operatorname{Pa}$ e $1\operatorname{atm}=1013.25\operatorname{bar}$). Infine l'ultima grandezza fisica che necessita un'introduzione prima di passare al capitolo è la temperatura, questa può essere espressa in Kelvin ($K$) o Celsius ($^{\circ}C$) e la conversione tra le due scale è data da $T(K)=t(^{\circ}C)+273.15$. 
+\subsubsection{Calcolo della pressione}
+    Assumiamo di voler calcolare la pressione esercitata da un'insieme di particelle su una parete che le contiene. Per prima cosa dobbiamo assumere che: \begin{enumerate}
+        \item $m_i \leftrightarrow m_j$ non interagiscono tra di loro per ogni $i,j \in [1,N]$.
+        \item Gli urti tra particella e parete sono perfettamente elastici, inoltre la massa della parete è molto maggiore di quella delle particelle ($M\gg m$)
+        \item Il raggio della particella è trascurabile
+    \end{enumerate}
+    Avendo assunto tutto ciò chiameremo $``P_{\text{lungo} x}''$ la pressione esercitata dalle particelle lungo l'asse $x$, la pressione che una singola particella esercita sulla parete è data da: $P_{\text{lungo } x}=\frac{F_{\text{lungo} x}}{L_y\cdot L_z}$, dove $F_{\text{lungo} x}$ è la forza esercitata dalla particella sulla parete e $L_y\cdot L_z$ è l'area della parete. La forza esercitata dalla particella sulla parete è una forza impulsiva dunque si dovrebbe calcolare come $-\frac{J}{\Delta t}$ dato che l'intervallo di tempo da considerare nella situazione di impulso è molto piccolo, consideriamo equivalentemente $\Delta t$ come il periodo tra due urti sulla stessa parete, questa sarà $\Delta t=\frac{2L_x}{v_x}$ che è il tempo per percorrere due volte la lunghezza $L_x$ con componente della velocità $v_x$. Passano al denominatore l'impulso $J$ è dato da $J=(P_{f,x}-P_{i,x})\cdot \hat{x}$ ma dato che $P_{f,x}=-P_{i_x}$ visto che gli urti sono completamente elastici ed la massa della superficie è molto maggiore rispetto alla massa della particella, dunque $``F_{\text{lungo } x}''=\frac{m v_x^2}{L_x}$ il che significa che la pressione lungo la superficie $L_y\cdot L_z$ è $P_{\text{lungo }x} = \frac{\frac{m v_x^2}{L_x}}{L_y\cdot L_z} = \frac{m_iv_x^2}{L_xL_yL_z}=\frac{m_iv_x^2}{V}$. Questo vale solo per una particella, sommando l'insieme delle particelle otteniamo:
+    \begin{align*}
+        \sum_{i=1}^N\frac{m_iv_{x,i}^2}{V}=&\frac{m}{V}N\frac{\sum_{i=1}^N v_{x,i}}{N}
+        =&\frac{Nm<v_x^2>}{V}
+    \end{align*}
+    Notiamo come $N,m,V$ siano uguali per tutti gli assi e l'unico parametro che cambi sia la velocità di tutte le particelle sull'asse $x$ tuttavia dato che il sistema complessivamente è isotropo possiamo dire che $<v_x^2>=<v_y^2>=<v_z^2>$ e quindi possiamo scrivere la pressione totale come:
+    \begin{align}
+        P = \frac23\frac{N<E_x>}{V}
+    \end{align}
+    dove $<E_x>$ è l'energia cinetica media lungo l'asse $x$ e $N$ è il numero di particelle. 
+\section{Calore}
+    Abbiamo accennato alla temperatura, possiamo dire che che la differenza di temperatura sia proporzionale alla massa del materiale combustibile usato, ($\Delta T \propto m_{comb}$), infatti logicamente più combustibile abbiamo più calore possiamo generare per una stessa quantità da scaldare. Inoltre se la massa del corpo da scaldare è proporzionale alla massa del combustibile, ($M_{scaldato} \propto m_{comb}$) infatti con più massa da scaldare abbiamo bisogno di più calore per scaldarlo della stessa temperatura. Infine possiamo dire che il calore $\mathcal{Q}$ è proporzionale alla differenza di temperatura ($\Delta T$) e alla massa del corpo da scaldare ($M_{scaldato}$), quindi possiamo scrivere:
+    $$
+        \mathcal{Q}=cm\Delta T
+    $$
+    Dove $c$ è il calore specifico, che è una costante che dipende dal materiale e dalla temperatura. Il calore specifico è definito come la quantità di calore necessaria per aumentare la temperatura di un'unità di massa di un materiale di un grado Celsius. La sua unità di misura è $\frac{J}{kg\cdot K}$. Il calore ha la stessa dimensionalità dell'energia, infatti viene misurato in Joule ($J$). 
+    \subsubsection{Esperimento di Joule}
+        Prendiamo in considerazione un contenitore isolato termicamente, nel quale è presente un pistone ed un liquido in esso. Il pistone è collegato tramite delle carrucole ideali ad un peso $P$ che scende di un'altezza $h$. Dunque il lavoro compiuto dal peso è $W=-P\cdot (h_f -h_i)$ in quanto $E_{pot,i}=-P\cdot h_i$ e $E_{pot,f}=-P\cdot h_f$ e quindi dato che $h_f<h_i$ allora $mgh_i>mgh_f$ dunque $\Delta U_m = mg(h_f-h_i<0$. È quindi compiuto un lavoro dal peso sul liquido il quale ne aumenta l'energia potenziale dunque $\Delta U_{H_2O} > 0$  per questo possiamo dire che:
+        \begin{align}
+            W &= \Delta U \propto \Delta T_{H_2O}\\
+            \mathcal{Q} &= m_{H_2O}c_{H_2O}\Delta T_{H_2O}\\
+            \Delta U_{H_2O} &= \mathcal{Q} - W \label{eq:prima_legge_termo}
+        \end{align}
+        L'equazione \ref{eq:prima_legge_termo} è nota come prima legge della termodinamica, essa afferma che l'energia interna di un sistema è uguale alla somma del calore fornito al sistema e del lavoro compiuto sul sistema. Essa è una legge fondamentale della termodinamica e rappresenta il principio di conservazione dell'energia applicato ai sistemi termodinamici.\newline
+        Per convenzione si considera il calore fornito al sistema come positivo e il lavoro compiuto sul sistema come positivo, di conseguenza il calore ceduto dal sistema e il lavoro compiuto dal sistema sono considerati negativi. La prima legge della termodinamica può essere espressa in forma differenziale come:
+        \begin{align*}
+            dU = \delta Q - \delta W
+        \end{align*}
+        non possiamo usare il simbolo $d$ per il calore e il lavoro perché non sono funzioni di stato, ma dipendono dal ``percorso'' seguito dal sistema per passare da uno stato all'altro.\newline
+        Se quindi viene eseguito un lavoro sul sistema e il calore viene fornito al sistema, l'energia interna del sistema aumenta. Se invece il sistema compie lavoro e cede calore, l'energia interna del sistema diminuisce. La prima legge della termodinamica è una legge fondamentale della fisica e ha molte applicazioni in ingegneria, chimica e fisica. Essa è alla base della termodinamica e delle sue applicazioni pratiche, come i motori a combustione interna, le turbine a gas e le pompe di calore.
+\section{Stato Termodinamico}
+    Un sistema termodinamico è definito da un insieme di variabili macroscopiche che descrivono il suo stato. Queste variabili sono chiamate variabili di stato e includono grandezze come la temperatura, la pressione, il volume e la massa del sistema, ma anche altre. Lo stato del sistema viene espresso come $f(v_1,v_2,\dots,v_n)=0$ dove $v_i$ sono le variabili del sistema termodinamico. L'uguaglianza a zero sta ad indicare che il sistema è in equilibrio termodinamico, se non fosse così il sistema non sarebbe in equilibrio e quindi il suo stato non sarebbe definito, infatti nelle trasformazioni termodinamiche si passa da uno stato $s_1$ ad uno stato $s_2$ ($s_1\rightarrow s_2$) e quindi il sistema non è più in equilibrio.
+    \paragraph{Equilibrio Termodinamico}
+        Un sistema è in equilibrio termodinamico se sono vere tre condizioni:
+        \begin{enumerate}
+            \item Sussiste un equilibrio meccanico \underline{medio} tra le particelle del sistema. 
+            \item Sussiste un equilibrio chimico tra le particelle del sistema.
+            \item Sussiste un equilibrio termico \underline{medio} tra le particelle del sistema.
+        \end{enumerate}
+        I punti 1 e 3 sono stati definiti \textit{equilibrio medio} poiché non è necessario che ogni singola particella del sistema sia in equilibrio, ma è sufficiente che nel complesso il sistema sia ``fermo'' o a ``temperatura costante''. In particolare, l'equilibrio termico medio implica che la temperatura del sistema sia uniforme e costante nel tempo. Se il sistema non è in equilibrio, le variabili di stato possono variare nel tempo e il sistema può subire trasformazioni termodinamiche. In questo caso, le variabili di stato non sono più costanti e il sistema non è più in equilibrio, l'equazione di stato non sarà più valida.
+    \subsection{Trasformazioni termodinamiche}
+        Andiamo ora a definire le trasformazioni termodinamiche, esse sono i processi attraverso i quali un sistema termodinamico passa da uno stato iniziale a uno stato finale. Le trasformazioni termodinamiche possono essere classificate in base a diverse caratteristiche, come la natura del processo (reversibile o irreversibile), la variazione di temperatura (isoterma, adiabatica, isocora, isobara) e la variazione di energia interna (isocora, isobara). 
+        \subsubsection{Trasformazioni Adiabatiche}
+            Le trasformazioni adiabatiche sono processi in cui non c'è scambio di calore tra il sistema e l'ambiente circostante. Ovvero $\mathcal{Q}=0$ e quindi $\Delta U = -W$. In questo caso, l'energia interna del sistema può variare solo a causa del lavoro compiuto sul sistema o dal sistema. Le trasformazioni adiabatiche sono caratterizzate da una variazione di temperatura e pressione, ma non da una variazione di calore. Un esempio di trasformazione adiabatiche è l'espansione rapida di un gas in un cilindro, in cui il gas si espande senza scambiare calore con l'ambiente circostante.
+        \subsubsection{Trasformazioni non-diabatiche}
+            Le trasformazioni dove c'è scambio di calore tra il sistema e l'ambiente circostante sono dette non-adiabatiche. Un oggetto o un sistema può essere scaldato o raffreddato in diversi modi
+                \paragraph{Conduzione di calore} 
+                    La conduzione di calore è il processo attraverso il quale il calore viene trasferito da un corpo a un altro attraverso il contatto diretto. In questo caso il calore è proporzionale alla superficie di contatto: $S\propto Q$, al tempo per il quale il calore viene trasferito: $\delta t\propto Q$, alla differenza di temperatura tra i due corpi: $\Delta \mathcal{T}\propto Q$ ed infine ad un coefficiente di conduzione del materiale: $k\propto Q$ il quale oltre a dipendere dal materiale dipende anche dalla temperatura. Dunque possiamo scrivere:
+                    \begin{align}
+                        \mathcal{Q}=h(T_2-T_1)S\Delta t
+                    \end{align}
+                    portando l'equazione in forma differenziale otteniamo:
+                    \begin{align}
+                        dQ = -\frac{d\mathcal{T}}{dm}ds\, dt\, k \label{eq:legge_furier}
+                    \end{align}
+                    dove $dQ$ è il calore trasferito, $dm$ è la massa del materiale, $ds$ è lo spessore del materiale e $dt$ è il tempo di conduzione. L'equazione \ref{eq:legge_furier} è nota come legge di Fourier per la conduzione del calore. Essa descrive il flusso di calore attraverso un materiale in funzione della differenza di temperatura, dello spessore del materiale e del tempo di conduzione. La legge di Fourier è alla base della termodinamica e ha molte applicazioni pratiche, come l'isolamento termico degli edifici e la progettazione di scambiatori di calore.
+                \paragraph{Convezione}
+                    La convezione è il processo attraverso il quale il calore viene trasferito da un corpo a un altro attraverso il movimento di un fluido. Non andremo ad analizzare nel dettaglio questo processo poiché questo è molto complesso e non rientra nello scopo del corso.
+                \paragraph{Irraggiamento}
+                    L'irraggiamento è il processo attraverso il quale il calore viene trasferito da un corpo a un altro attraverso l'emissione di radiazioni elettromagnetiche. Questo processo avviene senza contatto diretto tra i corpi e senza la necessità di un fluido intermedio. L'irraggiamento è responsabile del trasferimento di calore dal Sole alla Terra e da un corpo caldo a uno freddo. La legge di Stefan-Boltzmann descrive come il calore trasferito $\epsilon$ da un corpo a un altro attraverso l'irraggiamento è proporzionale alla quarta potenza della temperatura assoluta del corpo emittente, e all'efficienza del corpo ricevente $\ell$:
+                    \begin{align*}
+                        \epsilon = \ell \cdot \sigma \cdot (T^4)
+                    \end{align*}
+                    dove $\sigma$ è la costante di Stefan-Boltzmann, che ha un valore di circa $5.67 \cdot 10^{-8} \frac{W}{m^2 \cdot K^4}$. La legge di Stefan-Boltzmann è alla base della termodinamica e ha molte applicazioni pratiche, come la progettazione di pannelli solari e il riscaldamento degli edifici.
