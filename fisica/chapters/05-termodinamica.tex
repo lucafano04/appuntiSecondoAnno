@@ -70,4 +70,151 @@ Passiamo ora a studiare la termodinamica, che è la branca della fisica che stud
                     \begin{align*}
                         \epsilon = \ell \cdot \sigma \cdot (T^4)
                     \end{align*}
-                    dove $\sigma$ è la costante di Stefan-Boltzmann, che ha un valore di circa $5.67 \cdot 10^{-8} \frac{W}{m^2 \cdot K^4}$. La legge di Stefan-Boltzmann è alla base della termodinamica e ha molte applicazioni pratiche, come la progettazione di pannelli solari e il riscaldamento degli edifici.
+                    dove $\sigma$ è la costante di Stefan-Boltzmann, che ha un valore di circa $5.67 \cdot 10^{-8} \frac{W}{m^2 \cdot K^4}$. La legge di Stefan-Boltzmann è alla base della termodinamica e ha molte applicazioni pratiche, come la progettazione di pannelli solari e il riscaldamento degli edifici
+        \subsubsection{Cambi di fase}
+            Un caso particolare nel quale una variazione di calore non comporti una variazione di temperatura è il passaggio di stato, ovvero il passaggio da uno stato fisico a un altro. Ad esempio, quando si riscalda dell'acqua, essa passa dallo stato solido (ghiaccio) a quello liquido (acqua) e poi a quello gassoso (vapore). Durante questo processo, la temperatura dell'acqua rimane costante fino a quando tutto il ghiaccio non si è sciolto e poi rimane costante fino a quando tutto l'acqua non è evaporata. Questo fenomeno è dovuto al fatto che il calore fornito al sistema viene utilizzato per rompere i legami tra le molecole del ghiaccio o dell'acqua, piuttosto che per aumentare la temperatura del sistema. Il calore necessario per il passaggio di stato è chiamato calore latente e dipende dalla sostanza, dalla temperatura e dalla pressione. Il calore latente di fusione è il calore necessario per passare dallo stato solido a quello liquido, mentre il calore latente di vaporizzazione è il calore necessario per passare dallo stato liquido a quello gassoso.
+            \paragraph{Il grafico dello stato della materia}
+                Lo stato di un materiale può essere riassunto in un grafico nel quale sull'asse ``$x$'' la temperatura e sull'asse ``$y$'' la pressione. In questo grafico è presente un punto denominato punto triplo ($T_{tr}$) che è il punto in cui coesistono i tre stati della materia (solido, liquido e gassoso). 
+                \begin{figure}[H]
+                    \centering
+                    \begin{tikzpicture}[scale=1.2, font=\small]
+                        \draw[->] (0,0) -- (10,0) node[right] {$T (\operatorname{K})$};
+                        \draw[->] (0,0) -- (0,7) node[above] {$P (\operatorname{atm})$};
+                        
+                        % Etichette sugli assi (temperature)
+                        \foreach \x/\xlabel in {1/250, 2/273, 4/373, 9/647}
+                        \draw (\x,0.1) -- (\x,-0.1) node[below] {\xlabel};
+                        
+                        % Etichette pressione (approssimazione visiva)
+                        \foreach \y/\ylabel in {1/0.006, 2/1, 4/100, 6/200, 7/218}
+                        \draw (0.1,\y) -- (-0.1,\y) node[left] {\ylabel};
+                        
+                        % Punto triplo (273.16 K, 0.006 atm)
+                        \filldraw[red] (2,1) circle (2pt) node[above right] {Punto triplo};
+                        
+                        % Punto critico (647 K, 218 atm)
+                        \filldraw[blue] (9,7) circle (2pt) node[above left] {Punto critico};
+                        
+                        % Linea solido-liquido
+                        \draw[thick] (1,6) -- (2,1);
+                        
+                        % Linea liquido-gas
+                        \draw[thick] (2,1) .. controls (4,2) and (6,3.5) .. (9,7);
+                        
+                        % Linea solido-gas
+                        \draw[thick] (2,1) .. controls (1,0.5) and (0.5,0.2) .. (0.2,0.05);
+                        
+                        % Etichette delle fasi
+                        \node at (0.8,4.5) {Solido};
+                        \node at (4,3.2) {Liquido};
+                        \node at (5,0.5) {Vapore};
+                        
+                    \end{tikzpicture}
+                \end{figure}
+                Il grafico mostra le diverse fasi della materia in funzione della temperatura e della pressione. La linea che separa il solido dal liquido è chiamata linea di fusione, mentre la linea che separa il liquido dal vapore è chiamata linea di vaporizzazione. La linea che separa il solido dal vapore è chiamata linea di sublimazione. Il punto critico è il punto oltre il quale non è possibile distinguere tra liquido e vapore, e oltre il quale il materiale si comporta come un fluido supercritico. Inoltre al disotto di una certa pressione e temperatura non si può avere dell'acqua intesa come $H_2O$ ma la materia si decompone in idrogeno e ossigeno.
+            \paragraph{Cambio di fase analiticamente}
+                Analiticamente il cambio di fase può essere descritto come:
+                \begin{align}
+                    -\lambda m = \mathcal{Q}
+                \end{align}
+                Dove come già accennato $\lambda$ è il calore latente di fusione o vaporizzazione e $m$ è la massa del materiale da scalare/raffreddare. 
+    \subsection{Altre leggi che regolano la termodinamica}
+        Rimanendo nel campo dello stato termodinamico nel corso degli anni sono state formulate delle leggi che ne regolano il comportamento. Oltre alla prima legge della termodinamica abbiamo la legge di Avogadro, la legge di Boyle e le leggi di Gay-Lussac che regolano il comportamento dei gas ideali.
+        \begin{definition}[Legge di Avogadro - Gas Ideali]
+            Il numero di moli di un gas ideale è dipendente dalla pressione, dal volume e dalla temperatura del gas stesso.\newline
+            Nelle stesse condizioni di temperatura e pressione, volumi uguali di gas diversi contengono lo stesso numero di molecole.
+        \end{definition}
+        \begin{definition}[Legge di Boyle - Gas Ideali]
+            La legge di Boyle afferma che a temperatura costante, il prodotto pressione-volume di un gas ideale è costante. In altre parole, se la temperatura di un gas ideale rimane costante, un aumento della pressione del gas comporta una diminuzione del volume e viceversa.
+            \begin{align}
+                PV = \text{costante} \label{eq:legge_boyle}
+            \end{align}
+        \end{definition}
+        \begin{definition}[1° Legge di Gay-Lussac - Gas Ideali]
+            A pressione costante, il volume di un gas ideale è dipende dalla temperatura.
+            \begin{align}
+                P = \text{costante} \Rightarrow V(t)=V_0\left[1+\alpha(T-T_0)\right]
+            \end{align}
+        \end{definition}
+        \begin{definition}[2° Legge di  Gay-Lussac - Gas Ideali]
+            A volume costante, la pressione di un gas ideale è dipendente dalla temperatura.
+            \begin{align}
+                V = \text{costante} \Rightarrow P(t)=P_0\left[1+\beta(T-T_0)\right]
+            \end{align}
+        \end{definition}
+        Queste quattro leggi sono alla base della termodinamica e sono utilizzate per descrivere il comportamento dei gas ideali. Unendole quindi possiamo ricavarci l'equazione di stato per i gas ideali:
+        \begin{align}
+            PV = nRT \label{eq:gas_ideale}
+        \end{align}
+        dove $P$ è la pressione, $V$ è il volume, $n$ è il numero di particelle (solitamente in moli) e $R$ è la costante universale dei gas ideali, che ha un valore di circa $8.314 \frac{J}{mol \cdot K}$ ed infine $T$ è la temperatura in Kelvin.\newline 
+        L'equazione di stato dei gas ideali (\ref{eq:gas_ideale}) scritta in formato molare è:
+        \begin{align}
+            PV = Mk_{B}T
+        \end{align}
+        la quale sfrutta la costante \underline{naturale} di Boltzmann ($k_B$) che ha un valore di circa $1.38 \cdot 10^{-23} \frac{J}{K}$ e $M$ è la massa molare del gas in $\frac{kg}{mol}$. A differenza del numero di Avogadro ($N_A$) che è un numero puro \underline{arbitrario} e non ha unità di misura, la costante di Boltzmann è una costante fisica fondamentale che ha un valore specifico e una dimensione fisica.
+        \subsubsection{Gas Ideali}
+            Un gas ideale è un modello teorico di un gas che segue le leggi prima descritte ed è caratterizzato dal'equazione di stato $PV-nRT = 0$. Per essere ideale un gas ``generalmente'' deve essere rarefatto, ovvero le particelle devono essere distanti tra di loro e non devono interagire tra di loro. Inoltre vanno trascurate le forze intermolecolari e le dimensioni delle particelle. In questo modo possiamo descrivere una teoria cinetica dei gas, che ci permette di calcolare la pressione, il volume e la temperatura del gas in funzione delle sue proprietà microscopiche. 
+            \paragraph{Densità dell'aria}
+                Dato che come accennato l'aria è un gas ideale possiamo calcolarne la densità usando l'equazione di stato dei gas ideali. Questa sarà data da:
+                \begin{align*}
+                    \rho &= \frac{m}{V}\\
+                    &= \frac{m_{\text{particella}}N}{V}\\
+                    &= \frac{m_{\text{particella}}P\cancel{V}}{\cancel{V}k_{B}T}\\
+                    &= \frac{m_{\text{particella}}P}{k_{B}T}
+                \end{align*}
+                Sapendo che la massa di una singola particella di aria è $m_{\text{particella}}=28.8\cdot 10^{-3}kg$ e che la pressione atmosferica è $P=101325Pa$ e che la temperatura media dell'aria è $T=293K$ possiamo calcolare la densità dell'aria:
+                \begin{align*}
+                    \rho &= \frac{28.8\cdot 10^{-3}kg\cdot 101325Pa}{1.38\cdot 10^{-23}J/K\cdot 293K}\\
+                    &= 1.2\frac{kg}{m^3}
+                \end{align*}
+\section{Lavoro termodinamico e energia interna}
+    \subsection{Lavoro dei gas ideali}
+        In senso meccanico il lavoro è definito come il prodotto tra la forza e lo spostamento ($dw=\vec{F}\cdot d\vec{s}$) ma come abbiamo visto in precedenza il lavoro nel senso termodinamico viene definito come il prodotto tra la pressione e il volume ($dW=P\cdot dV$) dimostriamo ora che i due lavori sono equivalenti con l'ausilio di un pistone.
+        \begin{proof}
+            Consideriamo un pistone isolato termicamente, nel quale è presente un gas ideale, sperimentalmente osserviamo che il pistone non si muove e dunque la risultante delle forze a lui applicate è nulla.\newline
+            Dunque la forza peso del pistone stesso è contrastata dalla forza che il gas esercita su di esso ($R=m\vec{g}+\vec{F_{gas}}=\vec{0}$). Ora sembrerebbe che sussista una accelerazione del gas sull'asse $z$ in quanto questa dovrebbe contrastare la forza peso del pistone stesso, tuttavia ciò andrebbe contro l'assunzione che sia presente un gas ideale. Infatti con un gas ideale sussiste l'isotropia delle forze e quindi la forza peso del pistone non può essere contrastata da una forza che agisce solo lungo l'asse $z$ ma deve essere contrastata da una forza che agisce lungo tutti gli assi. Sapendo che la velocità media del gas ideale su una superficie è $<v^2>=630 \frac{m^2}{s^2}$ ed inoltre che questa è opposta ad una accelerazione $g$ della gravità, possiamo dire che la velocità finale dopo un istante $t_1$ è:
+            \begin{align*}
+                v_{f} = v_0 + g t_1
+            \end{align*}
+            dove $v_0$ è la velocità iniziale del gas ideale. Sappiamo inoltre che la posizione finale del gas ideale è:
+            \begin{align*}
+                s_{f} = s_0 + v_0 t_1 + \frac{1}{2} g t_1^2
+            \end{align*}
+            dove $s_0$ è la posizione iniziale del gas ideale. 
+            Dunque la forza peso del pistone è contrastata dalla forza che il gas esercita su di esso ($R=m\vec{g}+\vec{F_{gas}}=\vec{0}$) e quindi possiamo scrivere:
+            \begin{align*}
+                R = m\vec{g} + \vec{F_{gas}} = 0
+            \end{align*}
+            Ora assumendo che venga aggiunto un peso di massa $m$ al pistone, allora il pistone si muoverà di una distanza $l$ lungo l'asse $z$, viene quindi compiuto un lavoro $W$ sul sistema (dato che il pistone si abbassa) e quindi possiamo scrivere:
+            \begin{align*}
+                dw &= \vec{F}_{\text{gas}} \cdot d\vec{l} \\
+                &= \vec{F}^{\text{gas}}_{\perp} \cdot d\vec{l} \\
+                &= p \cdot \vec{S} \cdot d\vec{l} \\
+                &= p \cdot dV
+            \end{align*}
+            è stato possibile eseguire il passaggio da $F_{gas}$ a $p\cdot S$ in quanto la definizione di pressione è data da $P=\frac{F}{S}$ e quindi $F=P\cdot S$. Inoltre il passaggio da $p\cdot S \cdot d\vec{l}$ a $p\cdot V$ è dovuto al fatto che il pistone si muove lungo l'asse $z$ e quindi la variazione di volume del gas ideale è data da $V=S\cdot d\vec{l}$.
+        \end{proof}
+    \subsection{Lavoro termodinamico}
+        Il lavoro termodinamico è il lavoro compiuto da un sistema termodinamico per passare da uno stato iniziale a uno stato finale. Il lavoro termodinamico viene preso, a differenza del lavoro inteso in senso meccanico, come l'integrale della variazione di pressione rispetto alla variazione di volume del sistema. Il lavoro termodinamico è dato da:
+        \begin{align}
+            W_{a\rightarrow b}=\int_{A}^{B} p(V) dV
+        \end{align}
+        quindi intrinsecamente stiamo considerando la somma di tutti i piccolissimi lavori compiuti dal sistema per passare da uno stato iniziale a uno stato finale, dunque in teoria potremmo considerare ognuno di questi inter-stati come uno stato di equilibrio. Tuttavia in certe circostanze non è possibile considerare il sistema ``in equilibro'' in certi stati intermedi. Quando, invece, il sistema è in equilibrio in ogni stato intermedio chiameremo la trasformazione \textbf{quasi-statica} dato che ogni micro stato è in equilibrio. Dunque dato che $p=\frac{mRT}{V}$ possiamo definire:
+        \begin{align}
+            W_{a\rightarrow b}\stackrel{\operatorname{def}}{=}\int_{A}^{B} mRT \cdot \frac{dV}{V}
+        \end{align}
+
+    \subsection{Energia interna ai gas}
+        Sperimentalmente consideriamo un contenitore isolato termicamente, nel quale è presente un gas ideale in equilibrio in una metà del contenitore e il vuoto nell'altra metà. Se ora andiamo a rompere il setto che divide le due metà, il gas si espanderà nella metà vuota del contenitore. Durante questo processo il volume che il gas occupa raddoppia, osserviamo che la pressione di questo gas dimezza ma la temperatura rimane costante. Notiamo come nessun lavoro è stato compiuto sul gas e nessun calore è stato scambiato con l'ambiente circostante. Ma in quanto sia la pressione che il volume sono cambiati allora possiamo dire che l'energia interna del sistema dipende solo dalla temperatura e non dal volume o dalla pressione. Dunque possiamo scrivere:
+        \begin{align*}
+            \left.\begin{aligned}
+                U_i = U_f\\
+                T_i = T_f
+            \end{aligned}\right\}\Rightarrow U=U(T)
+        \end{align*}
+        Dunque possiamo dire che l'energia interna di un gas ideale è una funzione della temperatura e non del volume o della pressione.\newline
+        Altra osservazione che possiamo fare sul sistema è quella che l'energia interna del sistema è una funzione di stato, ovvero non dipende dal percorso seguito dal sistema per passare da uno stato iniziale a uno stato finale, ciò a differenza del lavoro e del calore che sono funzioni di percorso. Infatti se consideriamo due stati $A$ e $B$ del sistema, possiamo passare da $A$ a $B$ in diversi modi, ad esempio attraverso una trasformazione isocora o isobara. Tuttavia l'energia interna del sistema sarà sempre la stessa, indipendentemente dal percorso seguito ma non sarà mai la stessa per il lavoro e il calore. Dunque possiamo scrivere:
+        \begin{align*}
+            d U = \delta Q - \delta W
+        \end{align*}
+        al posto di usare la notazione infinitesimale errata per il calore e il lavoro.
