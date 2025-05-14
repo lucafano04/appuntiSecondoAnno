@@ -215,6 +215,156 @@ Passiamo ora a studiare la termodinamica, che è la branca della fisica che stud
         Dunque possiamo dire che l'energia interna di un gas ideale è una funzione della temperatura e non del volume o della pressione.\newline
         Altra osservazione che possiamo fare sul sistema è quella che l'energia interna del sistema è una funzione di stato, ovvero non dipende dal percorso seguito dal sistema per passare da uno stato iniziale a uno stato finale, ciò a differenza del lavoro e del calore che sono funzioni di percorso. Infatti se consideriamo due stati $A$ e $B$ del sistema, possiamo passare da $A$ a $B$ in diversi modi, ad esempio attraverso una trasformazione isocora o isobara. Tuttavia l'energia interna del sistema sarà sempre la stessa, indipendentemente dal percorso seguito ma non sarà mai la stessa per il lavoro e il calore. Dunque possiamo scrivere:
         \begin{align*}
-            d U = \delta Q - \delta W
+            d U = \delta \mathcal{Q} - \delta W
         \end{align*}
         al posto di usare la notazione infinitesimale errata per il calore e il lavoro.
+        \subsubsection{Relazione di Mayer}
+            La relazione di Mayer è una relazione che descrive, in una trasformazione isocora, la variazione di energia interna di un gas ideale in funzione della sua temperatura e del suo volume. Essa viene ricavata a partire dall'equazione di stato dei gas ideali e dalla definizione di energia interna:
+            \begin{align*}
+                nc_pdT &= nc_VdT + P dV \\
+            \end{align*}
+            Differenziando l'equazione di stato dei gas ideali
+            \begin{align*}
+                pdV + Vdp &= nRdT
+            \end{align*}
+            Dato che in trasformazione isobara $dp=0$ 
+            \begin{align}
+                nc_pdT &= nc_VdT + nRdT\\
+                \Rightarrow c_p - c_V &= R \label{eq:relazione_mayer}
+            \end{align}
+            ovvero $c_p$, il calore specifico a pressione costante, è maggiore del calore specifico a volume costante $c_V$ di una quantità pari alla costante universale dei gas ideali $R$. 
+\section{Trasformazioni gas ideali}
+    Come dalla relazione di Mayer, possiamo considerare ``gas ideali'' quei gas che hanno $c_p>c_V$ e che questi siano indipendenti dalla temperatura.
+    \subsection{Trasformazioni adiabatiche}
+        Il contenitore isolato termicamente è un sistema chiuso, in cui non c'è scambio di calore con l'ambiente circostante. In questo caso solo il lavoro può essere compiuto nel sistema (tramite una parete mobile) e quindi, tra due punti di equilibro $A$ e $B$, possiamo scrivere:
+        \begin{align}
+            W_{AB}=-\Delta U = -nc_V(T_B-T_A)=\frac{1}{\gamma-1}(p_aV_a-p_bV_b)
+        \end{align}
+        dove $\gamma=\frac{c_p}{c_V}$ è il rapporto tra il calore specifico a pressione costante e il calore specifico a volume costante.
+        \paragraph{Trasformazione reversibile}
+            Se la trasformazione è reversibile, possiamo scrivere:
+            \begin{align*}
+                d\mathcal{Q} = dU + dW = nc_VdT + pdV = 0
+            \end{align*}
+            in quanto la trasformazione è reversibile, possiamo usare l'equazione di stato per ognuno degli stati intermedi e dunque la pressione è esprimibile come $p=\frac{nRT}{V}$ e quindi:
+            \begin{align*}
+                nc_VdT + \frac{nRT}{V}dV = 0
+            \end{align*}
+            usando l'equazione \ref{eq:relazione_mayer} possiamo scrivere:
+            \begin{align*}
+                \frac{c_p - c_V}{c_V}\frac{dv}{V} + \frac{dT}{T} = 0 \Rightarrow (\omega-1)\frac{dv}{V} + \frac{dT}{T} = 0
+            \end{align*}
+            È quindi questa l'equazione che regola ogni coordinata delle trasformazioni adiabatiche reversibili. Integrando da $A$ a $B$ otteniamo:
+            \begin{align*}
+                \int_{T_A}^{T_B} (\gamma-1)\frac{dv}{V} = -\frac{dT}{T}\\
+                \Rightarrow \operatorname{ln} \left(\frac{V_B}{V_A}\right)^{\gamma-1} = \frac{c_V}{c_p} \operatorname{ln} \left(\frac{T_B}{T_A}\right)\\
+                T_AV_A^{\gamma-1} = T_BV_B^{\gamma-1}
+            \end{align*}
+            Dunque si hanno tre equazioni che legano le tre variabili $T$, $V$ e $p$:
+            \begin{align}
+                TV^{\gamma-1} = \text{costante}\\
+                pV^{\gamma} = \text{costante}\\
+                Tp^{\frac{\gamma-1}{\gamma}} = \text{costante}
+            \end{align}
+            Queste tre equazioni sono note come equazioni per le trasformazioni adiabatiche reversibili e descrivono il comportamento dei gas ideali durante le trasformazioni adiabatiche.
+    \subsection{Trasformazioni isoterme}
+        Le trasformazioni isoterme sono processi in cui la temperatura del sistema rimane costante. In questo caso, l'energia interna del sistema non varia e quindi possiamo scrivere:
+        \begin{align*}
+            dU = 0 \Rightarrow d\mathcal{Q} = dW
+        \end{align*}
+        Dunque il calore fornito al sistema è uguale al lavoro compiuto dal sistema. In questo caso, l'equazione di stato dei gas ideali diventa:
+        \begin{align*}
+            p_AV_A = p_BV_B
+        \end{align*}
+        Vista la definizione di lavoro termodinamico, e considerando che il sistema è in equilibrio, possiamo scrivere:
+        \begin{align*}
+            W_{AB} =& -\int_{A}^{B} p dV = -\int_{A}^{B} \frac{nRT}{V} dV\\
+            =& nRT\int_{A}^{B} \frac{1}{V} dV = nRT\operatorname{ln}\left(\frac{V_B}{V_A}\right)
+        \end{align*}
+        dunque il calore scambiato dal sistema non sarà mai nullo in quanto se così fosse allora $T=0$ il che è impossibile.\newline
+        Notare come nell'esperimento di \textit{Joule}, descritto in precedenza la trasformazione avvenuta è sia adiabatica che isoterma, questo solo perché la trasformazione è irreversibile. Infatti se la trasformazione fosse stata reversibile, non sarebbe stato possibile avere una trasformazione sia adiabatica che isoterma. 
+    \subsection{Trasformazioni isocore}
+        Le trasformazioni isocore sono processi in cui il volume del sistema rimane costante e il lavoro compiuto dal sistema è nullo. In questo caso, l'energia interna del sistema varia solo a causa del calore fornito al sistema, il che ci porta a:
+        \begin{align*}
+            \mathcal{Q} = nC_V(T_B - T_A)
+        \end{align*}
+        il che si traduce in:
+        \begin{align*}
+            \frac{p_A}{T_A} = \frac{p_B}{T_B} \Rightarrow \frac{p_a}{p_b} = \frac{T_a}{T_b}
+        \end{align*}
+        Dunque il rapporto tra le pressioni è sempre uguale al rapporto tra le temperature, se ne aumenta una aumenta anche l'altra e viceversa. Quando vuol cedere calore al gas allora ne và aumentata la temperatura e quindi la pressione, solitamente ciò viene fatto scaldando una parte del recipiente in cui è contenuto il gas, in questo modo però la trasformazione è irreversibile in quanto non c'è equilibrio termico tra il gas e il sistema. Se invece vengono messi a contatto due recipienti contenenti gas a temperature diverse, allora il sistema è in equilibrio termico e quindi la trasformazione è reversibile.
+    \subsection{Trasformazioni isobare, Entalpia}
+        Le trasformazioni isobare sono processi in cui la pressione del sistema rimane costante, dunque l'equazione di stato dei gas ideali diventa:
+        \begin{align*}
+            \frac{V_A}{T_A} = \frac{V_B}{T_B} \Rightarrow \frac{V_a}{V_b} = \frac{T_a}{T_b}
+        \end{align*}
+        Dunque sia lavoro che calore sono possono essere scambiati ed espressi come:
+        \begin{align*}
+            W_{AB} = -nR(T_B - T_A)\\
+            \mathcal{Q} = nc_p(T_B - T_A)
+        \end{align*}
+        Notiamo come entrambe le quantità dipendano dalla temperatura, ma il lavoro dipende dalla costante universale dei gas ideali $R$ mentre il calore dipende dal calore specifico a pressione costante $c_p$. Dunque possiamo definire una nuova grandezza fisica chiamata \textbf{entalpia} ($H$) che è definita come:
+        \begin{align}
+            H = U + pV
+        \end{align}
+        questa è può essere vista come una funzione di stato del sistema, in quanto sia $U$ che $pV$ dipendono solo dalle coordinate termodinamiche del sistema, ovvero la temperatura (in un gas ideale) in quanto $pV$ grazie alla funzione di stato dei gas ideali è esprimibile come $nRT$, il che ci porta a concludere che l'entalpia dei gai ideali è funzione solo della temperatura ($H=H(T)$). Possiamo definire una trasformazione infinitesima dell'entalpia come:
+        \begin{align*}
+            dH = dU + d(pV) = nc_VdT + nRdT = nc_p dT
+        \end{align*}
+        ed usando la relazione di Mayer possiamo scrivere:
+        \begin{align}
+            \Delta H &= n \int_{T_A}^{T_B} c_p dT \nonumber\\
+            \Delta H &= nc_p(T_B - T_A) \text{ se } c_p \text{ costante} \label{eq:entalpia}
+        \end{align}
+        Nel caso delle trasformazioni isobare, la variazione di entalpia è uguale al calore scambiato dal sistema mentre nelle trasformazioni isocore la variazione di entalpia è uguale alla differenza dell'energia interna del sistema.
+    \subsection{Riassumendo}
+        Riporto qui di seguito una tabella riassuntiva delle trasformazioni dei gas ideali, in modo da avere un quadro generale delle trasformazioni che possono avvenire in un sistema termodinamico.
+        \begin{table}[H]
+            \centering
+            \begin{tabular}{|c|c|c|c|}
+                \hline
+                Trasformazione & Lavoro & Calore & Energia interna\\
+                \hline
+                Adiabatica & $W_{AB} = \frac{1}{\gamma-1}\left(p_Av_A-p_BV_B\right)$ & $Q=0$ & $\Delta U = -W_{AB}$\\
+                Isoterma & $W_{AB} = nRT\operatorname{ln}\left(\frac{V_B}{V_A}\right)$ & $Q=nRT\operatorname{ln}\left(\frac{V_B}{V_A}\right)$ & $\Delta U = 0$\\
+                Isocora & $W_{AB} = 0$ & $Q=nC_V(T_B - T_A)$ & $\Delta U = nC_V(T_B - T_A)$\\
+                Isobara & $W_{AB} = -nR(T_B - T_A)$ & $Q=nC_p(T_B - T_A)$ & $\Delta U = nC_V(T_B - T_A)$\\
+                \hline
+            \end{tabular}
+        \end{table}
+        Di seguito il grafico delle trasformazioni volume/pressione di un gas ideale:
+        \begin{figure}[H]
+            \centering
+            \begin{tikzpicture}[scale=0.8, font=\small]
+                \begin{axis}[
+                    axis lines = middle,
+                    xlabel = {$V$},
+                    ylabel = {$P$},
+                    xtick={},
+                    ytick={},
+                    xmin=0, xmax=5,
+                    ymin=0, ymax=5,
+                ]
+                    % Adiabatiche
+                    \addplot[domain=0.1:5, thick,samples=100, red] {1/x^2};
+                    % Isoterme
+                    \addplot[domain=0.1:5, thick,samples=100, blue] {1/x};
+                    % Isocore
+                    \addplot[domain=0:5, thick,samples=100, green] {1};
+                    % Isobare
+                    \addplot[thick,samples=100, orange] coordinates {(2,0) (2,5)};
+                \end{axis}
+            \end{tikzpicture}
+            \caption{Trasformazioni dei gas ideali}
+        \end{figure}
+        La curva rossa rappresenta la trasformazione adiabatiche, la curva blu rappresenta la trasformazione isoterma, la retta verde rappresenta la trasformazione isocora e la retta arancione rappresenta la trasformazione isobara.
+    \subsection{Trasformazioni politropiche e generali}
+        Le trasformazioni politropiche sono tali che per tutta la loro durata il calore specifico rimane costante ($c_k$) e quindi per la prima legge della termodinamica possiamo scrivere:
+        \begin{align*}
+            nc_vdT = nc_kdT - pdV
+        \end{align*}
+        definiamo ora la costante $k$ come la somma del rapporto tra la costante $R$ ed la differenza tra i calori specifici $c_v$ e $c_k$ con 1 ($k=\frac{R}{c_v-c_k}+1$) e quindi scriviamo:
+        \begin{align*}
+            PV^{k} = \text{costante}
+        \end{align*}
+        per le altre trasformazioni generali ricorriamo al primo principio della termodinamica (\ref{eq:prima_legge_termo}).
