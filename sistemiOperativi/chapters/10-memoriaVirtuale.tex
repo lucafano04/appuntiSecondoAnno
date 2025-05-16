@@ -1,0 +1,152 @@
+\chapter{Memoria Virtuale}
+Andiamo ora ad analizzare la gestione di sistemi nei quali è possibile usare più memoria (\texttt{RAM}) di quella fisicamente installata. Questo è possibile grazie alla \textbf{memoria virtuale} o \textit{swap}. La memoria virtuale è una tecnica che consente di utilizzare una porzione del disco rigido come se fosse memoria principale, permettendo così di eseguire più processi contemporaneamente anche quando la memoria fisica è insufficiente. In questo capitolo vedremo come funziona la memoria virtuale, i suoi vantaggi e svantaggi, e come viene implementata nei sistemi operativi moderni.
+\paragraph{Concetti fondamentali}
+    Ogni pagina in memoria primaria puo essere ``\textit{swapped}'' con una pagina in memoria secondaria, inoltre la memoria secondaria permette di avere un ulteriore livello di separazione tra il livello fisico e il livello logico. L'implementazione della memoria virtuale può essere realizzate o tramite paginazione su domanda (\textit{demand paging}) o tramite segmentazione su domanda (\textit{demand segmentation}). 
+
+\section{Paginazione su domanda}
+    Il principio della paginazione su domanda è quello di caricare in memoria solo le pagine necessarie per eseguire un processo. Quando un processo richiede una pagina che non è attualmente in memoria, si verifica un \textbf{page fault}, che è un'interruzione generata dal processore per indicare che la pagina richiesta non è presente in memoria.
+    \paragraph{Vantaggi} Il principale vantaggio della paginazione su domanda è che richiede meno interazioni di \texttt{I/O} quando è necessario lo \textit{swapping}, inoltre si una meno memoria fisica, poiché solo le pagine necessarie vengono caricate in memoria. Questo consente di eseguire più processi contemporaneamente e di utilizzare la memoria in modo più efficiente. Risulta necessario però conoscere lo stato di ogni pagina, se è in memoria o meno.
+    \paragraph{Stato delle pagine} Per tenere traccia dello stato delle pagine, il sistema operativo aggiunge un bit di stato nella tabella delle pagine. Questo bit può assumere due valori: \texttt{0} se la pagina è nel disco e \texttt{1} se è in memoria. Quando un processo richiede una pagina, il sistema operativo controlla il bit di stato per determinare se la pagina è presente in memoria o meno. Se la pagina non è presente, il sistema operativo genera un \textit{page fault} e carica la pagina richiesta dalla memoria primaria.
+    \subsubsection{Gestione del page fault} 
+        Quando si verifica un \textit{page fault}, il sistema operativo esegue una serie di operazioni per gestire la situazione. Queste operazioni possono variare a seconda del sistema operativo, ma in generale seguono questi passaggi:
+        \begin{enumerate}
+            \item \texttt{SO} verifica se la pagina è un riferimento valido, se non lo è viene generato un \textit{segmentation fault} e il processo termina.
+            \item Viene caricato un frame vuoto
+            \item Viene eseguito lo \textit{swapping} della pagina, ovvero viene copiata la pagina dal disco alla memoria fisica.
+            \item Modifica la tabella delle pagine per indicare che la pagina è ora presente in memoria.
+            \item Riprende l'esecuzione del processo, riprendendo l'istruzione che ha causato il \textit{page fault}.
+        \end{enumerate}
+        Tutti questi passaggi richiedono tempo e risorse, dunque il tempo effettivo di accesso alla memoria può essere calcolato come:
+        \begin{align*}
+            \texttt{EAT} = (1-p) \cdot \texttt{T\textsubscript{mem}} + p \cdot (\texttt{T\textsubscript{page fault}}
+        \end{align*}
+        Dove il \texttt{EAT} è il tempo medio di accesso alla memoria, \texttt{p} è la probabilità di un \textit{page fault}, \texttt{T\textsubscript{mem}} è il tempo di accesso alla memoria calcolato come:
+        \begin{align*}
+            \texttt{T\textsubscript{mem}} = (\texttt{T\textsubscript{mem}} + \texttt{T\textsubscript{TLB}}) \cdot \alpha + (2 \cdot \texttt{T\textsubscript{mem}} + \texttt{T\textsubscript{TLB}}) \cdot (1-\alpha)
+        \end{align*}
+        Dove \texttt{T\textsubscript{TLB}} è il tempo di accesso alla memoria secondaria e \texttt{alpha} è la probabilità di un \textit{TLB hit}. La \texttt{TLB} è una cache che memorizza le traduzioni degli indirizzi virtuali in indirizzi fisici, riducendo così il numero di accessi alla tabella delle pagine.\newline
+        Il tempo $\texttt{T\textsubscript{page fault}}$ è dato da tre componenti principali:
+        \begin{itemize}
+            \item Il tempo necessario per l'interrupt 
+            \item Lo \textit{swap} in lettura della pagina
+            \item Il costo del riavvio del processo
+            \item Successivamente il tempo di \textit{swap} in scrittura della pagina
+        \end{itemize}
+        \paragraph{Rimpiazzo delle pagine}
+            Nel caso non ci siano \textit{frame} liberi in memoria al momento della richiesta di una pagina, il sistema operativo deve prima cercare le pagine che sono in memoria e successivamente eseguire il rimpiazzo di una pagina. Il rimpiazzo delle pagine deve seguire un preciso algoritmo in modo da garantire la massima efficienza minimizzando il numero di \textit{page fault}. Di seguito un esempio di algoritmo di rimpiazzo delle pagine:
+            \begin{enumerate}
+                \item Il sistema operativo verifica una tabella per determinare se questa è in memoria o meno.
+                \item Viene cercato un \textit{frame} vuoto in memoria.
+                \subitem a) Se presente salto al punto 4
+                \subitem b) Se non presente viene eseguito l'algoritmo di rimpiazzo delle pagine.
+                \item Viene eseguito lo \textit{swap} della pagina ``vittima'' sul disco.
+                \item Viene eseguito lo \textit{swap} della pagina richiesta nel \textit{frame} vuoto (o in un \textit{frame} di una pagina ``vittima'').
+                \item Viene aggiornata la tabella delle pagine per indicare che la pagina è ora presente in memoria (e la pagina ``vittima'' non è più presente).
+                \item Viene ripresa l'esecuzione del processo, riprendendo l'istruzione che ha causato il \textit{page fault}.
+            \end{enumerate} 
+            Come si può notare nel caso di un \textit{page fault} senza \textit{frame} liberi, il sistema operativo deve eseguire due accessi alla memoria per ogni \textit{page fault}, uno per la pagina ``vittima'' e uno per la pagina richiesta. Questo raddoppia il tempo di esecuzione del processo di \textit{page fault}, per ottimizzare il tempo di accesso alla memoria viene usato un \texttt{bit} che simboleggia se la pagina è stata modificata o meno. Se la pagina non è stata modificata, il sistema operativo può semplicemente scartarla senza eseguire lo \textit{swap} sul disco. Questo riduce il numero di accessi alla memoria e migliora le prestazioni del sistema. 
+    \subsubsection{Problematiche della paginazione su domanda}
+        La paginazione su domanda presenta alcune problematiche, tra cui:
+        \begin{itemize}
+            \item La scelta della pagina da rimpiazzare
+            \item L'allocazione dei frame in memoria
+        \end{itemize}
+        per risolvere ciò sono stati sviluppati diversi algoritmi di rimpiazzo delle pagine e di allocazione dei frame.
+\section{Algoritmi di rimpiazzo delle pagine}
+    Come anticipato l'obbiettivo principale degli algoritmi di rimpiazzo delle pagine è quello di minimizzare il numero di \textit{page fault} e massimizzare l'efficienza del sistema. Valuteremo questi algoritmi in modo analitico andando a calcolare il numero di \textit{page fault} su una stringa di indirizzi sapendo il numero di \textit{frame} disponibili in memoria. In ogni caso il numero di \textit{page fault} è inversamente proporzionale al numero di \textit{frame} disponibili in memoria.
+    \subsubsection{Algoritmo \texttt{FIFO}}
+        L'algoritmo \texttt{FIFO} (\textit{First In First Out}) è uno dei più semplici algoritmi di rimpiazzo delle pagine. In questo algoritmo, la pagina che è stata in memoria per più tempo viene rimpiazzata per prima. Questo algoritmo è semplice da implementare, ma può portare a situazioni in cui le pagine più frequentemente utilizzate vengono rimpiazzate, causando un aumento del numero di \textit{page fault}. Di seguito un esempio di calcolo del numero di \textit{page fault} usando l'algoritmo \texttt{FIFO}:\newline
+        Assumiamo la stringa $7,0,1,2,0,3,0,4,2,3,0,3,2,1,2,0,1,7,0,1$ e 3 \textit{frame} disponibili in memoria. Allora la tabella delle pagine nel tempo sarà:
+        \begin{table}[H]
+            \centering
+            \begin{tabular}{|c|c|c|c|c|}
+                \hline
+                \textbf{Tempo} & \textbf{Pagina Richiesta} & \textbf{Frame 1} & \textbf{Frame 2} & \textbf{Frame 3} \\
+                \hline
+                1 & \textbf{7} & 7 & - & - \\
+                2 & \textbf{0} & 7 & 0 & - \\
+                3 & \textbf{1} & 7 & 0 & 1 \\
+                4 & \textbf{2} & 2 & 0 & 1 \\
+                5 & 0 & 2 & 0 & 1 \\
+                6 & \textbf{3} & 2 & 3 & 1 \\
+                7 & \textbf{0} & 2 & 3 & 0 \\
+                8 & \textbf{4} & 4 & 3 & 0 \\
+                9 & \textbf{2} & 4 & 2 & 0 \\
+                10 & \textbf{3} & 4 & 2 & 3 \\
+                11 & \textbf{0} & 0 & 2 & 3 \\
+                12 & 3 & 0 & 2 & 3 \\
+                13 & 2 & 0 & 2 & 3 \\
+                14 & \textbf{1} & 0 & 1 & 3 \\
+                15 & \textbf{2} & 0 & 1 & 2 \\
+                16 & 0 & 0 & 1 & 2 \\
+                17 & 1 & 0 & 1 & 2 \\
+                18 & \textbf{7} & 7 & 1 & 2 \\
+                19 & \textbf{0} & 7 & 0 & 2 \\
+                20 & \textbf{1} & 7 & 0 & 1 \\
+                \hline
+            \end{tabular}
+        \end{table}
+        notiamo un totale di 12 \textit{page fault}, notiamo come ad esempio quando nel punto 5 usiamo la pagina 0 questa e scattata al punto 6 e poi ri-caricata al punto 7 causando un \textit{page fault} inutile in quanto rimpiazzando un altro \textit{frame} non sarebbe successo. Questo algoritmo è semplice da implementare, ma è soggetto all'anomalia di \textit{Belady}, questa anomalia si verifica quando aumentando il numero di \textit{frame} disponibili in memoria, non è detto che il numero di \textit{page fault} diminuisca. Questo è dovuto al fatto che l'algoritmo \texttt{FIFO} non tiene conto dell'uso delle pagine, ma solo del tempo in cui sono state caricate in memoria. 
+        \subsubsection{Algoritmo Ideale}
+            L'algoritmo ideale è un algoritmo che dovrebbe prevedere il futuro e rimpiazzare la pagina che non verrà più utilizzata per il periodo di tempo più lungo. Questo algoritmo è teorico e non può essere implementato nella pratica ma nel caso di un programma compilato è possibile stimare la stringa di indirizzi e applicare l'algoritmo ideale. Di seguito un esempio di calcolo del numero di \textit{page fault} usando l'algoritmo ideale e la stessa stringa di prima:\newline
+            Assumiamo la stringa $7,0,1,2,0,3,0,4,2,3,0,3,2,1,2,0,1,7,0,1$ e 3 \textit{frame} disponibili in memoria. Allora la tabella delle pagine nel tempo sarà:
+            \begin{table}[H]
+                \centering
+                \begin{tabular}{|c|c|c|c|c|}
+                    \hline
+                    \textbf{Tempo} & \textbf{Pagina Richiesta} & \textbf{Frame 1} & \textbf{Frame 2} & \textbf{Frame 3} \\
+                    \hline
+                    1 & \textbf{7} & 7 & - & - \\
+                    2 & \textbf{0} & 7 & 0 & - \\
+                    3 & \textbf{1} & 7 & 0 & 1 \\
+                    4 & \textbf{2} & 2 & 0 & 1 \\
+                    5 & 0 & 2 & 0 & 1 \\
+                    6 & \textbf{3} & 2 & 0 & 3 \\
+                    7 & 0 & 2 & 0 & 3 \\
+                    8 & \textbf{4} & 2 & 4 & 3 \\
+                    9 & 2 & 2 & 4 & 3 \\
+                    10 & 3 & 2 & 4 & 3 \\
+                    11 & \textbf{0} & 2 & 0 & 3 \\
+                    12 & 3 & 2 & 0 & 3 \\
+                    13 & 2 & 2 & 0 & 3 \\
+                    14 & \textbf{1} & 2 & 0 & 1 \\
+                    15 & 2 & 2 & 0 & 1 \\
+                    16 & 0 & 2 & 0 & 1 \\
+                    17 & 1 & 2 & 0 & 1 \\
+                    18 & \textbf{7} & 7 & 0 & 1 \\
+                    19 & 0 & 7 & 0 & 1 \\
+                    20 & 1 & 7 & 0 & 1 \\
+                    \hline
+                \end{tabular}
+            \end{table}
+            Notiamo come in questo caso il numero di \textit{page fault} sia 9 rispetto ai 12 dell'algoritmo \texttt{FIFO}. Questo algoritmo è teorico e non può essere implementato nella pratica, ma può essere utilizzato come riferimento per valutare le prestazioni degli altri algoritmi di rimpiazzo delle pagine.
+        \subsubsection{Algoritmo \texttt{LRU}}
+            L'algoritmo \texttt{LRU} (\textit{Least Recently Used}) è un algoritmo di rimpiazzo delle pagine che tiene conto dell'uso delle pagine. In questo algoritmo, la pagina che non è stata utilizzata per il periodo di tempo più lungo viene rimpiazzata per prima. Questo algoritmo è più efficiente rispetto all'algoritmo \texttt{FIFO}, poiché tiene conto dell'uso passato delle pagine e cerca di mantenere in memoria le pagine più frequentemente utilizzate. Ma comunque non è esente da problematiche, in quanto richiede una maggiore complessità di implementazione e può portare a un aumento del numero di accessi alla memoria per tenere traccia dell'uso delle pagine. Di seguito un esempio di calcolo del numero di \textit{page fault}\newline
+            Tralasciando l'esempio un problema di questo algoritmo è l'implementazione infatti richiede che venga tenuta traccia di tutte le pagine in memoria e del loro utilizzo, il che può richiedere una grande quantità di memoria aggiuntiva per memorizzare l'ultima referenza di ogni pagina in memoria oltre ad un tempo di ricerca dell'ultimo accesso, il che può portare a un aumento del numero di accessi alla memoria e quindi a un aumento del tempo di esecuzione del processo. Per questo motivo, l'algoritmo \texttt{LRU} viene approssimato in molti sistemi operativi moderni in quanto la sua reale implementazione porterebbe a più svantaggi che vantaggi.
+            \paragraph{Approssimazione dell'algoritmo \texttt{LRU}}
+                La tecnica principale di approssimazione dell'algoritmo \texttt{LRU} è quella di utilizzare un contatore per tenere traccia dell'uso delle pagine. In questo caso partiamo di algoritmo \texttt{LFU} (\textit{Least Frequently Used}) che tiene traccia del numero di accessi a ciascuna pagina e rimpiazza la pagina meno frequentemente utilizzata. Questo algoritmo è più semplice da implementare rispetto all'algoritmo \texttt{LRU}, ma può portare a situazioni in cui le pagine più frequentemente utilizzate vengono rimpiazzate, causando un aumento del numero di \textit{page fault}. 
+            \paragraph{Approssimazione con \texttt{MFU}}
+                Un altro algoritmo di approssimazione dell'algoritmo \texttt{LRU} è l'algoritmo \texttt{MFU} (\textit{Most Frequently Used}), che tiene traccia del numero di accessi a ciascuna pagina e rimpiazza la pagina più frequentemente utilizzata.
+            \paragraph{Approssimazion con timpiazzo \textit{second chance}}
+                Un altro algoritmo di approssimazione dell'algoritmo \texttt{LRU} è l'algoritmo \texttt{second chance}, che sostanzialmente è una variante dell'algoritmo \texttt{FIFO} circolare con un bit di riferimento. In questo algoritmo è presente una ``lancetta'' che punta alla pagina successiva da rimpiazzare, questa se il \texttt{bit} di riferimento è 0 viene rimpiazzata, se è 1 viene azzerato e la lancetta si sposta alla pagina successiva. Se una pagina in memoria viene richiesta, il sistema operativo imposta il \texttt{bit} di riferimento a 1. Questo algoritmo è più efficiente rispetto all'algoritmo \texttt{FIFO}, poiché tiene minimamente conto dell'uso delle pagine e cerca di mantenere in memoria le pagine più frequentemente utilizzate.
+\section{Allocazione dei frame}
+    L'allocazione dei frame è un altro aspetto importante della gestione della memoria virtuale. Il sistema operativo deve decidere come allocare i frame in memoria per i processi in esecuzione. Bisogna tenere conto di diversi fattori, tri quali troviamo il fatto che ogni processo necessita di un numero minimo di pagine per essere eseguito, ogni istruzione interrotta per un \textit{page fault} deve essere ripresa, ed il numero minimo di pagine è dato dal numero massimo di indirizzi specificabili in una istruzione.
+    \paragraph{Allocazione fissa}
+        L'allocazione fissa è un metodo di allocazione dei frame in cui il sistema operativo alloca in parti uguali i frame in memoria per ogni processo. Con $n$ processi e $m$ frame disponibili in memoria, ogni processo riceve $\frac{m}{n}$ frame. Oppure alloca un numero di frame proporzionalmente alla dimensione del processo. Questo metodo è semplice da implementare, ma può portare a una scarsa utilizzo della memoria se i processi hanno dimensioni molto diverse o se alcuni processi non utilizzano tutti i frame assegnati.
+    \paragraph{Allocazione variabile}
+        L'allocazione variabile è un metodo di allocazione dei frame in cui il sistema operativo alloca i frame in memoria in base alle esigenze dei processi. In questo metodo, il sistema operativo deve tenere traccia o calcolando il \textit{working set} o calcolando il \textit{page fault frequency} per determinare il numero di frame da allocare a ciascun processo. Questo metodo è più complesso da implementare rispetto all'allocazione fissa, ma può portare a un utilizzo più efficiente della memoria se i processi hanno dimensioni diverse o se alcuni processi non utilizzano tutti i frame assegnati.
+    \subsubsection{Calcolo del \textit{working set}}
+        Il \textit{working set} è un criterio per determinare il numero di frame da allocare a ciascun processo. Il \textit{working set} viene calcolato sulla base del modello della località temporale, ovvero se e quando un processo accede a una pagina, è probabile che acceda a pagine vicine in un breve periodo di tempo, questo fenomeno viene calcolato analizzando gli accessi passati a una pagina. Il \textit{working set} è definito come il numero delle pagine referenziate nell'intervallo di tempo $t-\Delta, t$, dove $t$ è il tempo corrente e $\Delta$ è un intervallo di tempo definito dal sistema operativo. Anche qui la scelta del valore di $\Delta$ è critica, in quanto se troppo grande si rischia di non avere un numero sufficiente di frame per il processo, mentre se troppo piccolo si rischia di avere un numero eccessivo di frame per il processo. Per misurare il \textit{working set} approssimiamo tramite dei timer e dei bit di riferimento, in questo se allo scadere del timer il \texttt{bit} di riferimento è 1, allora la pagina è parte del \textit{working set}, altrimenti non lo è e viene scartata.\newline
+        La richiesta totale dei frame di tutti i processi è data da:
+        \begin{align*}
+            \texttt{D} = \sum_{i} \texttt{WSS}_i
+        \end{align*}
+        se $\texttt{D}$ è maggiore del numero di frame disponibili in memoria, si verifica un errore noto come \textit{thrashing}, in questo caso il sistema operativo deve decidere quali processi terminare o sospendere per liberare frame in memoria.
+        \paragraph{\textit{Trashing}}
+            Il \textit{thrashing} è una situazione che si verifica quando il numero di processi associati a un processo è minore rispetto ad una certa soglia di frame, in questo caso il sistema operativo deve eseguire un numero eccessivo di \textit{page fault} per soddisfare le richieste del processo. Questo porta a un aumento del numero di accessi alla memoria e a una diminuzione delle prestazioni del sistema
+    \subsubsection{Gestione della frequenza dei \textit{page fault}}
+        La gestione della frequenza dei \textit{page fault} è un altro metodo per determinare il numero di frame da allocare a ciascun processo. In questo metodo, il sistema operativo stabilisce una soglia di frequenza dei \textit{page fault} per ciascun processo e monitora il numero di \textit{page fault} per ciascun processo. Se il numero di \textit{page fault} supera la soglia, il sistema operativo aumenta il numero di frame allocati al processo. Se il numero di \textit{page fault} è inferiore alla soglia, il sistema operativo diminuisce il numero di frame allocati al processo. 
+    \subsubsection{Altre considerazione}
+        Bisogna tenere le pagine di piccola dimensione in quanto così ridurremo la frammentazione interna. Se abbassiamo la dimensione delle pagine aumentiamo il numero di pagine e quindi deve essere aumentato il numero di frame e la dimensione della tabella delle pagine. Infine bisogna tenere conto dell'\texttt{I/O} \textit{overhead} che porterebbe ad una pagina più grande per ammortizzare il costo di accesso alla memoria, và quindi trovato un compromesso tra le dimensioni delle pagine e il numero di frame disponibili in memoria.
+        \paragraph{Blocco di \textit{frame} (\textit{frame blocking})}
+            Il blocco di \textit{frame} è una tecnica che permette che una pagina non sia rimpiazzata, utile per processi \textit{kernel} o per processi che richiedono un numero elevato di frame. In questo caso il sistema operativo deve tenere traccia dei frame bloccati e non rimpiazzarli durante il rimpiazzo delle pagine.
