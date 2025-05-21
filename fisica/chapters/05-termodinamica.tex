@@ -368,3 +368,142 @@ Passiamo ora a studiare la termodinamica, che è la branca della fisica che stud
             PV^{k} = \text{costante}
         \end{align*}
         per le altre trasformazioni generali ricorriamo al primo principio della termodinamica (\ref{eq:prima_legge_termo}).
+\section{Trasformazioni Cicliche}
+    Come visto in precedenza in una trasformazioni la differenza di energia interna è data dalla differenza del'energia interna finale e quella iniziale, in una trasformazione ciclica questa è nulla ($\Delta U = U_f - U_i = 0$) in quanto il punto finale coincide con quello iniziale. Non possiamo dire lo stesso per il lavoro e il calore, abbiamo già accennato che mentre l'energia interna è una funzione di stato, il lavoro e il calore sono funzioni di percorso. Possiamo quindi scrivere il lavoro compiuto dal sistema come:
+    \begin{align*}
+        W_{i\to f} = \int_{i}^{f} dW = \oint_{C} dW = W_C
+    \end{align*}
+    dove $C$ è il percorso chiuso che il sistema compie per tornare al punto iniziale. Ora considerando il grafico $P/V$ verrà eseguito del ``lavoro positivo'', ovvero il sistema compie lavoro sul sistema esterno, se il circuito è in senso orario, mentre il lavoro compiuto dal sistema esterno sul sistema è negativo se il circuito è in senso antiorario. \newline
+    Dunque in caso di lavoro positivo ci troviamo davanti un ciclo termico, o macchina termica, dove il calore viene trasformato in parte in lavoro meccanico ed in parte dissipato nell'ambiente. In caso di lavoro negativo ci troviamo davanti un ciclo frigorifero, o macchina frigorifera, dove il lavoro meccanico viene trasformato in calore e quindi il sistema assorbe calore dall'ambiente.
+    \paragraph{Rendimento}
+        Il rendimento di una macchina termica è definito come il rapporto tra il lavoro compiuto dalla macchina e il calore assorbito dalla sorgente calda. Esso è dato da:
+        \begin{align}
+            \eta = \frac{W}{Q_A} = \frac{Q_{tot} - \overbrace{\Delta U}^{=0}}{Q_A} = \frac{Q_{tot}}{Q_A} = \frac{Q_A+Q_C}{Q_A} = 1 + \frac{Q_C}{Q_A}
+        \end{align}
+        dove $Q_A$ è il calore assorbito dalla sorgente calda e $Q_{tot}$ è il totale del calore (assorbito e ceduto) dalla macchina termica. Notiamo dunque che il rendimento di una macchina termica non può mai essere superiore a $1$ in quanto il calore ceduto è una quantità negativa (per la convenzione di segno) e quindi il rendimento è sempre minore di $1$. \newline
+        Il rendimento di una macchina frigorifera è definito come:
+        \begin{align}
+            CoP = \frac{Q_A}{W_\epsilon} = \frac{Q_A}{|W_{\texttt{NEED}}|}
+        \end{align}
+    \newpage
+    \subsection{Ciclo di Carnot}
+        Il ciclo di Carnot è un ciclo termodinamico ideale in quattro fasi, può essere rappresentato graficamente come segue:
+        \begin{figure}[H]
+            \centering
+            \begin{tikzpicture}
+                \begin{axis}[
+                    axis lines = middle,
+                    xlabel = {$V$},
+                    ylabel = {$P$},
+                    xtick={},
+                    ytick={},
+                    xmin=0, xmax=3,
+                    ymin=0, ymax=3,
+                ]
+                    % Adiabatiche
+                    \addplot[domain=0.3:3, thick,samples=100, red] {1/(x-(1/5))^2};
+                    \addplot[domain=0.3:3, thick,samples=100, green] {2/(x-(1/5))^2};
+                    % Isoterme
+                    \addplot[domain=0.15:3, thick,samples=100, blue] {1/x};
+                    \addplot[domain=0.15:3, thick,samples=100, yellow] {2/x};
+                    % Punti 
+                    \addplot[only marks, mark=*, mark options={scale=1}, color=red] coordinates {(0.85311, 2.34436)};
+                    \node at (axis cs:0.85311, 2.34436) [anchor=west] {$A$};
+                    \addplot[only marks, mark=*, mark options={scale=1}, color=red] coordinates {(1.37082, 1.45898)};
+                    \node at (axis cs:1.37082, 1.45898) [anchor=west] {$B$};
+                    \addplot[only marks, mark=*, mark options={scale=1}, color=red] coordinates {(2.38322, 0.4196)};
+                    \node at (axis cs:2.38322, 0.4196) [anchor=west] {$C$};
+                    \addplot[only marks, mark=*, mark options={scale=1}, color=red] coordinates {(1.37082, 0.72949)};
+                    \node at (axis cs:1.37082, 0.72949) [anchor=west] {$D$};
+                \end{axis}
+            \end{tikzpicture}
+        \end{figure}
+        questo ciclo è composto da due trasformazioni adiabatiche e due trasformazioni isoterme. Le trasformazioni isoterme sono rappresentate dalle curve blu e gialla, mentre le trasformazioni adiabatiche sono rappresentate dalle curve rosse e verdi. \newline
+        In questo ciclo il lavoro è dato dall'area racchiusa tra le curve, per calcolarne il valore dobbiamo calcolare il lavoro svolto dalle diverse trasformazioni, il quale sarà dato da:
+        \begin{align*}
+            W_{AB} &= nRT_{1}\operatorname{ln}\left(\frac{V_B}{V_A}\right)\\
+            W_{BC} &= -mc_V(T_1-T_2)\\
+            W_{CD} &= nRT_{2}\operatorname{ln}\left(\frac{V_D}{V_C}\right)\\
+            W_{DA} &= -mc_V(T_2-T_1)
+        \end{align*}
+        Ciò in quanto la trasformazione da $A$ a $B$ è una trasformazione espansiva isoterma a temperatura $T_1$, la trasformazione da $B$ a $C$ è una trasformazione espansiva adiabatiche da $T_1$ a $T_2$, la trasformazione da $C$ a $D$ è una trasformazione isoterma compressiva a temperatura $T_2$ e infine la trasformazione da $D$ a $A$ è una trasformazione adiabatiche compressiva da $T_2$ a $T_1$. Andando a sommare i vari lavori compiuti dal sistema otteniamo:
+        \begin{align*}
+            W =& W_{AB} + W_{BC} + W_{CD} + W_{DA}\\
+            =& nRT_{1}\operatorname{ln}\left(\frac{V_B}{V_A}\right) - \cancel{mc_V(T_1-T_2)} + nRT_{2}\operatorname{ln}\left(\frac{V_D}{V_C}\right) - \cancel{mc_V(T_2-T_1)}\\
+            =& nR\left(T_{1}\operatorname{ln}\left(\frac{V_B}{V_A}\right) + T_{2}\operatorname{ln}\left(\frac{V_D}{V_C}\right)\right)
+        \end{align*}
+        Ma in quanto $\operatorname{ln}\left(\frac{V_B}{V_A}\right)$ è una quantità positiva dato che il volume finale è maggiore di quello iniziale, mentre $\operatorname{ln}\left(\frac{V_D}{V_C}\right)$ è una quantità negativa dato che il volume finale è minore di quello iniziale allora diciamo che nella prima avviene un lavoro positivo mentre nella seconda avviene un lavoro negativo, conseguentemente il calore $\mathcal{Q}_A$ assorbito dalla sorgente calda sarà uguale al lavoro $W_{AB}$ compiuto dal sistema e il calore $\mathcal{Q}_C$ ceduto alla sorgente fredda sarà uguale al lavoro $W_{CD}$ compiuto dal sistema. L'efficienza di questo ciclo è data da:
+        \begin{align*}
+            \eta = \frac{W}{Q_A} =& 1 + \frac{\cancel{nR}\left(T_{1}\operatorname{ln}\left(\frac{V_D}{V_C}\right)\right)}{\cancel{nR}\left(T_{2}\operatorname{ln}\left(\frac{V_B}{V_A}\right)\right)}
+        \end{align*}
+        Il che in quanto $\frac{V_B}{V_A}=\frac{V_D}{V_C}$ dato che sono in gioco le trasformazioni isoterme che generano il seguente sistema di equazioni:
+        \begin{align*}
+            \left\{\begin{aligned}
+                p_dV_d &= p_aV_a\\
+                p_bV_b &= p_cV_c\\
+                p_aV_a &= p_bV_b\\
+                p_cV_c &= p_dV_d
+            \end{aligned}\right.\Rightarrow \frac{V_B}{V_A} = \frac{V_D}{V_C}
+        \end{align*}
+        visto che il logaritmo di un rapporto uguale è uguale al logaritmo del rapporto stesso, possiamo scrivere:
+        \begin{align*}
+            \eta = 1 - \frac{T_2}{T_1}
+        \end{align*}
+        dunque il rendimento nel ciclo di Carnot è dato dalla differenza tra la temperatura della sorgente calda e quella della sorgente fredda. Se questa differenza si avvicina a $0$ allora il rapporto tende a $1$ e quindi il rendimento tende a $0$, se invece la differenza è molto altra tale per cui il rapporto tende a $0$ ($T_2 \ll T_1$) allora il rendimento tende a $1$. 
+    \subsection{Ciclo di Otto - Motori Diesel} 
+        Il ciclo di Otto è un ciclo termodinamico ideale che descrive il funzionamento dei motori a combustione interna, in particolare i motori a benzina. Esso è composto da sei trasformazioni termodinamiche:
+        \begin{itemize}
+            \item $O\to A$ - Espansione reversibile isobara
+            \item $A\to B$ - Compressione reversibile adiabatiche
+            \item $B\to C$ - Trasformazione isocora
+            \item $C\to D$ - Espansione reversibile adiabatiche
+            \item $D\to E$ - Trasformazione isocora
+            \item $E \to O$ - Compressione reversibile isocora
+        \end{itemize}
+        Il ciclo di Otto può essere rappresentato graficamente come segue:
+        \begin{figure}[H]
+            \centering
+            \begin{tikzpicture}
+                \begin{axis}[
+                    axis lines=middle,
+                    xlabel={$v$},
+                    ylabel={$p$},
+                    xmin=0, xmax=5,
+                    ymin=0, ymax=5,
+                    xtick=\empty,
+                    ytick=\empty,
+                    enlargelimits=false,
+                    clip=false,
+                    axis line style={->},
+                    every axis x label/.style={at={(axis description cs:1.05,0)}, anchor=west},
+                    every axis y label/.style={at={(axis description cs:0,1.05)}, anchor=south},
+                ]
+
+                % Curve isoterme
+                \addplot[domain=0.7:4.2, thick, samples=100] {3/x}; % curva superiore: 3 -> 4
+                \addplot[domain=0.7:4.2, thick, samples=100] {2/x}; % curva inferiore: 2 -> 1
+
+                % Segmenti verticali e orizzontali
+                \addplot[thick] coordinates {(0.7,2.85714) (0.7,4.28571)}; % verticale: 2 -> 3
+                \addplot[thick] coordinates {(4.2,0.47619) (4.2,0.71429)}; % verticale: 4 -> 1
+
+                \addplot[thick] coordinates {(1,0.47619) (4.2,0.47619)}; % orizzontale: 0 -> 1    
+                
+                \addplot[only marks, mark=*, mark options={scale=1}, color=red] coordinates {(4.2,0.71429)};
+                \addplot[only marks, mark=*, mark options={scale=1}, color=red] coordinates {(0.7,2.85714)};
+                \addplot[only marks, mark=*, mark options={scale=1}, color=red] coordinates {(0.7,4.28571)};
+                \addplot[only marks, mark=*, mark options={scale=1}, color=red] coordinates {(4.2,0.47619)};
+                \addplot[only marks, mark=*, mark options={scale=1}, color=red] coordinates {(1,0.47619)};
+
+                % Etichette
+                \node at (axis cs:4.2,0.71429) [anchor=north west] {$A$};
+                \node at (axis cs:0.7,2.85714) [anchor=north east] {$B$};
+                \node at (axis cs:0.7,4.28571) [anchor=south east] {$C$};
+                \node at (axis cs:4.2,0.47619) [anchor=south west] {$D$};
+                \node at (axis cs:1,0.47619) [anchor=south west] {$O$};
+
+                \end{axis}
+            \end{tikzpicture}
+        \end{figure}
+        Nella prima fase del ciclo si osserva una espansione isobara, nella quale il pistone si espande premettendo l'ingresso di una miscela di aria e benzina nel cilindro, il tutto a pressione constante (valvola aperta). Poi si ha una compressione adiabatiche, in cui il pistone si muove verso l'alto comprimendo la miscela di aria e benzina (valvola chiusa, sistema isolato). Poi avviene la fase di scoppio della miscela di aria e benzina, in cui la miscela viene accesa da una scintilla e quindi si verifica un improvviso ed irreversibile aumento di pressione e temperatura (valvola chiusa), questo fenomeno porta negli instanti successivi ad una espansione del volume del gas, il quale compie lavoro sul pistone (valvola chiusa). Quando il gas si trova al massimo volume viene espulso aprendo la valvola di scarico (valvola aperta) e diminuendo irreversibilmente la pressione. Viene infine chiusa la valvola e compresso il pistone fino a tornare alla posizione iniziale (valvola chiusa). \newline
+        Il ciclo di Otto è un ciclo ideale, in quanto non tiene conto delle perdite di calore e del lavoro compiuto dal sistema. Tuttavia, possiamo notare come il lavoro viene compiuto dal sistema unicamente nella fase da $C$ a $D$, nelle altre o è necessario compiere lavoro sul sistema o il lavoro è nullo. Un motore di questo genere ha un rendimento attorno al $20\%$ idealmente, ma in realtà il rendimento è molto più basso a causa delle perdite di calore e del lavoro compiuto dal sistema. 
