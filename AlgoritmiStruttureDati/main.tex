@@ -1,4 +1,4 @@
-\documentclass[twoside]{report}
+\documentclass[a4paper,twoside]{book}
 \usepackage[italian]{babel}
 \usepackage[utf8]{inputenc}
 \usepackage{amsmath}
@@ -18,11 +18,12 @@
 \usepackage{nicematrix}
 \usepackage{soul}
 \usepackage{tikz}
+\usepackage{subcaption}
 
 \graphicspath{{./images/}}
 
 \makeatletter
-\renewenvironment{abstract}{%
+\newenvironment{abstract}{%
     \if@twocolumn
         \section*{\abstractname}%
     \else
@@ -89,18 +90,18 @@
     \fancyfoot{}
     \renewcommand{\headrulewidth}{0pt}
     \renewcommand{\footrulewidth}{0.4pt}
-    \fancyfoot[LE,RO]{\thepage}
-    \fancyfoot[LO,RE]{``Appunti di Algoritmi e Strutture Dati" di Luca Facchini}
+    \fancyfoot[LO,RE]{\thepage}
+    \fancyfoot[LE,RO]{``Appunti di Algoritmi e Strutture Dati" di Luca Facchini}
 }
 \fancypagestyle{stdPage}{
     \fancyhead{}
-    \fancyhead[LE]{\leftmark}
-    \fancyhead[RO]{\rightmark}
+    \fancyhead[LO]{\leftmark}
+    \fancyhead[RE]{\rightmark}
     \fancyfoot{}
     \renewcommand{\footrulewidth}{0.4pt}
     \renewcommand{\headrulewidth}{0.4pt}
-    \fancyfoot[LE,RO]{\thepage}
-    \fancyfoot[LO,RE]{``Appunti di Algoritmi e Strutture Dati" di Luca Facchini}
+    \fancyfoot[LO,RE]{\thepage}
+    \fancyfoot[LE,RO]{``Appunti di Algoritmi e Strutture Dati" di Luca Facchini}
 }
 \fancypagestyle{tocStyle}{
     \fancyhf{}
@@ -164,4 +165,7 @@
     \include{chapters/12-gready}
     \include{chapters/13-backtracking}
     \include{chapters/14-problemiIntrattabili}
+    \include{chapters/15-tecnicheRisolutiveProblemiIntrattabili}
+    \include{chapters/16-ricercaLocale}
+    \include{chapters/17-algoritmiProbabilistici}
 \end{document}

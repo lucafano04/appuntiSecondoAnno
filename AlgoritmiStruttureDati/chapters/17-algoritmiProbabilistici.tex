@@ -1,0 +1,161 @@
+\chapter{Algoritmi Probabilistici}
+
+Il calcolo delle probabilità applicato alla teoria degli algoritmi è un argomento di grande interesse, in quanto permette di analizzare e progettare algoritmi che si comportano in modo efficiente nella maggior parte dei casi, anche se non garantiscono prestazioni ottimali in tutti i casi. Il calcolo delle probabilità non viene applicato all'input dell'algoritmo, ma ai dati di output dell'algoritmo stesso. Possiamo suddividere gli algoritmi probabilistici in due categorie principali:
+\begin{itemize}
+    \item Algoritmi la cui correttezza è probabilistica (Montecarlo)
+    \item Algoritmi corretti, il cui tempo di esecuzione è probabilistico (Las Vegas)
+\end{itemize}
+
+\section{Algoritmi Montecarlo}
+    \subsubsection{Test di primalità}
+        Il test di primalità è un algoritmo che verifica se un numero intero è primo o meno. Inoltre se un numero non è primo, l'algoritmo restituisce la fattorizzazione del numero.\newline
+        La soluzione più semplice è quella di provare a dividere il numero per tutti i numeri compresi tra 2 e la radice quadrata del numero stesso. Se il numero non è divisibile per nessuno di questi numeri, allora è primo. Tuttavia, questo algoritmo ha una complessità temporale di $O(\sqrt{n})$ e può essere migliorato.\newline
+        Il piccolo teorema di Fermat afferma che se $n$ è un numero primo allora
+        \begin{align*}
+            \forall b,2\leq b < n:\qquad b^{n-1} \mod n = 1
+        \end{align*}
+        Ma questo non può essere usato da solo perché ci sono numeri composti che soddisfano questa condizione. Ad esempio, 561 è un numero composto che soddisfa la condizione di Fermat per $b=2$. Infatti in caso di risultato venga restituito \textsc{true} non è detto che il numero sia primo, la serie dei numeri di \textit{Carmichael} è un insieme di numeri composti che soddisfano il teorema di Fermat per ogni base $b$ fino a $n-1$.
+    \paragraph{Teorena di Miller-Rabin}
+        Il teorema di Miller-Rabin è un test di primalità probabilistico che può essere usato per determinare se un numero è primo o composto. Il test si basa sul piccolo teorema di Fermat ed enuncia che se $n$ è un numero primo per ogni $b$ con $2\leq b < n$ valgono contemporaneamente le seguenti condizioni:
+        \begin{align*}
+            mcd(n,b)=&1\\
+            b^m\mod n =& 1 \lor \exists i,0\leq i < v: b^{m\cdot 2^i} \mod n = n-1
+        \end{align*}
+        Possiamo creare un algoritmo probabilistico che sfrutti la contrapposizione del teorema di Miller-Rabin, se \textbf{esiste} un intero $b$ con $2\leq b < n$ rale che \textbf{almeno una} delle due condizioni non è soddisfatta, allora $n$ è composto. \newline
+        Una dimostrazione di Rabin ha provato che se $n$ è composto allora ci sono almeno $\frac34(n-1)$ valori di $b$ che non verificano le condizioni. Quindi un algoritmo che verifica le condizioni per $k$ valori di $b$ ha una probabilità di errore inferiore a $\left(\frac{1}{4}\right)^k$. Viene quindi proposto il seguente algoritmo:
+        \begin{algorithm}[H]
+            \caption{\Bool \textsc{isPrime}(\Item $n$)}
+            \begin{algorithmic}
+                \For{$i=1$ \textbf{to} $k$}
+                    \State $b = \Call{random}{2,n-1}$
+                    \If{$\Call{isComposite}{n,b}$}
+                        \State \Return \textbf{false}
+                    \EndIf
+                \EndFor
+                \State \Return \textbf{true}
+            \end{algorithmic}
+        \end{algorithm}
+        La complessità di questa funzione è $O(k\log^2n\log\log n \log \log \log n)$, dove $k$ è il numero di iterazioni. La funzione \textsc{isComposite} verifica se $n$ è composto per un dato valore di $b$. La funzione \textsc{random} genera un numero casuale compreso tra 2 e $n-1$. La funzione \textsc{isPrime} restituisce \textbf{true} se il numero è primo, o non si è riuscito a dimostrare che è composto, altrimenti restituisce \textbf{false}.\newline
+        Esistono anche degli algoritmi deterministici per il test di primalità, come l'algoritmo di AKS, che ha una complessità polinomiale $O(\log^{6+\epsilon} n)$, ma rimane comunque più lento rispetto agli algoritmi probabilistici visto che le costanti nascoste sono molto elevate. In diverse situazioni comprese quelle di verifica per le chiavi \texttt{RSA} si preferisce usare un algoritmo probabilistico come quello di Miller-Rabin.
+    \subsubsection{Espressione polinomiale nulla}
+        Un altro esempio di algoritmo Montecarlo è l'algoritmo per determinare se un polinomio di grado $n$ è identicamente nulla. L'algoritmo deterministico che si basa sulla semplificazione del polinomi ha una complessità molto elevata, quindi si può usare un algoritmo probabilistico che lavora nel seguente modo:
+        \begin{itemize}
+            \item Si genera una $n$-pla di valori $v_1,v_2,\dots,v_n$ in modo uniforme e casuale
+            \item Si calcola $x=p(v_1,v_2,\dots,v_n)$
+            \subitem Se $x=0$ allora il polinomio è identicamente nullo
+            \subitem Se $x\neq 0$ allora il polinomio non è identicamente nullo
+            \item Se ogni $v_i$ è un valore intero compreso tra 1 e $2\cdot d$ e il polinomio è di grado $d$, allora la probabilità che l'algoritmo restituisca un risultato errato non è superiore a $\frac{1}{2}$.
+            \item Si ripete il test $k$ volte, in modo da ridurre la probabilità di errore a $\left(\frac{1}{2}\right)^k$.
+        \end{itemize}
+    \subsubsection{BitSet + Tabelle Hash = Bloom Filters}
+        I Bloom Filters sono una struttura dati probabilistica che permette di testare se un elemento appartiene a un insieme. La struttura è composta da un array di bit e da una serie di funzioni hash. Le funzioni hash vengono usate per mappare gli elementi dell'insieme in posizioni dell'array di bit. Dunque si ottiene il vantaggio di una struttura dati dinamica che occupa poco spazio e permette di testare se un elemento appartiene a un insieme in tempo costante. Tuttavia, i Bloom Filters non permettono di eliminare gli elementi dall'insieme, la risposta alla ricerca è probabilistica e non c'è vera e propria memorizzazione.
+        \begin{itemize}
+            \item insert(\textit{key}): per ogni funzione hash $h_i$ si calcola $h_i(key)$ e si imposta il bit in posizione $h_i(key)$ a 1.
+            \item \textbf{boolean} contains(\textit{key}): per ogni funzione hash $h_i$ si calcola $h_i(key)$ e si verifica se il bit in posizione $h_i(key)$ è 1. Se tutti i bit sono 1 allora l'elemento è presente, altrimenti non lo è. 
+            \subitem Se l'elemento non è presente, allora la risposta è certa. 
+            \subitem Se l'elemento è presente, allora la risposta è probabilistica.
+        \end{itemize}
+        Sia $\epsilon$ la probabilità di errore, ovvero la probabilità che un elemento non presente venga identificato come presente. I Bloom Filters richiedono $1.44\log_2\left(\frac{1}{\epsilon}\right)$ bit per elemento. La probabilità di errore è legata al numero di funzioni hash $k$ e alla dimensione dell'array $m$. Per un confronto rapido ecco una piccola tabella:
+        \begin{table}[H]
+            \centering
+            \begin{tabular}{|c|c|}
+                \hline
+                $\epsilon$ & $Bit$\\
+                \hline
+                $10^{-1}$ & 4.78\\
+                $10^{-2}$ & 9.57\\
+                $10^{-3}$ & 14.36\\
+                $10^{-4}$ & 19.15\\
+                \dots & \dots\\
+                \hline
+            \end{tabular}
+        \end{table}
+        Questo genere di struttura dati è molto usata in ambito web, ad esempio per il chrome safe browsing, per evitare di visitare siti malevoli. Inoltre è usato anche da Medium per evitare di mostrare articoli già letti, Apache HBase per evitare di ri-leggere dati già letti o anche da Ethereum per trovare rapidamente i log della blockchain.
+        \paragraph{Forumule e probabilità}
+            Dati $n$ oggetti con $m$ bit e $k$ funzioni hash, la probabilità di errore (falso positivo) è data dalla formula:
+            \begin{align*}
+                \epsilon = \left(1-e^{\frac{-kn}{m}}\right)^k
+            \end{align*}
+            Dati $n$ oggetti con $m$ bit il valore ottimale per $k$ è:
+            \begin{align*}
+                k = \frac{m}{n}\cdot\operatorname{ln}(2)
+            \end{align*}
+            Dato $n$ oggetti ed una probabilità di errore $\epsilon$ il valore ottimale per $m$ è:
+            \begin{align*}
+                m = -\frac{n\cdot\operatorname{ln}(\epsilon)}{\operatorname{ln}(2)^2}
+            \end{align*}
+\section{Algoritmi Las Vegas}
+    Una applicazione tipica degli algoritmi Las Vegas è la restituzione della media, varianza e moda di un vettore di dati. Oppure anche dato un vettore contenete $n$ valori interi trovare l'elemento che occuperebbe l'elemento $k$ se il vettore fosse ordinato. Oppure anche il calcolo della mediana di un vettore di dati. 
+    \subsubsection{Selezione per piccoli valori di $k$}
+        Sfruttiamo la memorizzazione con \textit{heap} per calcolare la selezione di un elemento $k$-esimo. L'algoritmo è molto semplice e si basa sulla costruzione di un \textit{heap} di dimensione $n$ con tutti gli elementi del vettore. Una volta costruito l'\textit{heap} si eseguono $k$ estrazioni, in modo da ottenere il valore $k$-esimo. La complessità dell'algoritmo è $O(n+k\cdot\log(n))$, se $k=O(n/\log n)$ allora la complessità diventa $O(n)$ ma se $k=n/2$ allora non è più possibile usare questo algoritmo. Allora usiamo un approccio simile a quello usato per l'algoritmo di \textit{Quicksort} ma non dobbiamo ordinare il vettore, ma solo trovare il valore $k$-esimo e dunque basta cercare nella partizione del vettore che contiene il valore $k$-esimo. 
+        \begin{algorithm}[H]
+            \caption{\Item \textsc{selection}(\Item[] $A$, \Int $start$, \Int $end$, \Int $k$)}
+            \begin{algorithmic}
+                \If{$start = end$}
+                    \State \Return $A[start]$
+                \Else
+                    \State $j = \Call{pivot}{A, start, end}$
+                    \State $q = j - start + 1$
+                    \If{$k = q$}
+                        \State \Return $A[j]$
+                    \ElsIf{$k < q$}
+                        \State \Return \Call{selection}{A, start, j-1, k}
+                    \Else
+                        \State \Return \Call{selection}{A, j+1, end, k-q}
+                    \EndIf
+                \EndIf
+            \end{algorithmic}
+        \end{algorithm}
+        Nel caso pessimo l'algoritmo ha una complessità rappresentata dalla seguente ricorrenza:
+        \begin{align*}
+            T(n) = \begin{cases}
+                1 & n\leq 1 \\
+                T(n-1) + n & n > 1
+            \end{cases}
+        \end{align*}
+        Il che ha complessita $O(n^2)$. Tuttavia, nel caso ottimo l'algoritmo ha una complessità rappresentata dalla seguente ricorrenza:
+        \begin{align*}
+            T(n) = \begin{cases}
+                1 & n\leq 1 \\
+                T(n/2) + n & n > 1
+            \end{cases}
+        \end{align*}
+        Il che ha complessita $O(n)$. Il caso medio dipende dal valore restituito dalla funzione \textsc{pivot}, infatti se questa restituisce in modo casuale una qualsiasi posizione del vettore, allora
+        \begin{align*}
+            T(n) =& n + \frac1n\sum_{q=1}^n T(\max\{q-1,n-q\}) &\text{Media su } n \text{ casi}\\
+            \leq & n + \frac1n\sum_{q=\left\lfloor \frac{n}2 \right\rfloor}^{n-1} 2T(q)  &\text{per } n>1
+        \end{align*}
+        Dato che è possibile dimostrare che $T(n) \leq cn$ per $c\geq 6$ e $n\geq 1$, il che implica che $T(n) = O(n)$.\newline
+        Dunque partendo dall'assunzione che \textsc{pivot} restituisca un valore casuale, (ed in caso negativo lo sostituiamo con un valore casuale) possiamo affermare che l'algoritmo nel caso medio ha una complessità di $O(n)$ per la selezione e $O(n\log n)$ per l'ordinamento. 
+        \paragraph{Selezione deterministica}    
+            Supponendo di avere un algoritmo che restituisca al più un valore che disti $\frac{3}{10}n$ dal valore mediano. Allora modifichiamo l'algoritmo di selezione come segue:
+            \begin{itemize}
+                \item Dividiamo il vettore in $n/5$ sotto-vettori di dimensione 5, ed l'i-esimo sotto-vettore lo chiamiamo $S_i$ con $i\in[1,\left\lceil\frac{n}{5}\right\rceil]$.
+                \item Calcoliamo il valore mediano di ogni sotto-vettore $S_i$ e calcoliamo il valore mediano $m$ dei valori mediani.
+                \item Usiamo $m$ come pivot e eseguiamo chiamate ricorsive come per la \textsc{selection}
+                \item Se la dimensione scende sotto 10, allora ordiniamo il sotto-vettore e restituiamo il valore mediano che sarà il valore $k$-esimo.
+            \end{itemize}
+            \begin{algorithm}[H]
+                \caption{\Item \textsc{select}(\Item[] $A$, \Int $start$, \Int $end$, \Int $k$)}
+                \begin{algorithmic}
+                    \If{$end - start + 1 \leq 10$}
+                        \State \Call{insertionSort}{A, start, end}
+                        \State \Return $A[start + k - 1]$
+                    \EndIf
+                    \State $m = \New\Int[1,\left\lceil\frac{end-start+1}{5}\right\rceil]$
+                    \For{$i=0$ \textbf{to} $\left\lceil\frac{end-start+1}{5}\right\rceil$}
+                        \State $m[i] = \Call{median}{A, start + 5i, start + 5i + 4}$
+                    \EndFor
+                    \State \Item $ m \gets \Call{select}{m, 1, \left\lceil\frac{end-start+1}{5}\right\rceil, \left\lceil\frac{\left\lceil\frac{end-start+1}{5}\right\rceil}{2}\right\rceil}$
+                    \State \Int $j = \Call{pivot}{A, start, end, m}$
+                    \State \Int $q = j - start + 1$
+                    \If{$k = q$}
+                        \State \Return $m$
+                    \ElsIf{$k < q$}
+                        \State \Return \Call{select}{A, start, j-1, k}
+                    \Else
+                        \State \Return \Call{select}{A, j+1, end, k-q}
+                    \EndIf
+                \end{algorithmic}
+            \end{algorithm}
+            Come dimostrato il calcolo dei mediani $M[]$ richiede al più $6\left\lceil\frac{n}{5}\right\rceil$ confronti, e la chiamata ricorsiva della funzione \textsc{select} viene eseguita su sotto-vettori di al più $\left\lceil\frac{n}{5}\right\rceil$ elementi. La seconda chiamata ricorsiva viene eseguita su un sotto-vettore di dimensione al più $\frac{7}{10}n$ e infine nel caso pessimo l'algoritmo la complessità è $O(n)$ ma nel caso medio è $T(n)=t(\frac{n}{5})+T(\frac{7n}{10})+\frac{11}{5}n$, il che implica che la complessità è $O(n)$.

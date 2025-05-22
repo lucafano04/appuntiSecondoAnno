@@ -1,0 +1,188 @@
+\chapter{Tecniche risolutive per problemi intrattabili}
+
+Anche se non è stato dimostrato che i problemi intrattabili ($NP$) siano risolvibili in tempo polinomiale, questi rimangono comunque interessanti e utili. Infatti, esistono tecniche che permettono di affrontare questi problemi, o una loro parte, in modo efficiente. Queste tecniche non garantiscono una soluzione ottimale, ma possono fornire soluzioni approssimate o risolvere casi specifici in tempi accettabili.
+
+\paragraph{A cosa rinunciamo?}
+Dato non possiamo avere una soluzione ottimale in tempi polinomiali, dobbiamo rinunciare a qualcosa. Possiamo rinunciare a:
+\begin{description}
+    \item[Generalità] Possiamo rinunciare a risolvere il problema in modo generale, e limitarci a casi specifici.
+    \item[Ottimalità] Possiamo rinunciare a trovare la soluzione ottimale, e limitarci a trovare una soluzione approssimata. In questo caso viene ricavato anche l'errore che si commette.
+    \item[Formalità] Possiamo rinunciare a formalizzare il problema, e limitarci a risolvere il problema in modo euristico. Ovvero non formale, usando tecniche come \textit{greedy}, \textit{branch and bound}, \textit{backtracking}, \textit{dynamic programming}, \textit{randomized algorithms} e \textit{approximation algorithms}.
+    \item[Efficienza] Possiamo rinunciare a risolvere il problema in modo efficiente, e limitarci a risolvere il problema in modo esatto, ma in tempi esponenziali. 
+\end{description}
+
+\section{Algoritmi pseudo-polinomiali}
+    Prendiamo in considerazione il seguente problema:
+    \subsection{Somma di sottoinsiemi (\textsc{subset-sum})}
+        Dati un vettore $A$ contente $N$ numeri interi e un numero intero $k$, determinare se esiste un sottoinsieme di $S\subseteq\{1,\ldots,N\}$ tale che la somma degli elementi di $S$ sia uguale a $\sum_{i\in S} A_i = k$.
+        \subsubsection{Programmazione dinamica}
+            Definiamo una tabella di \texttt{DP} come $DP[0\dots n][o\dots k]$, dove $n$ è la dimensione del vettore $A$ e $k$ è il valore da raggiungere. Il valore di $DP[i][r]$ è uguale a \texttt{true} se esiste un sottoinsieme di $A[0\dots i]$ la cui somma è uguale a $r$, altrimenti è \texttt{false}. \newline
+            Allora il valore di $DP[i][r]$ è uguale a:
+            $$
+                DP[i][r] = \begin{cases}
+                    \texttt{true} & r=0\\
+                    \texttt{false} & r>0 \land i=0\\
+                    DP[i-1][r] & r>0 \land i>0 \land A[i-1]>r\\
+                    DP[i-1][r] \lor DP[i-1][r-A[i-1]] & r>0 \land i>0 \land A[i-1]\leq r
+                \end{cases}
+            $$
+            La complessità di questo algoritmo è $O(nk)$, dove $n$ è la dimensione del vettore $A$ e $k$ è il valore da raggiungere. Questo algoritmo è un algoritmo pseudo-polinomiale, in quanto la complessità dipende anche dal valore di $k$, che può essere esponenziale rispetto alla dimensione del problema.
+            \paragraph{Algoritmo}
+                L'algoritmo per l'implementazione con programmazione dinamica è il seguente:
+                \begin{algorithm}[H]
+                    \caption{\Bool \textsc{SubsetSum}($\Int[] A, \Int n, \Int k$)}
+                    \begin{algorithmic}
+                        \State \Bool[][] $DP \gets \texttt{new} \Bool[n+1][k+1]$
+                        \For{$i \gets 0$ \textbf{to} $n$}
+                            \State $DP[i][0] \gets \texttt{true}$
+                        \EndFor
+                        \For{$r \gets 1$ \textbf{to} $k$}
+                            \State $DP[0][r] \gets \texttt{false}$
+                        \EndFor
+                        \For{$i \gets 1$ \textbf{to} $n$}
+                            \For{$r \gets 1$ \textbf{to} $k$}
+                                \State $DP[i][r] \gets DP[i-1][r]$
+                            \EndFor 
+                            \For{$r \gets 1$ \textbf{to} $k$}
+                                \State $DP[i][r] \gets DP[i-1][r] \Or DP[i-1][r-A[i]]$
+                            \EndFor
+                        \EndFor
+                    \end{algorithmic}
+                \end{algorithm}
+            \paragraph{Altre implementazioni}
+                Le altre possibili implementazioni sfruttano la ricorsione e la memorizzazione della tabella con un dizionario \textit{hash} o un array. La complessità di queste implementazioni è $O(nk)$, ma dato che $k$ non è la dimensione del problema, non è considerata polinomiale. $O(2^n)$
+    \subsection{Problemi fortemente e debolmente \texorpdfstring{$\mathbb{NP}$}{NP}-completi}
+            Dato un problema decisionale $R$ e una sua istanza $I$ allora la dimensione di $d$ di $I$ è la lunghezza della stringa che codifica $I$. Il valore $\#$ è il più grande numero intero che appare in $I$.\newline
+            Di seguito alcuni esempi della dimensione di un problema:
+            \begin{table}[H]
+                \centering
+                \begin{tabular}{|c|c|c|c|}
+                    \hline
+                    \textbf{Problema} & $\textbf{I}$ & $\textbf{\#}$ & $\textbf{d}$ \\ \hline
+                    \textsc{Subset-sum} & $\{n,k,A\}$ & $\max{n,k,\max{A}}$ & $O(n\log \#)$ \\ \hline
+                    \textsc{clique} & $\{n,m,k,G\}$ & $\max{n,m,k}$ & $O(n+m+\log \#)$ \\ \hline
+                    \textsc{TSP} & $\{n,m,d\}$ & $\max{n,m,\max d}$ & $O(n^2+\log \#)$ \\ \hline
+                \end{tabular}
+            \end{table}
+        \subsubsection{Problemi debolmente \texorpdfstring{$\mathbb{NP}$}{NP}-completi}
+            Sia $R_{pol}$ il problema $R$ ristretto ai dati di ingresso per i quali $\#$ è limitato superioramente da $T_p(d)$, con $T_p(d)$ funzione polinomiale in $d$. Allora $R$ è fortemente $\mathbb{NP}$-completo se $R_{pol}$ è $\mathbb{NP}$-completo.7
+            \newline
+            Ad esempio prendendo il problema \textsc{subset-sum} questo è debolemnte $\mathbb{NP}$-completo in quanto se:
+            \begin{align*}
+                \forall A[i] \leq k\\
+                k=O(n^c) allora \#=\max{n,k,a_1,\ldots,a_n} = O(n^c)\\
+                \text{la soluzione con \texttt{PD} ha complessità } O(nk) = O(n^{c+1})                
+            \end{align*}
+            Dunque il problema \textsc{subset-sum} è debole $\mathbb{NP}$-completo in quanto la soluzione con programmazione dinamica ha complessità polinomiale non constante in $\#$.
+            \paragraph{Definizione} Un algoritmo ha complessità \textit{pseudo-polinomiale} se risolve un certo problema $R$ per qualsiasi ingresso $I$ in tempo $T_p(\#,d)$, funzione con tempo polinomiale non constante in $\#$
+            \begin{theorem}
+                Nessun problema fortemente $\mathbb{NP}$-completo può essere risolto da un algoritmo pseudo-polinomiale, a meno che non sia $P=NP$.
+            \end{theorem}
+            \paragraph{Cricca (\textsc{clique})}
+                Il problema \textsc{clique} è un problema $\mathbb{NP}$-completo ed la versione ridotta di questo problema rimane comunque $\mathbb{NP}$-completo, dunque \textsc{clique} è un problema fortemente $\mathbb{NP}$-completo. 
+            \paragraph{Commesso viaggiatore}
+                Il problema del commesso viaggiatore è un problema $\mathbb{NP}$-completo come già visto nel capitolo precedente. Poniamo per assurdo che \textsc{tsp} sia debolmente $\mathbb{NP}$-completo. Allora esiste una soluzione polinomiale per \textsc{tsp}. Possiamo usare questa per risolvere il problema generale dato che abbiamo detto in precedenza che \textsc{tsp} e la sua riduzione sono $NP$-completi. Ma allora $\mathbb{P}=\mathbb{NP}$. Dunque \textsc{tsp} è fortemente $\mathbb{NP}$-completo.
+                \begin{proof}
+                    Sia $G=(V,E)$ un grafo non orientato\newline
+                    Definiamo una matrice di distanze a partire da $G$:
+                    \begin{align*}
+                        d[i][j] = \begin{cases}
+                            1 & (i,j)\in E\\
+                            2 & (i,j)\not\in E\\
+                        \end{cases}\\
+                    \end{align*}
+                    Allora il grafo $G$ ha un circuito hamilitoniano se e solo se è possibile trovare un percorso da commesso viaggiatore di costo $n$. Dunque se esistesse un algoritmo pseudo-polinomiale $A$ per \textsc{tsp}, \textsc{hemiltonian cirtuit} potrebbe essere risolto da $A$ in tempo polinomiale.
+                \end{proof}
+
+\section{Algoritmi di approssimazione}
+    I problemi che interessano sono nella forma di ottimizzazione, se il corrispettivo problema decisionale è $\mathbb{NP}$-completo, allora non sono noti algoritmi polinomiali per risolvere il corrispettivo problema di ottimizzazione. Dunque si cerca di trovare una soluzione approssimata in tempo polinomiale. 
+    \begin{definition}[approssimazione]
+        Dato un problema di ottimizzazione con funzione di costo non negativa $c$, un algoritmo si dice di $\alpha(n)$-approssimazione se fornisce una soluzione ammissibile $x$ il cui costo $c(x)$ non si discosti da $c(x^*)$ dove $x^*$ è la soluzione ottima, per un fattore $\alpha(n)$, ovvero:
+        \begin{align*}
+            c(x^*) \leq & c(x) \leq \alpha(n) c(x^*) & \alpha(n) > 1\qquad& (\text{Minimizzazione})\\
+            a(n)c(x^*) \leq & c(x) \leq c(x^*) & \alpha(n) > 1\qquad& (\text{Massimizzazione})\\
+        \end{align*}
+    \end{definition}
+    Notiamo come $\alpha(n)$ può essere una costante valida per ogni $n$, ed identificare un valore $\alpha(n)$ e dimostrare che l'algoritmo lo rispetta.
+    \paragraph{Problema \textit{Bin-packing} approssimato} 
+        Dati: un vettore $A$ contenente $N$ oggetti interi positivi e un numero intero $k$ che rappresenta la capacità di un contenitore. Dobbiamo trovare il numero minimo di contenitori necessari per contenere tutti gli oggetti.
+        \subparagraph{Soluzione banale - \textit{first fit}} 
+            L'algoritmo \textit{first fit} consiste nel prendere il primo oggetto e metterlo nel primo contenitore disponibile. Se non c'è spazio, si passa al secondo contenitore e così via. Se non c'è spazio in nessun contenitore, si crea un nuovo contenitore.\newline
+            Questo algoritmo è ottimo? No, ma è una soluzione approssimata. Infatti, per $N>1$ il numero di contenitori usati è limitato da $N*\geq \frac{\sum_{i=1}^nA[i]}{k}$ dato che non possono esserci due scatole riempite con meno di metà della loro capacità. Dunque il numero di scatole usate è al massimo $2*\frac{\sum_{i=1}^nA[i]}{k}$ e quindi $\alpha(n)=2$.
+    \paragraph{Commesso viaggiatore con disuguaglianze particolari} 
+        Siano date $n$ città e le distanze (positive) $d[i][j]$ tra esse, \textbf{tali per cui vale la regola delle disuguaglianze triangolari}: 
+        $$
+            d[i][j] \leq d[i][k] + d[k][j] \forall i,j,k: 1\leq i,j,k\leq n
+        $$
+        Trovare un percorso che partendo da una qualsiasi città attraversi ogni città esattamente una volta e ritorni alla città di partenza in modo che la somma delle distanze percorse sia minima.\newline
+        Dimostriamo che vale il lemma: $\textsc{HAMILTONIAN CIRCUIT} \leq_{p} \textsc{TSP}$, ovvero che il problema del circuito hamiltoniano è riducibile al problema del commesso viaggiatore. \newline
+        \begin{proof}
+            Sia $G=(V,E)$ un grafo non orientato e $d[i][j]$ la matrice delle distanze tra le città definita come:
+            $$
+                d[i][j] = \begin{cases}
+                    1 & (i,j)\in E\\
+                    2 & (i,j)\not\in E\\
+                \end{cases}
+            $$
+            Inoltre valgono le disuguaglianze triangolari:
+            $$
+                d[i][j] \leq d[i][k] + d[k][j] \forall i,j,k: 1\leq i,j,k\leq n
+            $$
+            Allora $G$ avrà un circuito hamiltoniano se e solo se esiste un percorso $\Delta-\textsc{TSP}$ di costo $n$.
+        \end{proof}
+        Interpretiamo il problema $(\Delta)-\textsc{TSP}$ come il problema di un circuito hamiltoniano su un grafo completo.\newline 
+        Considerando un qualsiasi circuito hamiltoniano del grafo completo e rimuovendo un suo arco otteniamo un albero di copertura
+        % TODO: finire sezione 15.3.2
+\section{Algoritmi euristici}
+    Gli algoritmi euristici sono algoritmi che non garantiscono una soluzione ottimale, ma cercano di trovare una soluzione accettabile in tempi ragionevoli. Questi algoritmi sono spesso utilizzati per risolvere problemi complessi di ottimizzazione come la classe dei problemi $\mathbb{NP}$-hard. Gli algoritmi euristici possono essere divisi in due categorie principali: algoritmi di ricerca locale e algoritmi di ricerca globale.
+    \subsubsection{Problema \texttt{TSP} con tecnica \textit{greedy} (1)}
+        La tecnica \textit{greedy} applicata al problema del commesso viaggiatore consiste nel'ordinare gli archi con pesi non decrescenti e ``prendere'' il primo arco tale che per ciascuno dei due nodi collegati non ci siano altri due archi che collegano i due nodi, e che non formi un ciclo. Si va aventi fino a quando non ci sono solamente due nodi rimasti, che formano un ciclo, allora si prende l'arco che collega i due nodi e si forma un ciclo desiderato.
+        \paragraph{Algoritmo} L'algoritmo per l'implementazione con greedy è il seguente:
+        \begin{algorithm}[H]
+            \caption{\Set \textsc{GreedyTSP}($\Graph G$)}
+            \begin{algorithmic}
+                \State \Set $result \gets \texttt{new} \Set()$
+                \State \textsc{Mfset} $M \gets \texttt{new} \textsc{Mfset}(G.n)$
+                \State $\Int[] edges \gets \New \Int [1\dots G.n] =\{0\}$
+                \State $A \gets \{ordina archi per peso\}$
+                \ForEach{$(u,v)\in A$}
+                    \If{$edges[u]<2 \And edges[v]<2 \And M.find(u)\neq M.find(v)$}
+                        \State $result.\Call{insert}{u,v}$
+                        \State $edges[u] \gets edges[u]+1$
+                        \State $edges[v] \gets edges[v]+1$
+                        \State $M.\Call{merge}{u,v}$
+                    \EndIf
+                \EndFor
+                \State $\Int u \gets 1$
+                \While{$edges[u]\neq 1$}
+                    $u\gets u+1$
+                \EndWhile
+                \State \Int $v \gets u+1$
+                \While{$edges[v]\neq 1$}
+                    $v\gets v+1$
+                \EndWhile
+                \State $result.\Call{insert}{u,v}$
+                \State \Return $result$
+            \end{algorithmic}
+        \end{algorithm}
+        \paragraph{Complessità} La complessità di questo algoritmo è $O(n^2\log n)$, dove $n$ è il numero di nodi del grafo. Infatti, l'ordinamento degli archi ($m=O(n^2)$) richiede $O(m\log m)$ e la ricerca del ciclo richiede $O(n^2)$.
+    \subsubsection{Problema \texttt{TSP} con tecnica \textit{greedy} (2)}
+        Un altra tecnica \textit{greedy} applicata al problema del commesso viaggiatore consiste in quella che viene chiamata \textit{nearest neighbor}. Questa tecnica consiste nel partire da un nodo qualunque e visitare il nodo più vicino andando ad escludere gli altri archi che partono dal nodo corrente. Si continua a visitare il nodo più vicino fino a quando non si torna al nodo di partenza. \newline
+        Senza star a fornire codice questa soluzione funziona in $O(n^2)$, dove $n$ è il numero di nodi del grafo, ulteriore variante potrebbe essere quella di eseguire la ricerca partendo da ogni nodo e prendere il percorso migliore. In questo caso la complessità sarebbe $O(n^3)$ ma potrebbe, in alcuni casi, fornire una soluzione migliore.
+    \subsubsection{Problema \texttt{TSP} con tecnica ricerca locale}
+        La ricerca locale consiste nel partire da un qualsiasi circuito hamiltoniano $\pi$ e consideriamo il seguenti intorno:
+        \begin{align*}
+            I_2(\pi)=\{& \pi':\pi' \text{ è ottenuto a partire da } \pi\\
+            & \text{ cancellando due archi non consecutivi e ri-aggiungendo due archi non compresi nel circuito}\}
+        \end{align*}
+        Notare come $|I_2(\pi)|=n(n-1)/2-n$ in quanto ci sono $n(n-2)/2$ coppie di archi, ma $n$ sono consecutivi e esiste solo un altro modo differente per ri-aggiungere gli archi. \newline
+        Il costo per esaminare un intorno è $O(n^2)$.
+
+\section{Algoritmi \textit{Branch-\&-bound}}
+    La tecnica \textit{branch-\&-bound} è una tecnica di ricerca che similmente al \textit{backtracking} con \textit{pruning} cerca di esplorare lo spazio delle soluzioni, ma in modo più efficiente. Questa tecnica cerca ogni sequenza di scelta che abbia un costo non negativo e per ogni scelta che verrà fatta non diminuisce il costo totale. 
+    \paragraph{\textit{Upper bound}}
+        Durante l'enumerazione si mantengono le informazioni sulla miglior soluzione ammissibile ed il suo costo. Quest ultimo viene chiamato \textit{upper bound} per il problema.
+    \paragraph{\textit{Lower bound}}
+        Supponendo di avere a disposizione una funzione \textit{lower bound} che a partite dalle scelte già fatte, i dati del problema e la soluzione ammissibile corrente, calcola il costo minimo che si può ottenere facendo le scelte rimanenti. Se il costo della soluzione ammissibile corrente è maggiore del \textit{lower bound}, allora non è necessario continuare l'esplorazione di quella sequenza di scelte.
+    \paragraph{Potatura}
+        La potatura deve essere effettuata se la funzione \texttt{lb} è maggiore o uguale a \texttt{minCost}. Questo metodo non migliora la complessità ma ne abbassa il tempo di esecuzione.
