@@ -29,4 +29,64 @@
     Questo teorema implica che il rendimento di una macchina termica lavora con un rendimento limitato superiormente da $1-\frac{T_1}{T_2}$, quindi il rendimento di una macchina termica non può essere uguale a $1$, anzi anche se fosse reversibile il rendimento sarebbe comunque minore di $1$ in quanto il rendimento dipende dalla temperatura delle sorgenti.
     \paragraph{Teorema di Clausius}
         Il teorema di Clausius è una estensione del teorema di Carnot, esso afferma che per $N$ sorgenti termiche $T_1$, $T_2$, ..., $T_N$ con le quali una macchina termica $x$ scambia calore $\mathcal{Q}_1$, $\mathcal{Q}_2$, ..., $\mathcal{Q}_N$ rispettivamente, allora la somma $\displaystyle\sum_{i=1}^N \frac{\mathcal{Q}_i}{T_i} < 0$. La stessa cosa vale su $\infty$ sorgenti termiche, quindi $\displaystyle\oint\frac{d\mathcal{Q}}{T} < 0$.
-    
+\section{Entropia}
+    A partire dalla seconda legge della termodinamica ed il teorema di clausius e considerando infinite sorgenti di un ciclo \textbf{reversibile} allora possiamo scrivere:
+    \begin{align*}
+        \oint \frac{d\mathcal{Q}}T=0
+    \end{align*}
+    Dunque prendendo due qualunque stati del ciclo $A$, $B$ ed i percorsi del ciclo $I$ e $II$ che collegano gli stati $A$ e $B$ si ha che:
+    \begin{align*}
+        \oint \frac{d\mathcal{Q}}T =& \int_{A, I\text{ Rev.}}^B \frac{d\mathcal{Q}}T + \int_{A, II\text{ Rev.}}^B \frac{d\mathcal{Q}}T = 0\\
+        \int_{A, I\text{ Rev.}}^B \frac{d\mathcal{Q}}T =& -\int_{A, II\text{ Rev.}}^B \frac{d\mathcal{Q}}T\\
+        \int_{A, I\text{ Rev.}}^B \frac{d\mathcal{Q}}T =& \int_{A, II\text{ Rev.}}^B \frac{d\mathcal{Q}}T \stackrel{\text{def.}}{\equiv} F(B) - F(A)
+    \end{align*}
+    Visto che il risultato non dipende dal percorso scelto visto che $I_{Rev.}$ e $II_{Rev.}$ sono entrambi reversibili, allora la funzione primitiva dell'integrale $\int_{A}^{B} \frac{d\mathcal{Q}}T$ è una funzione di stato, la quale descrive il cambiamento di calore tra due stati $A$ e $B$ in un ciclo reversibile ad una data temperatura $T$. Questa funzione di stato è chiamata \textbf{entropia} e viene indicata con $S$, formalmente si ha che:
+    \begin{align}
+        S|\Delta S_{A\to B}\stackrel{\text{def.}}{=}&S_B - S_A = \int_{A, \text{Rev}}^{B} \frac{d\mathcal{Q}}T\\
+        dS\stackrel{\text{def.}}{=}&\left.\frac{d\mathcal{Q}}T\right|_{\text{Rev.}}
+    \end{align}
+    Notiamo come l'entropia non sia definita (al momento) come assoluta ma bensì solo come differenza di entropia tra due stati. Inoltre questa ha dimensionalità di $[S] = \left[\frac{E}{T}\right] = \frac{J}{K}$. Questa sta a significare che cedere una certa quantità di calore ad una certa temperatura \textbf{non} equivale all'opposto di assorbire la stessa quantità di calore ad una temperatura diversa.
+    \paragraph{Entropia e ciclo di Carnot}
+        Avendo definito l'entropia possiamo applicare questa nozione al ciclo di Carnot, possiamo dunque considerare il grafico $T/S$ del ciclo di Carnot, in esso le due isoterme verranno rappresentate come rette orizzontali, mentre le due adiabatiche come rette verticali, in quanto nelle prime non avviene una variazione di temperatura, mentre nelle seconde non avviene una variazione di entropia in quanto non avviene scambio di calore.
+        \begin{figure}[H]
+            \centering
+            \begin{tikzpicture}
+                \begin{axis}[
+                    xlabel={$T$},
+                    ylabel={$S$},
+                    axis lines=middle,
+                    axis line style={->},
+                    xmin=0, xmax=3,
+                    ymin=0, ymax=3,
+                    xtick={0.5,2.5},
+                    ytick={0.5,2.5},
+                    xticklabels={$S_1$,$S_2$},
+                    yticklabels={$T_1$,$T_2$},
+                ]
+                    \addplot[domain=0.5:2.5, samples=100, smooth] {2.5};
+                    \addplot[domain=0.5:2.5, samples=100, smooth] {0.5};
+                    \addplot[smooth] coordinates {(0.5,0.5) (0.5,2.5)};
+                    \addplot[smooth] coordinates {(2.5,0.5) (2.5,2.5)};
+                    \node at (axis cs:0.5,2.5) [anchor=south west] {$A$};
+                    \node at (axis cs:2.5,2.5) [anchor=south east] {$B$};
+                    \node at (axis cs:2.5,0.5) [anchor=south east] {$C$};
+                    \node at (axis cs:0.5,0.5) [anchor=south west] {$D$};
+                \end{axis}
+            \end{tikzpicture}
+        \end{figure}
+        Mentre nel grafico $P/V$ l'area compresa tra le curve rappresenta il lavoro prodotto dalla macchina, nel grafico $T/S$ l'area compresa tra le curve rappresenta il calore scambiato dalla macchina. Calcoliamo dunque l'entropia scambiata dalla macchina durante il ciclo di Carnot, essa è data da:
+        \begin{align*}
+            \Delta S_{\circ} =& \Delta S_{AB} + \Delta S_{BC} + \Delta S_{CD} + \Delta S_{DA}\\
+            =& \Delta S_{AB} + 0 + \Delta S_{CD} + 0\\
+            =& \int_{A}^{B} \frac{d\mathcal{Q}}{T} + \int_{C}^{D} \frac{d\mathcal{Q}}{T} + 0\\
+            =& \int_{A}^{B} \frac{nR\cancel{T}d[\operatorname{ln} V]}{\cancel{T}} + \int_{C}^{D} \frac{nR\cancel{T}d[\operatorname{ln} V]}{\cancel{T}}\\
+            =& nR\operatorname{ln}\left(\frac{V_B}{V_A}\right) + nR\operatorname{ln}\left(\frac{V_D}{V_C}\right)\\
+            =& nR\left[\operatorname{ln}\left(\frac{V_B}{V_A}\right) + \operatorname{ln}\left(\frac{V_D}{V_C}\right)\right]\\
+        \end{align*}
+        ma visto che $\frac{V_B}{V_A} = \frac{V_C}{V_D}$, e dunque $\frac{V_B}{V_A} = -\frac{V_D}{V_C}$, allora si ha che:
+        \begin{align*}
+            nR\left[\operatorname{ln}\left(\frac{V_B}{V_A}\right) + \operatorname{ln}\left(\frac{V_D}{V_C}\right)\right] = 0
+        \end{align*}
+        questo è indipendente dalla temperatura, quindi l'entropia scambiata dalla macchina durante il ciclo di Carnot è nulla, abbiamo quindi dimostrato che il ciclo di Carnot è un ciclo reversibile.
+    \paragraph{Entropia nei sistemi isolati}
+        Considerando un sistema isolato, esso non scambia calore con l'esterno, inoltre non scambia lavoro con l'esterno, quindi il suo stato non cambia al variare del tempo, quindi il suo stato è stazionario. Dato che il sistema universo è per eccellenza un sistema isolato, allora \textbf{l'entropia dell'universo non può diminuire} il che $\frac{dS_U}{dt} \geq 0$, quindi l'entropia nell'universo è positiva. Possiamo definire \textbf{l'entropia assoluta} di un sistema come: $S = k_B \operatorname{ln} [N_{pr}]$ dove $N_{pr}$ è il numero di possibili realizzazioni del sistema considerato! In questo modo l'entropia è sempre positiva, inoltre l'entropia di un sistema isolato non può diminuire, quindi l'entropia di un sistema isolato è sempre crescente. Questo ci permette di stabilire quando il nostro universo è stato originato, visto che il tempo non è assoluto ma relativo all'osservatore.  

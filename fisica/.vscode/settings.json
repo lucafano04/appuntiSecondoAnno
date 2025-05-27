@@ -17,7 +17,8 @@
         "xticklabels",
         "ylabel",
         "ytick",
-        "yticklabels"
+        "yticklabels",
+        "Lussac"
     ],
     "editor.wordWrap": "on",
     "editor.wordWrapColumn": 80,
