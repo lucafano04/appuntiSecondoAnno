@@ -345,7 +345,6 @@
                 \includegraphics[width=0.3\textwidth]{04/rotazioneDestra.png}
                 \caption{Esempio di rotazione a destra}
             \end{figure}
-        \newpage
         \paragraph{Rotazione a sinistra}
             Assumiamo che la situazione all'interno del nostro albero di ricerca sia la seguente:
 
@@ -473,7 +472,6 @@
                     \end{figure}
                 \subparagraph{Conclusioni}
                     I casi 1 e 2 non richiedono ulteriori operazioni, i casi 3, 4 e 5 richiedono una rotazione e un ri-coloramento (con eventuali ricorsioni). In generale, l'inserimento di un nodo in un albero \textit{Red-Black} richiede $O(\log n)$ operazioni. É implementabile con il seguente pseudo-codice:
-                    \newpage
                     \begin{algorithm}
                         \caption{balanceInsert(\Tree $ t $)}
                         \begin{algorithmic}

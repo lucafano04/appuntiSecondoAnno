@@ -1,4 +1,4 @@
-\documentclass[a4paper,twoside]{report}
+\documentclass[a4paper,twoside]{book}
 \usepackage[italian]{babel}
 \usepackage[utf8]{inputenc}
 \usepackage{amsmath}
@@ -30,7 +30,7 @@
 \titlespacing*{\subparagraph}{1em}{0em}{0em} 
 
 \makeatletter
-\renewenvironment{abstract}{
+\newenvironment{abstract}{
     \if@twocolumn
         \section*{\abstractname}%
     \else
@@ -97,7 +97,7 @@
 \date{A.A. 2024/2025}
 
 \begin{document}
-    
+    \frontmatter
     % Page numeration to roman
     \pagenumbering{Roman}
 
@@ -157,7 +157,7 @@
     \thispagestyle{tocStyle}
     \pagestyle{stdPage}
     \newpage
-
+    \mainmatter
     \pagenumbering{arabic}
     
     \include{chapters/01-definizioneStoria}
